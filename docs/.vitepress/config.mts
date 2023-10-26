@@ -1,10 +1,11 @@
+import { fileURLToPath, URL } from 'node:url'
 import Unocss from 'unocss/vite'
 import { defineConfig } from 'vitepress'
-import { version } from '../../package.json'
 
 export default defineConfig({
-  base: '/vitepress-blog-starter/',
-  description: 'Blog included. Built on top of VitePress and UnoCSS.',
+  base: '/',
+  title: 'Thunder',
+  description: 'Thunder is the lightning-fast deployment platform designed specifically for developers and web application teams.',
   markdown: {
     headers: {
       level: [0, 0],
@@ -12,14 +13,16 @@ export default defineConfig({
   },
   themeConfig: {
     footer: {
-      message: 'VitePress Blog Starter',
-      copyright: 'Copyright © 2023 SFXCode',
+      message: 'AWS Simplified for Front-end Engineers.',
+      copyright: 'Copyright © 2023 CloudBits, Inc.',
     },
     search: {
       provider: 'local',
     },
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/sfxcode/vitepress-blog-starter' },
+      { icon: 'github', link: 'https://github.com/thunder-so/' },
+      { icon: 'discord', link: 'https://discord.gg/nZwr6c5c6v' },
+      { icon: 'x', link: 'https://twitter.com/_thunderso' }
     ],
     editLink: {
       pattern: 'https://github.com/sfxcode/vitepress-blog-starter/edit/main/docs/:path',
@@ -31,48 +34,55 @@ export default defineConfig({
       '/config/': sidebarConfig(),
     },
     blog: {
-      title: 'My Blog',
-      description: 'Some articles for sample Blog',
+      title: 'The Cloud Blog',
+      description: 'Educational content and resources on how web developers can leverage the cloud.',
     },
 
   },
-  title: 'VitePress Blog Starter',
   vite: {
     plugins: [
       Unocss({
         configFile: '../../unocss.config.ts',
       }),
     ],
+
+    resolve: {
+      alias: [
+        {
+          find: /^.*\/VPHero\.vue$/,
+          replacement: fileURLToPath(
+            new URL('./theme/components/VPHero.vue', import.meta.url)
+          )
+        },
+        {
+          find: /^.*\/VPHomeHero\.vue$/,
+          replacement: fileURLToPath(
+            new URL('./theme/components/VPHomeHero.vue', import.meta.url)
+          )
+        },
+        {
+          find: /^.*\/VPFeatures\.vue$/,
+          replacement: fileURLToPath(
+            new URL('./theme/components/VPFeatures.vue', import.meta.url)
+          )
+        },
+        {
+          find: /^.*\/VPFeature\.vue$/,
+          replacement: fileURLToPath(
+            new URL('./theme/components/VPFeature.vue', import.meta.url)
+          )
+        },
+      ]
+    }
   },
 })
 
 function nav() {
   return [
     { text: 'Guide', link: '/guide/', activeMatch: '/guide/' },
-    { text: 'Configs', link: '/config/', activeMatch: '/config/' },
+    // { text: 'Configs', link: '/config/', activeMatch: '/config/' },
     { text: 'Blog', link: '/blog/', activeMatch: '/blog/' },
-    {
-      text: 'External Docs',
-      items: [
-        {
-          text: 'Vitepress',
-          link: 'https://vitepress.vuejs.org',
-        },
-        {
-          text: 'UnoCSS',
-          link: 'https://uno.antfu.me',
-        },
-      ],
-    },
-    {
-      text: version,
-      items: [
-        {
-          text: 'Changelog',
-          link: 'https://github.com/sfxcode/vitepress-blog-starter/blob/main/CHANGELOG.md',
-        },
-      ],
-    },
+    { text: 'Pricing', link: '/pricing/', activeMatch: '/pricing/' },
   ]
 }
 
@@ -82,7 +92,9 @@ function sidebarGuide() {
       text: 'Introduction',
       collapsible: true,
       items: [
-        { text: 'What is this?', link: '/guide/' },
+        { text: 'Getting Started', link: '/guide/' },
+        { text: 'Applications', link: '/guide/applications' },
+        { text: 'Deployments', link: '/guide/deploy' },
       ],
     },
     {

@@ -1,15 +1,16 @@
-
 import {
   defineConfig,
   presetIcons,
   presetUno,
   transformerDirectives,
   transformerVariantGroup,
-} from 'unocss'
+  presetTypography 
+} from 'unocss';
 
 export default defineConfig({
   presets: [
     presetUno(),
+    presetTypography(),
     presetIcons({
       scale: 1.2,
       unit: 'em',
