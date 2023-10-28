@@ -95,14 +95,14 @@ defineProps<{
   line-height: 24px;
   font-size: 16px;
   font-weight: 600;
+  margin-bottom: 0.5rem;
 }
 
 .details {
   flex-grow: 1;
-  padding-top: 8px;
   line-height: 24px;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 300;
   color: var(--vp-c-text-2);
 }
 

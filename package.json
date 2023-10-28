@@ -36,5 +36,8 @@
     "unocss": "^0.56.5",
     "vitepress": "1.0.0-rc.22",
     "vue": "^3.3.4"
+  },
+  "dependencies": {
+    "vue3-carousel": "^0.3.1"
   }
 }

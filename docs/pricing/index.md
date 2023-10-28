@@ -52,7 +52,47 @@ All plans include
 
 All pricing is in USD and renews automatically unless cancelled.
 
-
+  <section class="section" id="faq">
+    <h2>Frequently Asked Questions</h2>
+    <div class="accordion" id="accordionExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            What if I do not like the product?
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne">
+          <div class="accordion-body">
+            Money back, no questions asked. Contact support for assistance.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            How does this product work?
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo">
+          <div class="accordion-body">
+            Thunder simplifies the following tasks: Provisioning VPC, ECS Cluster, Load Balancer, build process with CloudBuild and ECR, and deployments with CloudDeploy. Thunder provides a set of well tested workflows so you can avoid writing CloudFormation templates or Terraform.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingThree">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            I am using Vercel/Netlify/DigitalOcean Apps, why should I switch?
+          </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree">
+          <div class="accordion-body">
+            Optionality for full control over your infrastructure. Node.js applications hosted on the edge costs a fraction of what you are paying. Small companies can make great use of the free tier and AWS Activate credits.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
 <section class="container section section-alt" id="bird">
    <div class="row">

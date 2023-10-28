@@ -14,24 +14,30 @@ hero:
     #   link: /docs/
 
 features:
-- title: "Static Site Generators (SSG)"
+- icon: 🔥
+# - icon:
+#     dark: /dark-feature-icon.svg
+#     light: /light-feature-icon.svg
+  title: "Static Site Generators (SSG)"
   details: Deploy landing pages and documentation sites quickly using Github, AWS S3 and CloudFront.
-- title: "Single Page Applications (SPA)"
+- icon: ⚙️
+  title: "Single Page Applications (SPA)"
   details: Deploy full stack applications using AWS Lambda or Elastic Compute Service (ECS) for Server-Side Rendering (SSR).
-- title: "Preview and Ship"
+- icon: ⚡
+  title: "Preview and Ship"
   details: Trigger preview deployments with a git push. Streamlined workflows designed specifically for web developers.
 ---
 
 <section class="segment">
 <div class="container">
   <div class="focus">
-    <section class="intro text-left mb-10">
+    <section class="intro text-center mb-10">
       <h2>
         <span class="text-4xl font-light block mb-2">Deploy your next project on AWS</span>
         <span class="text-2xl font-light">without the pain of configuration</span>
       </h2>
       <!-- We know the AWS Console is an intimidating behemoth which requires week-long courses to even scratch the surface. -->
-      <p>We built Thunder so you can focus on building and shipping your product without juggling infrastructure-as-code. Let us handle the underlying complexity.</p>
+      <p>We built Thunder so you can focus on building and shipping your application without ever juggling infrastructure-as-code. Let us handle the underlying complexity.</p>
     </section>
   </div>
   <section class="features grid grid-cols-2 grid-rows-1 gap-4">
@@ -44,75 +50,26 @@ features:
       <p>Pick a project or pick a template to deploy instantly. Seamless CI/CD between your Github code and your AWS account.</p>
     </article>
   </section>
+  <section class="features grid grid-cols-3 grid-rows-1 gap-4 mt-4">
+    <article class="feature">
+      <h3>Zero-config installation</h3>
+      <p>Thunder will install all dependent infrastructure on your account, such as S3 bucket, CloudFront distribution, Lambdas, neccessary IAM roles, CodeBuild project, ECR, CodePipeline.</p>
+    </article>
+    <article class="feature">
+      <h3>Choose your compute</h3>
+      <p>From a simple API endpoint with Lambda, or a full-stack application using Elastic Compute Service (ECS) - Deploy on a compute platform appropriate for your app.</p>
+    </article>
+    <article class="feature">
+      <h3>Own everything</h3>
+      <p>You own the code. You own the infrastructure. Unlike other platforms, we do not inject scripts or track your product in any way. Your sites will keep working if you disconnect Thunder.</p>
+    </article>
+  </section>
 </div>
 </section>
 
+<Frameworks />
+
 <!--
-  <section class="tools">
-    <h3>Works with the tools you love.</h3>
-    <p>Choose from a template and deploy instantly.</p>
-  </section>
-
-  <section class="">
-    <h3>Multiple Environments</h3>
-    <p>Separate preview from prod. Link branches of your repo.</p>
-    <h3>Automatic installation</h3>
-    <p>Thunder will install all dependent infrastructure on your account, such as S3 bucket, CloudFront distribution, Lambdas, neccessary IAM roles, CodeBuild project, ECR, CodePipeline.</p> 
-    <h3>Optimal cache control</h3>
-    <p>Thunder will install optimized cache control headers for your S3 bucket and CloudFront distribution.</p>
-    <h3>Preview deployments</h3>
-    <p>Push to git to deploy preview sites instantly.</p>
-  </section>
-
-  <section class="">
-    <h2>Own everything</h2>
-    <p>You own the code. You own the infrastructure. We collect no data from your product. Unlike other platforms, we do not inject scripts into your product.</p>
-    <h2>Stretch your money</h2>
-    <p>Take advantage of the AWS Free Tier limits to host apps for free. Leverage AWS Activate credits for your organization to extend your runway.</p>
-  </section>
-
-  <section class="section" id="faq">
-    <h2>Frequently Asked Questions</h2>
-    <div class="accordion" id="accordionExample">
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingOne">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-            What if I do not like the product?
-          </button>
-        </h2>
-        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne">
-          <div class="accordion-body">
-            Money back, no questions asked. Contact support for assistance.
-          </div>
-        </div>
-      </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingTwo">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-            How does this product work?
-          </button>
-        </h2>
-        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo">
-          <div class="accordion-body">
-            Thunder simplifies the following tasks: Provisioning VPC, ECS Cluster, Load Balancer, build process with CloudBuild and ECR, and deployments with CloudDeploy. Thunder provides a set of well tested workflows so you can avoid writing CloudFormation templates or Terraform.
-          </div>
-        </div>
-      </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingThree">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-            I am using Vercel/Netlify/DigitalOcean Apps, why should I switch?
-          </button>
-        </h2>
-        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree">
-          <div class="accordion-body">
-            Optionality for full control over your infrastructure. Node.js applications hosted on the edge costs a fraction of what you are paying. Small companies can make great use of the free tier and AWS Activate credits.
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section class=" section section-alt" id="founder">
     "Open source web application frameworks should be easier to run on the public cloud."
 

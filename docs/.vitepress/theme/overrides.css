@@ -197,19 +197,17 @@ article p, article ul, article ol, article dd, article small, article table, art
    * -------------------------------------------------------------------------- */
 
   section.segment {
-    @apply pt-32 pb-32 px-4;
+    @apply mt-32 mb-32 px-4;
   }
-
-  /* @media (min-width: 768px) {
-    section.segment {
-      @apply pt-10 pb-10 px-24;    
-    }
-  } */
 
   section.intro h2 {
     @apply text-2xl mb-4;
     font-weight: 540;
     letter-spacing: -.015em;
+  }
+
+  section.intro p {
+    color: var(--vp-c-text-2);
   }
 
   article.feature {
@@ -219,8 +217,18 @@ article p, article ul, article ol, article dd, article small, article table, art
     height: 100%;
     background-color: var(--vp-c-bg-soft);
     transition: border-color 0.25s, background-color 0.25s;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
   }
 
+  article.feature h3 {
+    @apply text-xl mb-2;
+  }
+
+  article.feature p {
+    color: var(--vp-c-text-2);
+  }
 
   /**
    * Component: Button
