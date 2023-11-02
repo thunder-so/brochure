@@ -4,13 +4,17 @@
  */
 
 
-.container {
-  margin: 0 auto;
-}
+/**
+ * Container
+ * -------------------------------------------------------------------------- */
 
-@media (min-width: 1536px){
-  .container{max-width:1280px;}
-}
+  .container {
+    margin: 0 auto;
+  }
+
+  @media (min-width: 1536px){
+    .container{max-width:1280px;}
+  }
 
 .focus {
   position: relative;
@@ -24,29 +28,61 @@
   max-width: 650px;
 }
 
+.founder {
+  max-width: 650px;
+  margin: 0 auto;
+  border: 1px solid var(--vp-c-bg-soft);
+  border-radius: 12px;
+  height: 100%;
+  background-color: var(--vp-sidebar-bg-color);
+  transition: border-color 0.25s, background-color 0.25s;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.founder p {
+  color: var(--vp-c-text-2);
+  margin-bottom: 0.5rem;
+}
+
+
+/**
+  * Component: FOOTER
+  * -------------------------------------------------------------------------- */
+
+
 
 /**
  * Typography
  * -------------------------------------------------------------------------- */
 
-:root {
-  --vp-font-family-base: 'Atkinson Hyperledgible', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --vp-font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-}
+  :root {
+    --vp-font-family-base: 'Atkinson Hyperledgible', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --vp-font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', monospace;
+  }
 
-h1 {
-  @apply text-2xl;
-}
-h2 {
-  @apply text-xl;
-}
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-xl;
+  }
 
-article p, article ul, article ol, article dd, article small, article table, article pre, .cell-content p, article blockquote {
-  line-height: 1.4;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-  font-weight: 300;
-}
+  article p, 
+  article ul, 
+  article ol, 
+  article dd, 
+  article small, 
+  article table, 
+  article pre, 
+  .cell-content p, 
+  blockquote {
+    line-height: 1.4;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    font-weight: 300;
+  }
 
 /**
  * Colors: Background
@@ -63,19 +99,19 @@ article p, article ul, article ol, article dd, article small, article table, art
  *   the page. Used for things like "carbon ads" or "table", VPFeatures article.box
  * -------------------------------------------------------------------------- */
 
- :root {
-  --vp-c-bg: #F1E7D0;
-  --vp-c-bg-alt: #EADEC2;
-  --vp-c-bg-elv: #EADEC2;
-  --vp-c-bg-soft: #EADEC2;
-}
+  :root {
+    --vp-c-bg: #F1E7D0;
+    --vp-c-bg-alt: #EADEC2;
+    --vp-c-bg-elv: #EADEC2;
+    --vp-c-bg-soft: #EADEC2;
+  }
 
-.dark {
-  --vp-c-bg: #1b1b1f;
-  --vp-c-bg-alt: #161618;
-  --vp-c-bg-elv: #202127;
-  --vp-c-bg-soft: #202127;
-}
+  .dark {
+    --vp-c-bg: #1b1b1f;
+    --vp-c-bg-alt: #161618;
+    --vp-c-bg-elv: #202127;
+    --vp-c-bg-soft: #202127;
+  }
 
 /**
  * Colors: Borders
@@ -90,17 +126,17 @@ article p, article ul, article ol, article dd, article small, article table, art
  *   the header and the lest of the page.
  * -------------------------------------------------------------------------- */
 
-:root {
-  --vp-c-border: #c2c2c4;
-  --vp-c-divider: #e2e2e3;
-  --vp-c-gutter: #e2e2e3;
-}
+  :root {
+    --vp-c-border: #c2c2c4;
+    --vp-c-divider: #e2e2e3;
+    --vp-c-gutter: #e2e2e3;
+  }
 
-.dark {
-  --vp-c-border: #3c3f44;
-  --vp-c-divider: #2e2e32;
-  --vp-c-gutter: #000000;
-}
+  .dark {
+    --vp-c-border: #3c3f44;
+    --vp-c-divider: #2e2e32;
+    --vp-c-gutter: #000000;
+  }
 
 
 /**
@@ -124,39 +160,25 @@ article p, article ul, article ol, article dd, article small, article table, art
  * To understand the scaling system, refer to "Colors: Palette" section.
  * -------------------------------------------------------------------------- */
 
- :root {
-  --vp-c-default-1: var(--vp-c-gray-1);
-  --vp-c-default-2: var(--vp-c-gray-2);
-  --vp-c-default-3: var(--vp-c-gray-3);
-  --vp-c-default-soft: var(--vp-c-gray-soft);
+  :root {
+    --vp-c-default-1: var(--vp-c-gray-1);
+    --vp-c-default-2: var(--vp-c-gray-2);
+    --vp-c-default-3: var(--vp-c-gray-3);
+    --vp-c-default-soft: var(--vp-c-gray-soft);
 
-  --vp-c-brand-1: #EC7211;
-  --vp-c-brand-2: #FF9900;
-  --vp-c-brand-3: #FFFC00;
-  --vp-c-brand: var(--vp-c-brand-1);
+    --vp-c-brand-1: #EC7211;
+    --vp-c-brand-2: #FF9900;
+    --vp-c-brand-3: #FFFC00;
+    --vp-c-brand: var(--vp-c-brand-1);
 
-  --vp-home-hero-name-color: var(--vp-c-brand);
-  --vp-button-brand-bg: var(--vp-c-brand-1);
-}
-
-.dark {
-  --vp-c-brand: var(--vp-c-brand-3);
-}
-
-/*  *
- :root {
-    --vp-c-brand-light: #E0E000;
-    --vp-c-brand-lighter: #9499ff;
-    --vp-c-brand-lightest: #bcc0ff;
-    --vp-c-brand-dark: #FF9900;
-    --vp-c-brand-darker: #EC7211;
-    --vp-c-brand-dimm: rgba(100, 108, 255, 0.08);
-    --border-color: #21262D;
-    --vp-home-hero-name-color: #FFFC00;
-    --vp-button-brand-bg: var(--vp-c-brand-dark);
-    --vp-button-brand-text: black;
+    --vp-home-hero-name-color: var(--vp-c-brand);
+    --vp-button-brand-bg: var(--vp-c-brand-1);
   }
-/*  */
+
+  .dark {
+    --vp-c-brand: var(--vp-c-brand-3);
+  }
+
   a:link,
   a:visited {
     color: var(--vp-c-text-2);
@@ -192,9 +214,9 @@ article p, article ul, article ol, article dd, article small, article table, art
     text-decoration: none !important;
   }
 
-  /**
-   * Component: Intro
-   * -------------------------------------------------------------------------- */
+/**
+  * Component: Intro
+  * -------------------------------------------------------------------------- */
 
   section.segment {
     @apply mt-32 mb-32 px-4;
@@ -215,7 +237,7 @@ article p, article ul, article ol, article dd, article small, article table, art
     border: 1px solid var(--vp-c-bg-soft);
     border-radius: 12px;
     height: 100%;
-    background-color: var(--vp-c-bg-soft);
+    background-color: var(--vp-sidebar-bg-color);
     transition: border-color 0.25s, background-color 0.25s;
     display: flex;
     flex-direction: column;
@@ -229,159 +251,56 @@ article p, article ul, article ol, article dd, article small, article table, art
   article.feature p {
     color: var(--vp-c-text-2);
   }
+  
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: -6px;
+    padding-top: 24px;
+  }
 
-  /**
-   * Component: Button
-   * -------------------------------------------------------------------------- *
-  
-  :root {
-    --vp-button-brand-border: var(--vp-c-brand-light);
-    --vp-button-brand-text: var(--vp-c-white);
-    --vp-button-brand-bg: var(--vp-c-brand);
-    --vp-button-brand-hover-border: var(--vp-c-brand-light);
-    --vp-button-brand-hover-text: var(--vp-c-white);
-    --vp-button-brand-hover-bg: var(--vp-c-brand-light);
-    --vp-button-brand-active-border: var(--vp-c-brand-light);
-    --vp-button-brand-active-text: var(--vp-c-white);
-    --vp-button-brand-active-bg: var(--vp-button-brand-bg);
-  }
-  
-  /**
-   * Component: Home
-   * -------------------------------------------------------------------------- *
-  
-  :root {
-    --vp-home-hero-name-color: transparent;
-    --vp-home-hero-name-background: -webkit-linear-gradient(
-      120deg,
-      #bd34fe 30%,
-      #41d1ff
-    );
-  
-    --vp-home-hero-image-background-image: linear-gradient(
-      -45deg,
-      #bd34fe 50%,
-      #47caff 50%
-    );
-    --vp-home-hero-image-filter: blur(40px);
-  }
-  
   @media (min-width: 640px) {
-    :root {
-      --vp-home-hero-image-filter: blur(56px);
+    .actions {
+      padding-top: 32px;
     }
   }
-  
-  @media (min-width: 960px) {
-    :root {
-      --vp-home-hero-image-filter: blur(72px);
-    }
-  }
-  
-  /**
-   * Component: Custom Block
-   * -------------------------------------------------------------------------- */
-  
-  :root {
-    /* --vp-custom-block-tip-border: var(--vp-c-brand);
-    --vp-custom-block-tip-text: var(--vp-c-brand-darker);
-    --vp-custom-block-tip-bg: var(--vp-c-brand-dimm); */
-    --vp-custom-block-tip-border: var(--vp-c-brand);
-    --vp-custom-block-tip-text: var(--vp-c-brand-lightest);
-    --vp-custom-block-tip-bg: var(--vp-c-brand-dimm);
-  }
-  
-  /**
-   * Component: Algolia
-   * -------------------------------------------------------------------------- */
-  
-  .DocSearch {
-    --docsearch-primary-color: var(--vp-c-brand) !important;
-  }
-  
-  /**
-   * VitePress: Custom fix
-   * -------------------------------------------------------------------------- */
-  
-  /*
-    Use lighter colors for links in dark mode for a11y.
-    Also specify some classes twice to have higher specificity
-    over scoped class data attribute.
-  */
-  .vp-doc a,
-  .vp-doc a > code,
-  .VPNavBarMenuLink.VPNavBarMenuLink:hover,
-  .VPNavBarMenuLink.VPNavBarMenuLink.active,
-  .link.link:hover,
-  .link.link.active,
-  .edit-link-button.edit-link-button,
-  .pager-link .title {
-    color: var(--vp-c-brand-lighter);
-  }
-  
-  .vp-doc a:hover,
-  .vp-doc a > code:hover {
-    color: var(--vp-c-brand-lightest);
-    opacity: 1;
-  }
-  
-  /* Transition by color instead of opacity */
-  .vp-doc .custom-block a {
-    transition: color 0.25s;
+
+  .action {
+    flex-shrink: 0;
+    padding: 6px;
   }
 
-  /* .VPNavBarAppearance {
-    display: none !important;
-  }
-   */
-  /* .VPHome {
-    padding-bottom: 3rem !important;
-  } */
-
-  /* .VPHomeHero h1.name,
-  .VPHomeHero p.tagline {
-    max-width: 700px !important;
-  }
-   */
-  /* .VPHomeFeatures {
-    padding-bottom: 6rem !important;
-  }
-  
-  .VPFeature {
-    background-color: var(--vp-c-alt) !important;
-    border-color: var(--border-color) !important;
-  } */
-  
-  /* section.section {
-    padding: 6rem;
-    background-color: var(--vp-c-bg);
-  }
-
-  section > h2 {
-    margin-bottom: 1rem;
-  }
-  
-  section > h3 {
-    margin-bottom: 1rem;
-  }
-
-  section.section-alt {
-    background-color: var(--vp-c-alt);
-  } */
-  
-  #beta {
-    text-align: center;
-  }
-
-  .VPSidebarItem p.text {
-    margin-bottom: 0 !important;
-  }
 
 /**
- * PRICING
- */
+  * Component: BLOG
+  * -------------------------------------------------------------------------- */
+  .blog-posts {
+    display: block;
+    border: 1px solid var(--vp-c-bg-soft);
+    border-radius: 12px;
+    height: 100%;
+    background-color: var(--vp-c-bg-soft);
+    padding: 24px;
+  }
 
- 
+
+/**
+  * Component: PRICING
+  * -------------------------------------------------------------------------- */
+
+  section.pricing .tier p,
+  section.pricing .tier li {
+    color: var(--vp-c-text-2);
+  }
+
+  section.pricing .tier h3 {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
 .pricing-table {
 	background: var(--vp-c-bg);
 	box-shadow: 0px 1px 10px -6px rgba(0, 0, 0, .15);
@@ -459,8 +378,8 @@ stripe-buy-button {
 }
 
 .pricing-table .price-tag .after {
-    display: block;
-    margin-top: 0.5rem;
+  display: block;
+  margin-top: 0.5rem;
 	color: #B3B3B3;
 	font-weight: 500;
 }
@@ -480,7 +399,6 @@ stripe-buy-button {
 	text-decoration: none;
 }
 
-
 .green .pricing-label {
 	background: var( --bs-success-bg-subtle );
 	color: var( --bs-success-text );
@@ -498,7 +416,6 @@ stripe-buy-button {
 .grey .price-tag {
     color: var( --bs-light );
 }
-
 
 .purple .pricing-label {
 	background: #cad2ff;
@@ -554,30 +471,4 @@ stripe-buy-button {
 
 .red .price-button:hover {
 	background: #f23c3c;
-}
-
-/**
- *  FAQ
- */
-.accordion {
-    --bs-accordion-color: none !important;
-    --bs-accordion-bg: none !important;
-    --bs-accordion-border-color: transparent !important;
-}
-
-/**
- *  Footer
- */
-#footer {
-  padding: 5rem 0;
-}
-
-#footer h4 {
-  font-size: 24px;
-  font-weight: 500;
-}
-
-#footer a.title {
-  height: auto !important;
-  margin-bottom: 1rem;
 }

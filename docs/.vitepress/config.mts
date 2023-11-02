@@ -13,7 +13,7 @@ export default defineConfig({
   },
   themeConfig: {
     footer: {
-      message: 'AWS Simplified for Front-end Engineers.',
+      message: 'AWS Deployment Platform for Front-end Engineers.',
       copyright: 'Copyright © 2023 CloudBits, Inc.',
     },
     search: {
@@ -24,10 +24,10 @@ export default defineConfig({
       { icon: 'discord', link: 'https://discord.gg/nZwr6c5c6v' },
       { icon: 'x', link: 'https://twitter.com/_thunderso' }
     ],
-    editLink: {
-      pattern: 'https://github.com/sfxcode/vitepress-blog-starter/edit/main/docs/:path',
-      text: 'Edit this page on GitHub',
-    },
+    // editLink: {
+    //   pattern: 'https://github.com/thunder-so/brochure/docs/:path',
+    //   text: 'Edit this page on GitHub',
+    // },
     nav: nav(),
     sidebar: {
       '/guide/': sidebarGuide(),
@@ -48,6 +48,12 @@ export default defineConfig({
 
     resolve: {
       alias: [
+        {
+          find: /^.*\/VPHome\.vue$/,
+          replacement: fileURLToPath(
+            new URL('./theme/components/VPHome.vue', import.meta.url)
+          )
+        },
         {
           find: /^.*\/VPHero\.vue$/,
           replacement: fileURLToPath(
@@ -70,6 +76,12 @@ export default defineConfig({
           find: /^.*\/VPFeature\.vue$/,
           replacement: fileURLToPath(
             new URL('./theme/components/VPFeature.vue', import.meta.url)
+          )
+        },
+        {
+          find: /^.*\/VPFooter\.vue$/,
+          replacement: fileURLToPath(
+            new URL('./theme/components/VPFooter.vue', import.meta.url)
           )
         },
       ]

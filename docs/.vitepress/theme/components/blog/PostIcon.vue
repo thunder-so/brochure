@@ -9,12 +9,25 @@ const category: string = props.post.data.category ? props.post.data.category : '
 </script>
 
 <template>
-  <div>
-    <div v-if="category === 'Article'" class="i-heroicons-outline-book-open mr-2" />
-    <div v-if="category === 'Tutorial'" class="i-heroicons-outline-academic-cap mr-2" />
-    <div v-if="category === 'Document'" class="i-heroicons-outline-document mr-2" />
-    <span>{{ category }}</span>
+  <div class="category">
+    <span v-if="category === 'Article'" class="icon i-heroicons-outline-book-open" />
+    <span v-if="category === 'Tutorial'" class="icon i-heroicons-outline-academic-cap" />
+    <span v-if="category === 'Document'" class="icon i-heroicons-outline-document" />
+    <span class="text">{{ category }}</span>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.category {
+  display: flex;
+}
+span.icon {
+  display: inline-block;
+  line-height: 24px;
+}
+span.text {
+  line-height: 20px;
+  font-size: 14px;
+  margin-left: 5px;
+}
+</style>

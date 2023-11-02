@@ -14,25 +14,18 @@ const author = findByName(props.post.author)
 </script>
 
 <template>
-  <article
-    class="p-6 rounded-lg border border-[color:var(--vp-c-brand-light)] shadow-md dark:border-[color:var(--vp-c-brand-dark)]"
-  >
+  <article class="blog-posts">
     <div class="flex justify-between items-center mb-5 text-gray-500">
-      <span
-        class="bg-primary-100 text-[color:var(--vp-c-brand-light)] dark:text-[color:var(--vp-c-brand-dark)] text-sm font-medium inline-flex items-center rounded"
-      >
-        <PostIcon :post="post">
-          <span class="text-sm">{{ post.date.since }}</span>
-        </posticon></span>
+      <PostIcon :post="post">
+        <span class="text-sm">{{ post.date.since }}</span>
+      </PostIcon>
     </div>
     <h2 class="mb-2 text-2xl font-bold tracking-tight text-[color:var(--vp-c-brand-light)] dark:text-[color:var(--vp-c-brand-dark)]">
-      <a
-        :href="`${site.base}blog${post.href}`"
-      >{{ post.title }}</a>
+      <a :href="`${site.base}blog${post.href}`">{{ post.title }}</a>
     </h2>
     <p class="mb-5 font-light" v-html="post.excerpt" />
-    <div class="flex justify-between items-center">
-      <PostAuthor :author="author" />
+    <div class="flex">
+      <!-- <PostAuthor :author="author" /> -->
       <a
         :href="`${site.base}blog${post.href}`"
         class="inline-flex items-center font-medium hover:text-[color:var(--vp-c-brand-dark)]"
@@ -49,5 +42,3 @@ const author = findByName(props.post.author)
     </div>
   </article>
 </template>
-
-<style scoped></style>

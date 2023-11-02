@@ -102,7 +102,6 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
     font-size: 56px;
   }
 }
-
 .tagline {
   padding-top: 8px;
   font-size: 18px;
@@ -125,25 +124,5 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
     line-height: 36px;
     font-size: 24px;
   }
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  margin: -6px;
-  padding-top: 24px;
-}
-
-@media (min-width: 640px) {
-  .actions {
-    padding-top: 32px;
-  }
-}
-
-.action {
-  flex-shrink: 0;
-  padding: 6px;
 }
 </style>

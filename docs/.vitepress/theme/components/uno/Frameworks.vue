@@ -36,27 +36,29 @@ const slides = [
   { id: 2, title: 'React JS', content: 'Deploy React SSG on AWS' , src: 'React.svg'},
   { id: 3, title: 'Svelte', content: 'Deploy Svelte on AWS' , src: 'Svelte.svg'},
   { id: 4, title: 'Vite JS', content: 'Deploy Vite on AWS' , src: 'Vite.svg'},
-  { id: 5, title: 'Astro JS', content: 'Deploy Astro Build on AWS' , src: 'Astro.svg'},
-  { id: 6, title: 'NextJS', content: 'Deploy NextJS on AWS' , src: 'Nextjs.svg'},
-  { id: 7, title: 'Nuxt 3', content: 'Deploy Nuxt on AWS' , src: 'Nuxt.svg'},
-  { id: 8, title: 'NestJS', content: 'Deploy NestJS on AWS' , src: 'NestJS.svg'},
-  { id: 9, title: 'SolidJS', content: 'Deploy SolidJS on AWS' , src: 'SolidJS.svg'},
-  { id: 10, title: 'Eleventy (11ty)', content: 'Deploy 11ty SSG on AWS' , src: '11ty.svg'},
-  { id: 11, title: 'Adonis JS', content: 'Deploy AdonisJS on AWS' , src: 'AdonisJS.svg'},
+  { id: 5, title: 'NextJS', content: 'Deploy NextJS on AWS' , src: 'Nextjs.svg'},
+  { id: 6, title: 'Nuxt 3', content: 'Deploy Nuxt on AWS' , src: 'Nuxt.svg'},
+  { id: 7, title: 'Remix JS', content: 'Deploy Remix Run on AWS' , src: 'RemixJS.svg'},
+  { id: 8, title: 'Astro JS', content: 'Deploy Astro Build on AWS' , src: 'Astro.svg'},
+  { id: 9, title: 'NestJS', content: 'Deploy NestJS on AWS' , src: 'NestJS.svg'},
+  { id: 10, title: 'SolidJS', content: 'Deploy SolidJS on AWS' , src: 'SolidJS.svg'},
+  { id: 11, title: 'Eleventy (11ty)', content: 'Deploy 11ty SSG on AWS' , src: '11ty.svg'},
+  { id: 12, title: 'Adonis JS', content: 'Deploy AdonisJS on AWS' , src: 'AdonisJS.svg'},
+  { id: 13, title: 'Hono JS', content: 'Deploy Hono JS on AWS' , src: 'HonoJS.svg'},
 ]
 </script>
 
 <template>
     <section class="segment">
         <div class="container">
-        <div class="focus">
-            <section class="intro text-center mb-10">
-            <h2>
-                <span class="text-4xl font-light block mb-2">Works with the tools you love.</span>
-            </h2>
-            <p>Import your existing projects from Github, or start fresh from a template.</p>
-            </section>
-        </div>
+            <div class="focus">
+                <section class="intro text-center mb-10">
+                <h2>
+                    <span class="text-4xl font-light block mb-2">Works with the tools you love</span>
+                </h2>
+                <p>Import your existing projects from Github, or start fresh from a template.</p>
+                </section>
+            </div>
         </div>
         
         <Carousel v-bind="settings" :breakpoints="breakpoints" :autoplay="4000">

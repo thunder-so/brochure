@@ -12,43 +12,37 @@ const author = findByName(post.value.author)
 
 <template>
   <div>
-    <div>
+    <article class="blog-post">
       <div class="flex justify-between items-center mb-1 text-gray-500">
-        <PostAuthor :author="author" />
-
-        <span
-          class="bg-primary-100  text-sm font-medium inline-flex items-center rounded"
-        >
-          <PostIcon :post="post" /></span>
+        <!-- <PostAuthor :author="author" /> -->
+        <span class="bg-primary-100  text-sm font-medium inline-flex items-center rounded">
+          <PostIcon :post="post" />
+        </span>
+        
         <span class="text-sm">{{ post.date.since }}</span>
       </div>
-      <h3 class="mb-2 mt-2 text-2xl font-bold tracking-tight text-[color:var(--vp-c-brand-light)] dark:text-[color:var(--vp-c-brand-dark)]">
+
+      <h3 class="mt-2">
         <span>{{ post.title }}</span>
       </h3>
-      <div class="flex justify-between items-center mt-2 text-gray-500">
-        <a
-          v-if="prevPost" :href="`${site.base}blog${prevPost.href}`"
-          class="inline-flex items-center font-medium dark:text-white hover:text-[color:var(--vp-c-brand-dark)]"
-        >
-          <div class="i-bx:arrow-back mr-2" />
-          <span>Previous Post</span>
-        </a>
-        <div v-if="!prevPost" />
-        <a
-          v-if="nextPost" :href="`${site.base}blog${nextPost.href}`"
-          class="inline-flex items-center font-medium dark:text-white hover:text-[color:var(--vp-c-brand-dark)]"
-        >
-          <span>Next Post</span>
-          <div class="i-bx:right-arrow-alt ml-2" />
-        </a>
-      </div>
-    </div>
-    <slot />
+      <slot />
+    </article>
+
+    <footer class="VPDocFooter">
+      <nav class="prev-next">
+        <div class="pager">
+          <a class="pager-link prev" v-if="prevPost" :href="`${site.base}blog${prevPost.href}`">
+            <span class="desc">Previous post</span>
+            <span class="title">{{ prevPost.title }}</span>
+          </a>
+        </div>
+        <div class="pager">
+          <a class="pager-link next" v-if="nextPost" :href="`${site.base}blog${nextPost.href}`">
+            <span class="desc">Next post</span>
+            <span class="title">{{ nextPost.title }}</span>
+          </a>
+        </div>
+      </nav>
+    </footer>
   </div>
 </template>
-
-<style scoped>
-.vp-doc h1, h2, h3, hr {
-  margin: 12px 0 0 0;
-}
-</style>

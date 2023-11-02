@@ -4,7 +4,7 @@ layout: home
 hero:
   name: AWS Simplified
   text: for Front-end Engineers.
-  tagline: Thunder is the lightning-fast deployment platform designed specifically for developers and web application teams.
+  tagline: Thunder is the lightning-fast deployment platform designed specifically for web developers and teams
   actions:
     - theme: brand
       text: Sign up using Github
@@ -69,55 +69,40 @@ features:
 
 <Frameworks />
 
-<!--
-  <section class=" section section-alt" id="founder">
-    "Open source web application frameworks should be easier to run on the public cloud."
-
-    I arrived at that statement after attempting to install a well-known open source framework (it was React) on AWS.
-
-    Having spent 40+ hours with Amplify, S3, CloudFront, CloudFormation templates, AWS CDK, etc, I failed. 
-    
-    Picked up the project again a few months later and spent another 40+ hours to crack it.
-
-    Looked into companies that offers this as a service. Just wanted the usability of Heroku/Vercel wrapped around AWS. Found nothing.
-
-    Why not build it, then?
-    
-    Hence, we spent six months working 12 hour days and produced something that might be valuable to the world. We can now deploy our favourite JavaScript framework on our own AWS account with ease.
-
-    If you find value in this product, consider becoming an early adopter. 
-
-    Saddam Azad<br />
-    <a href="https://twitter.com/_saddamazad" target="_blank">twitter.com/_saddamazad</a>
-  </section>
-
-  <section>
-    <h2>Deploy an App on AWS in Minutes</h2>
-    <p></p>
-
-    <button>Sign up with Github</button>
-  </section>
-
-</div>
-
-<section class="" id="footer">
-  <div class="row">
-      <div class="col-md-4">
-      </div>
-      <div class="col-md-4">
-      </div>
-      <div class="col-md-4 credits">
-        <p>Thunder.so is a property of
-          <br />CloudBits, Inc.
-          <br />651 N Broad St STE 206, 
-          <br />Middletown, DE 19709
-          <br /><a href="mailto:support@thunder.so">support@thunder.so</a>
-        </p>
-        <ul>
-          <li><a href="https://www.thunder.so/legal/tos.html">Terms of service</a></li>
-          <li><a href="https://www.thunder.so/legal/privacy.html">Privacy policy</a></li>
-        </ul>
-      </div>
+<section class="segment">
+<div class="container">
+  <div class="founder">
+    <blockquote>"Open source web application frameworks should be easier to run on the cloud."</blockquote>
+    <p>I arrived at that statement after attempting to install a well-known open source framework (Next JS) on AWS.</p>
+    <p>Having spent 40+ hours with AWS Amplify, S3, CloudFront, CloudFormation, Lambda, I failed. Picked up the project again a few months later and spent another 40+ hours to crack it.</p>
+    <p>Looked into companies that offers this as a service. Just wanted the usability of Heroku/Vercel wrapped around AWS. Found nothing.</p>
+    <p>Why not build it, then? Hence, we spent six months working 12 hour days and produced something that might be valuable to the world. We can now deploy our favourite JavaScript framework on our own AWS account with ease.</p>
+    <p>If you find value in this product, consider becoming an early adopter.</p>
+    <p class="flex wrap-around mt-2">
+      <span class="inline-flex items-center justify-center font-normal text-foreground select-none shrink-0 bg-secondary overflow-hidden h-10 w-10 text-xs rounded-full mr-3">
+        <img role="img" src="https://avatars.githubusercontent.com/u/399195?v=4" class="h-full w-full object-cover" alt="Saddam Azad" />
+      </span>
+      <span>
+        Saddam Azad<br />
+        <a href="https://twitter.com/_saddamazad" target="_blank">x.com/_saddamazad</a>
+      </span>
+    </p>
   </div>
+</div>
 </section>
--->
+
+<section class="segment">
+<div class="container">
+  <div class="focus">
+    <section class="intro text-center mb-10">
+      <h2><span class="text-4xl font-light block mb-2">Deploy JS/TS apps on AWS in Minutes</span></h2>
+      <p>Sign up now and get started.</p>
+      <div class="actions">
+        <div class="action">
+          <a class="VPButton btn medium brand" href="https://console.thunder.so/login">Sign up using Github</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+</section>
