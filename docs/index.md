@@ -96,7 +96,7 @@ features:
   <div class="focus">
     <section class="intro text-center mb-10">
       <h2><span class="text-4xl font-light block mb-2">Deploy JS/TS apps on AWS in Minutes</span></h2>
-      <p>Sign up now and get started.</p>
+      <p>Sign up now and get started with a 30-day free trial. No credit card required.</p>
       <div class="actions">
         <div class="action">
           <a class="VPButton btn medium brand" href="https://console.thunder.so/login">Sign up using Github</a>
