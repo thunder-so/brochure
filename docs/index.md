@@ -1,6 +1,8 @@
 ---
 layout: home
 
+title: Deploy JavaScript Apps on AWS
+
 hero:
   name: AWS Simplified
   text: for Front-end Engineers.

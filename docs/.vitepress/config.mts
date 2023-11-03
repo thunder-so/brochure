@@ -3,8 +3,9 @@ import Unocss from 'unocss/vite'
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
+  lang: 'en-US',
   base: '/',
-  title: 'Thunder',
+  title: 'Thunder.so',
   description: 'Thunder is the lightning-fast deployment platform designed specifically for developers and web application teams.',
   markdown: {
     headers: {
@@ -12,6 +13,8 @@ export default defineConfig({
     },
   },
   themeConfig: {
+    logo: '/images/thunder.svg',
+    siteTitle: 'thunder',
     footer: {
       message: 'AWS Deployment Platform for Front-end Engineers.',
       copyright: 'Copyright © 2023 CloudBits, Inc.',

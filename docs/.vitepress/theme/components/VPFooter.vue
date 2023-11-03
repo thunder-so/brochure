@@ -32,16 +32,22 @@ const { hasSidebar } = useSidebar()
         <div class="community">
           <h3>Community</h3>
           <ul>
-            <li><a href="https://discord.gg/nZwr6c5c6v">Discord</a></li>
-            <li><a href="https://github.com/thunder-so/">Github</a></li>
-            <li><a href="https://twitter.com/_thunderso">Twitter/X</a></li>
+            <li><a href="https://discord.gg/nZwr6c5c6v">
+              Discord
+            </a></li>
+            <li><a href="https://github.com/thunder-so/">
+              Github
+            </a></li>
+            <li><a href="https://twitter.com/_thunderso">
+              Twitter / X
+            </a></li>
           </ul>
         </div>
 
         <div class="footer-meta">
           <div class="flex space-between mb-1">
             <Thunder class="w-6 mr-2" />
-            <h3>Thunder.so</h3>
+            <h3>thunder.so</h3>
           </div>
           <p v-if="theme.footer.message" class="message mb-2" v-html="theme.footer.message"></p>
           <p>CloudBits, Inc.
@@ -90,6 +96,10 @@ h3 {
 
 ul li {
   margin-bottom: 0.25rem;
+}
+
+span.icon {
+  display: inline-block;
 }
 
 .legal {
