@@ -124,6 +124,7 @@
 
     --vp-home-hero-name-color: var(--vp-c-brand);
     --vp-button-brand-bg: var(--vp-c-brand-1);
+    /* --vp-nav-bg-color: var(--vp-sidebar-bg-color); */
   }
 
   .dark {

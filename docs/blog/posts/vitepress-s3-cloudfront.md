@@ -28,7 +28,7 @@ The Ultimate Guide to Markdown. __This will also be bold__
 ### Creating an S3 Bucket
 
 Run the following command:
-```
+```shell
 aws s3api create-bucket 
   --bucket thunder-vitepress-demo 
   --region us-west-2 
@@ -36,7 +36,7 @@ aws s3api create-bucket
 ```
 
 Output:
-```
+```json
 {
   "Location": "http://thunder-vitepress-demo.s3.amazonaws.com/"
 }
@@ -44,7 +44,7 @@ Output:
 
 Remove the `Block Public Access` setting with the following command
 
-```
+```shell
 aws s3api put-public-access-block 
   --bucket thunder-vitepress-demo 
   --public-access-block-configuration "BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false"
@@ -55,7 +55,7 @@ Returns nothing on success.
 
 Create a local file `s3-bucket-policy.json`
 
-```
+```json
 {
     "Version": "2012-10-17",
     "Statement": [
