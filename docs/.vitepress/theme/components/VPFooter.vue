@@ -60,7 +60,7 @@ const { hasSidebar } = useSidebar()
         <p>
           <span v-if="theme.footer.copyright" v-html="theme.footer.copyright"></span>
           <span><a href="/legal/privacy">Privacy Policy</a></span>
-          <span><a href="/terms">Terms &amp; Conditions</a></span>
+          <span><a href="/legal/terms">Terms &amp; Conditions</a></span>
         </p>
       </div>
     </div>
