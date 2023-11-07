@@ -1,7 +1,10 @@
+import { createContentLoader, defineConfig, HeadConfig } from 'vitepress'
+import Unocss from 'unocss/vite'
+import { resolve } from 'node:path'
 import { describe } from 'node:test'
 import { fileURLToPath, URL } from 'node:url'
-import Unocss from 'unocss/vite'
-import { defineConfig } from 'vitepress'
+import { createWriteStream } from 'node:fs'
+import { SitemapStream } from 'sitemap'
 
 export default defineConfig({
   lang: 'en-US',
@@ -9,6 +12,38 @@ export default defineConfig({
   title: 'Thunder.so',
   description: 'Thunder is the lightning-fast deployment platform designed specifically for developers and web application teams.',
   // cleanUrls: true,
+
+  // Sitemap
+  lastUpdated: true,
+  buildEnd: async ({ outDir }) => {
+    const sitemap = new SitemapStream({ hostname: 'https://www.thunder.so/' })
+    const pages = await createContentLoader('*.md').load()
+    const writeStream = createWriteStream(resolve(outDir, 'sitemap.xml'))
+
+    sitemap.pipe(writeStream)
+    pages.forEach((page) => sitemap.write(
+      page.url
+        // Strip `index.html` from URL
+        .replace(/index.html$/g, '')
+        // Optional: if Markdown files are located in a subfolder
+        .replace(/^\/docs/, '')
+      ))
+    sitemap.end()
+
+    await new Promise((r) => writeStream.on('finish', r))
+  },
+
+  // OpenGraph
+  transformHead: ({ pageData }) => {
+    const head: HeadConfig[] = []
+
+    head.push(['meta', { property: 'og:title', content: pageData.frontmatter.title }])
+    head.push(['meta', { property: 'og:description', content: pageData.frontmatter.description }])
+    
+    return head
+  },
+
+  // Analytics and Fonts
   head: [
     // [
     //   'script', {}, `
