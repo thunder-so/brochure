@@ -14,18 +14,16 @@ const { hasSidebar } = useSidebar()
         <div class="product">
           <h3>Product</h3>
           <ul>
-            <li><a href="/features">Features</a></li>
-            <li><a href="/guide">Documentation</a></li>
-            <li><a href="/roadmap">Roadmap</a></li>
+            <li><a href="/features/">Features</a></li>
+            <li><a href="/guide/">Documentation</a></li>
           </ul>
         </div>
 
         <div class="company">
           <h3>Company</h3>
           <ul>
-            <li><a href="/story">Our story</a></li>
             <li><a href="https://wellfound.com/company/cloudbits/jobs">Careers</a></li>
-            <li><a href="/blog">The Cloud Blog</a></li>
+            <li><a href="/blog/">The Cloud Blog</a></li>
           </ul>
         </div>
 

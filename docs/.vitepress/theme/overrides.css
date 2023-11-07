@@ -410,6 +410,115 @@
 
 
 /**
+  * Component: VPDocFooter Styles
+  * -------------------------------------------------------------------------- */
+  .VPDocFooter {
+    margin-top: 64px;
+  }
+  
+  .edit-info {
+    padding-bottom: 18px;
+  }
+  
+  @media (min-width: 640px) {
+    .edit-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 14px;
+    }
+  }
+  
+  .edit-link-button {
+    display: flex;
+    align-items: center;
+    border: 0;
+    line-height: 32px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--vp-c-brand-1);
+    transition: color 0.25s;
+  }
+  
+  .edit-link-button:hover {
+    color: var(--vp-c-brand-dark);
+  }
+  
+  .edit-link-icon {
+    margin-right: 8px;
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+  }
+  
+  .prev-next {
+    border-top: 1px solid var(--vp-c-divider);
+    padding-top: 24px;
+  }
+  
+  @media (min-width: 640px) {
+    .prev-next {
+      display: flex;
+    }
+  }
+  
+  .pager.has-prev {
+    padding-top: 8px;
+  }
+  
+  @media (min-width: 640px) {
+    .pager {
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      width: 50%;
+    }
+  
+    .pager.has-prev {
+      padding-top: 0;
+      padding-left: 16px;
+    }
+  }
+  
+  .pager-link {
+    display: block;
+    border: 1px solid var(--vp-c-divider);
+    border-radius: 8px;
+    padding: 11px 16px 13px;
+    width: 100%;
+    height: 100%;
+    transition: border-color 0.25s !important;
+    text-decoration: none !important;
+  }
+  
+  .pager-link:hover {
+    border-color: var(--vp-c-brand-1);
+  }
+  
+  .pager-link.next {
+    margin-left: auto;
+    text-align: right;
+  }
+  
+  .desc {
+    display: block;
+    line-height: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--vp-c-text-2);
+  }
+  
+  .title {
+    display: block;
+    line-height: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--vp-c-brand-1);
+    transition: color 0.25s;
+  }
+
+
+  /**
   * Component: EXTRAS
   * -------------------------------------------------------------------------- */
 

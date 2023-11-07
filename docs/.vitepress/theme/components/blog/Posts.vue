@@ -3,7 +3,6 @@ import { useData } from 'vitepress'
 import usePosts from '../../composables/usePosts'
 
 const { allPosts: posts } = usePosts()
-
 const { theme } = useData()
 </script>
 

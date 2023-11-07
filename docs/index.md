@@ -3,6 +3,14 @@ layout: home
 
 title: Deploy JavaScript Apps on AWS
 
+head:
+  - - meta
+    - name: description
+      content: hello
+  - - meta
+    - name: keywords
+      content: super duper SEO
+
 hero:
   name: AWS Simplified
   text: for Front-end Engineers.

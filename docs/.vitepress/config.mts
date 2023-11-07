@@ -1,3 +1,4 @@
+import { describe } from 'node:test'
 import { fileURLToPath, URL } from 'node:url'
 import Unocss from 'unocss/vite'
 import { defineConfig } from 'vitepress'
@@ -7,7 +8,7 @@ export default defineConfig({
   base: '/',
   title: 'Thunder.so',
   description: 'Thunder is the lightning-fast deployment platform designed specifically for developers and web application teams.',
-  cleanUrls: true,
+  // cleanUrls: true,
   head: [
     // [
     //   'script', {}, `
@@ -21,14 +22,17 @@ export default defineConfig({
     [
       'script',
       {
-        async: 'true',
+        async: '',
         src: 'https://www.googletagmanager.com/gtag/js?id=G-WY75WH7XZ7',
       },
     ],
     [
       'script',
       {},
-      "window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', 'G-WY75WH7XZ7');",
+      `window.dataLayer = window.dataLayer || [];
+       function gtag(){dataLayer.push(arguments);}
+       gtag('js', new Date());
+       gtag('config', 'G-WY75WH7XZ7');`
     ],
     [
       "link", {
@@ -135,6 +139,12 @@ export default defineConfig({
             new URL('./theme/components/VPFooter.vue', import.meta.url)
           )
         },
+        {
+          find: /^.*\/VPDocFooter\.vue$/,
+          replacement: fileURLToPath(
+            new URL('./theme/components/VPDocFooter.vue', import.meta.url)
+          )
+        },
       ]
     }
   },
@@ -160,13 +170,13 @@ function sidebarGuide() {
         { text: 'Deployments', link: '/guide/deploy' },
       ],
     },
-    {
-      text: 'Features',
-      collapsible: true,
-      items: [
-        { text: 'UnoCSS', link: '/guide/features/unocss' },
-      ],
-    },
+    // {
+    //   text: 'Features',
+    //   collapsible: true,
+    //   items: [
+    //     { text: 'UnoCSS', link: '/guide/features/unocss' },
+    //   ],
+    // },
   ]
 }
 

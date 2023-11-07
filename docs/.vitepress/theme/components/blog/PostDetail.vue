@@ -22,27 +22,27 @@ const author = findByName(post.value.author)
         <span class="text-sm">{{ post.date.since }}</span>
       </div>
 
-      <h3 class="mt-2">
+      <h3 class="mt-2 text-4xl">
         <span>{{ post.title }}</span>
       </h3>
       <slot />
     </article>
 
     <footer class="VPDocFooter">
-      <nav class="prev-next">
+      <div class="prev-next">
         <div class="pager">
           <a class="pager-link prev" v-if="prevPost" :href="`${site.base}blog${prevPost.href}`">
             <span class="desc">Previous post</span>
             <span class="title">{{ prevPost.title }}</span>
           </a>
         </div>
-        <div class="pager">
+        <div class="pager has-prev">
           <a class="pager-link next" v-if="nextPost" :href="`${site.base}blog${nextPost.href}`">
             <span class="desc">Next post</span>
             <span class="title">{{ nextPost.title }}</span>
           </a>
         </div>
-      </nav>
+      </div>
     </footer>
   </div>
 </template>
