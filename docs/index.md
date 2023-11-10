@@ -14,16 +14,16 @@ hero:
       link: https://console.thunder.so/login
 
 features:
-- icon: 🔥
+- icon: ⚡
 # - icon:
 #     dark: /dark-feature-icon.svg
 #     light: /light-feature-icon.svg
   title: "Static Site Generators (SSG)"
   details: Deploy landing pages and documentation sites quickly using Github, AWS S3 and CloudFront.
-- icon: ⚙️
+- icon:  💪
   title: "Single Page Applications (SPA)"
-  details: Deploy full stack applications using AWS Lambda or Elastic Compute Service (ECS) for Server-Side Rendering (SSR).
-- icon: ⚡
+  details: Deploy full stack applications using Lambda or Fargate for Server-Side Rendering (SSR).
+- icon: 🔥
   title: "Preview and Ship"
   details: Trigger preview deployments with a git push. Streamlined workflows designed specifically for web developers.
 ---
@@ -56,8 +56,8 @@ features:
       <p>Thunder will install all dependent infrastructure on your account, such as S3 bucket, CloudFront distribution, Lambdas, neccessary IAM roles, CodeBuild project, ECR, CodePipeline.</p>
     </article>
     <article class="feature">
-      <h3>Choose your compute</h3>
-      <p>From a simple API endpoint with Lambda, or a full-stack application using Elastic Compute Service (ECS) - Deploy on a compute platform appropriate for your app.</p>
+      <h3>Choice of Serverless Compute</h3>
+      <p>Lambda or Fargate - Host full-stack applications with all modern features of server-side rendering using a compute platform appropriate for your app.</p>
     </article>
     <article class="feature">
       <h3>Own everything</h3>

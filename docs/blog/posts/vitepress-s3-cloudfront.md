@@ -6,7 +6,7 @@ tags: vue
 
 ---
 
-The Ultimate Guide to Markdown. __This will also be bold__
+VitePress is Vite & Vue Powered Static Site Generator. This tutorial shows how to deploy Vitepress on AWS S3 and CloudFront
 
 ---
 
@@ -35,7 +35,7 @@ aws s3api create-bucket
   --create-bucket-configuration LocationConstraint=us-west-2 
 ```
 
-Output:
+Outputs:
 ```json
 {
   "Location": "http://thunder-vitepress-demo.s3.amazonaws.com/"
@@ -72,7 +72,7 @@ Create a local file `s3-bucket-policy.json`
 
 Attach the bucket policy with the following command:
 
-```
+```sh
 aws s3api put-bucket-policy 
   --bucket thunder-vitepress-demo 
   --policy file://s3-bucket-policy.json
@@ -82,7 +82,7 @@ aws s3api put-bucket-policy
 - Configuring Static Website Hosting
 
 Create a local file `s3-website-config.json`
-```
+```json
 {
     "IndexDocument": {
         "Suffix": "index.html"
@@ -96,7 +96,7 @@ Create a local file `s3-website-config.json`
 Upload sample `index.html` and `error.html` 
 
 Run the following command:
-```
+```sh
 aws s3api put-bucket-website 
   --bucket thunder-vitepress-demo 
   --website-configuration file://s3-website-config.json 
@@ -119,7 +119,7 @@ Works.
 1. Create IAM Policy for CodeBuild
 
 file://codebuild-role.json
-```
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -135,7 +135,7 @@ file://codebuild-role.json
 ```
 
 Run the following command:
-```
+```sh
 aws iam create-role 
   --role-name codebuild-vitepress-role 
   --assume-role-policy-document file://codebuild-role.json 
@@ -143,7 +143,7 @@ aws iam create-role
 ```
 
 Outputs:
-```
+```json
 {
     "Role": {
         "Path": "/",
@@ -177,9 +177,11 @@ To give the CodeBuild project permissions to access other AWS services like S3 a
 
 You can attach these policies to the IAM role using the AWS CLI:
 
-```
+```sh
 aws iam attach-role-policy --role-name codebuild-vitepress-role --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess
+
 aws iam attach-role-policy --role-name codebuild-vitepress-role --policy-arn arn:aws:iam::aws:policy/CloudFrontFullAccess
+
 aws iam attach-role-policy --role-name codebuild-vitepress-role --policy-arn arn:aws:iam::aws:policy/CloudWatchFullAccess
 ```
 
@@ -187,7 +189,7 @@ aws iam attach-role-policy --role-name codebuild-vitepress-role --policy-arn arn
 2. Setting Up CodeBuild Project
 
 file://buildspec.yml
-```
+```yaml
 version: 0.2
 phases:
   install:
@@ -207,7 +209,7 @@ artifacts:
 ```
 
 Without inline buildspec. Success, but expects the repo to contain buildspec.yml in root directory.
-```
+```sh
 aws codebuild create-project 
   --name codebuild-vitepress 
   --source "type=GITHUB,gitCloneDepth=1,location=https://github.com/saddam-azad/vitepress.git" 
@@ -216,7 +218,7 @@ aws codebuild create-project
   --service-role codebuild-vitepress-role 
 ```
 
-```
+```json
 {                                                                                     
     "project": {                                                                      
         "name": "codebuild-vitepress",                                                
@@ -263,7 +265,7 @@ aws codebuild create-project
 ### Configuring CodePipeline
 
 file://codepipeline-role.json
-```
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -278,22 +280,24 @@ file://codepipeline-role.json
 }
 ```
 
-```
+```sh
 aws iam create-role 
   --role-name codepipeline-vitepress-role 
   --assume-role-policy-document file://codepipeline-role.json
   --description "IAM role for CodePipeline for Vitepress application"
 ```
 
-```
+```sh
 aws iam attach-role-policy --role-name codepipeline-vitepress-role --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess
+
 aws iam attach-role-policy --role-name codepipeline-vitepress-role --policy-arn arn:aws:iam::aws:policy/CloudWatchFullAccess
+
 aws iam attach-role-policy --role-name codepipeline-vitepress-role --policy-arn arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess
 ```
 
 
 file://codepipeline-config.json
-```
+```json
 {
   "pipeline": {
       "name": "vitepress-pipeline",
@@ -357,17 +361,15 @@ file://codepipeline-config.json
 }
 ```
 
-```
+```sh
 aws codepipeline create-pipeline 
   --cli-input-json file://codepipeline-config.json
 ```
 
 
-
-
 ### Configuring CloudFront Distribution
 
-```
+```sh
 aws cloudfront create-distribution 
   --origin-domain-name thunder-vitepress-demo.s3-website-us-west-2.amazonaws.com 
   --default-root-object index.html 
@@ -375,7 +377,7 @@ aws cloudfront create-distribution
 ```
 
 Outputs:
-```
+```json
 {
     "Location": "https://cloudfront.amazonaws.com/2020-05-31/distribution/E2XT0GYI54CKZ2",
     "ETag": "E3S8PC0JG3HEUU",
@@ -386,23 +388,23 @@ Outputs:
         "LastModifiedTime": "2023-07-27T10:01:42.411000+00:00",
         "InProgressInvalidationBatches": 0,
         "DomainName": "d1vys1kxm33ala.cloudfront.net",
-...
     }
 }
 ```
 
 Check 
-```
+```sh
 aws cloudfront wait distribution-deployed --id E2XT0GYI54CKZ2
 ```
 
-d1vys1kxm33ala.cloudfront.net
+Outputs a URL such as `1vys1kxm33ala.cloudfront.net`
 
 Works.
 
+TODO:
+
   - Setting Cache Policy
   - Configuring Custom Error Pages
-
 
 ## Testing the Deployment
 - Verifying the Website on CloudFront
