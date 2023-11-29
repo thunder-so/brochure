@@ -3,10 +3,10 @@ frontend:
   phases:
     preBuild:
       commands:
-        - npm ci
+        - npx pnpm i --store=node_modules/.pnpm-store
     build:
       commands:
-        - npx pnpm i --store=node_modules/.pnpm-store && npx pnpm run build
+        -  npx pnpm run build
   artifacts:
     baseDirectory: docs/.vitepress/dist
     files:
