@@ -149,7 +149,7 @@ Outputs:
         "Path": "/",
         "RoleName": "codebuild-vitepress-role",
         "RoleId": "AROAZVYBSGX6YZO7VPMMK",
-        "Arn": "arn:aws:iam::665186350589:role/codebuild-vitepress-role",
+        "Arn": "arn:aws:iam::YOUR_ACCOUNT:role/codebuild-vitepress-role",
         "CreateDate": "2023-07-28T06:38:32+00:00",
         "AssumeRolePolicyDocument": {
             "Version": "2012-10-17",
@@ -222,7 +222,7 @@ aws codebuild create-project
 {                                                                                     
     "project": {                                                                      
         "name": "codebuild-vitepress",                                                
-        "arn": "arn:aws:codebuild:us-east-2:665186350589:project/codebuild-vitepress",
+        "arn": "arn:aws:codebuild:us-east-2:YOUR_ACCOUNT:project/codebuild-vitepress",
         "source": {                                                                   
             "type": "GITHUB",                                                         
             "location": "https://github.com/saddam-azad/vitepress.git",               
@@ -249,7 +249,7 @@ aws codebuild create-project
             "privilegedMode": true,                                                   
             "imagePullCredentialsType": "CODEBUILD"                                   
         },                                                                            
-        "serviceRole": "arn:aws:iam::665186350589:role/codebuild-vitepress-role",     
+        "serviceRole": "arn:aws:iam::YOUR_ACCOUNT:role/codebuild-vitepress-role",     
         "timeoutInMinutes": 60,                                                       
         "queuedTimeoutInMinutes": 480,                                                
         "created": "2023-07-28T21:29:57.196000+06:00",                                
@@ -301,7 +301,7 @@ file://codepipeline-config.json
 {
   "pipeline": {
       "name": "vitepress-pipeline",
-      "roleArn": "arn:aws:iam::665186350589:role/codepipeline-vitepress-role",
+      "roleArn": "arn:aws:iam::YOUR_ACCOUNT:role/codepipeline-vitepress-role",
       "artifactStore": {
         "type": "S3",
         "location": "thunder-vitepress-demo"
@@ -322,7 +322,7 @@ file://codepipeline-config.json
                 "Owner": "saddam-azad",
                 "Repo": "vitepress",
                 "Branch": "main",
-                "OAuthToken": "github_pat_11AADBOWY08Cb6r31F5M9w_9im019lHooXXz4EM8PA6lJb4MklKzNPr9fzgCMs1nC72WVDVI7BTXCR34I"
+                "OAuthToken": "YOUR_TOKEN"
               },
               "outputArtifacts": [
                 {
@@ -379,11 +379,11 @@ aws cloudfront create-distribution
 Outputs:
 ```json
 {
-    "Location": "https://cloudfront.amazonaws.com/2020-05-31/distribution/E2XT0GYI54CKZ2",
+    "Location": "https://cloudfront.amazonaws.com/2020-05-31/distribution/DISTRIBUTION_ID",
     "ETag": "E3S8PC0JG3HEUU",
     "Distribution": {
-        "Id": "E2XT0GYI54CKZ2",
-        "ARN": "arn:aws:cloudfront::665186350589:distribution/E2XT0GYI54CKZ2",
+        "Id": "DISTRIBUTION_ID",
+        "ARN": "arn:aws:cloudfront::YOUR_ACCOUNT:distribution/DISTRIBUTION_ID",
         "Status": "InProgress",
         "LastModifiedTime": "2023-07-27T10:01:42.411000+00:00",
         "InProgressInvalidationBatches": 0,
@@ -394,10 +394,10 @@ Outputs:
 
 Check 
 ```sh
-aws cloudfront wait distribution-deployed --id E2XT0GYI54CKZ2
+aws cloudfront wait distribution-deployed --id DISTRIBUTION_ID
 ```
 
-Outputs a URL such as `1vys1kxm33ala.cloudfront.net`
+Outputs a URL such as `d1vys1kxm33ala.cloudfront.net`
 
 Works.
 
