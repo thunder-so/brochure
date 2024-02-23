@@ -105,7 +105,7 @@ export default defineConfig({
     siteTitle: 'thunder',
     footer: {
       message: 'AWS Deployment Platform for Front-end Engineers.',
-      copyright: 'Copyright © 2023 CloudBits, Inc.',
+      copyright: 'Copyright © 2024 CloudBits, Inc.',
     },
     search: {
       provider: 'local',

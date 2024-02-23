@@ -42,6 +42,7 @@ title: Pricing
             <li>Deploy on Lambda and ECS Fargate</li>
             <li>Multiple Services (backend, frontend)</li>
             <li>Multiple Environments (preview, production)</li>
+            <li>Custom Deployment Triggers</li>
         </ol>
         <div class="price-tag">
             <span class="symbol">$</span>
@@ -77,9 +78,9 @@ title: Pricing
         <ol>
           <li>Lifetime access</li>
           <li>All Pro and Teams features, when available</li>
-          <li>Migration Assistance</li>
+          <li>Migration assistance</li>
           <li>Priority email support</li>
-          <li>Private Discord channel</li>
+          <li>Private support channel (Discord/Slack)</li>
         </ol>
         <div class="price-tag">
             <span class="symbol">$</span>
@@ -87,7 +88,7 @@ title: Pricing
             <span class="extra">One-time. Lifetime license.</span>
         </div>
         <div class="actions">
-          <a class="btn btn-primary" href="https://console.thunder.so/login">Sign up and pay $749</a>
+          <a class="btn btn-primary" href="https://console.thunder.so/login">Sign up and pay</a>
         </div>
       </div>
       <div class="tier">
@@ -98,7 +99,7 @@ title: Pricing
           <li>SOC2 Compliance</li>
           <li>SSO/SAML for Thunder Console</li>
           <li>Priority email support & SLAs</li>
-          <li>Private support channel on Discord/Slack</li>
+          <li>Private support channel (Discord/Slack)</li>
         </ol>
         <div class="actions align-left">
           <a class="btn btn-primary" href="mailto:support@thunder.so">Contact Sales</a>
