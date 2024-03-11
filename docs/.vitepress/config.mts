@@ -201,17 +201,28 @@ function sidebarGuide() {
       collapsible: true,
       items: [
         { text: 'Getting Started', link: '/guide/' },
-        { text: 'Applications', link: '/guide/applications' },
-        { text: 'Deployments', link: '/guide/deploy' },
+        { text: 'Organization', link: '/guide/organization' },
+        { text: 'Billing', link: '/guide/billing' },
+        { text: 'AWS Provider', link: '/guide/provider' },
       ],
     },
-    // {
-    //   text: 'Features',
-    //   collapsible: true,
-    //   items: [
-    //     { text: 'UnoCSS', link: '/guide/features/unocss' },
-    //   ],
-    // },
+    {
+      text: 'Concepts',
+      collapsible: true,
+      items: [
+        { text: 'Application', link: '/guide/application' },
+        { text: 'Environment', link: '/guide/environment' },
+        { text: 'Stack', link: '/guide/stack' },
+        { text: 'Installation', link: '/guide/installation' },
+      ],
+    },
+    {
+      text: 'Stacks',
+      collapsible: true,
+      items: [
+        { text: 'Static Site Generator (SSG)', link: '/guide/ssg' },
+      ],
+    },
   ]
 }
 

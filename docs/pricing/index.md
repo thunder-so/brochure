@@ -10,8 +10,8 @@ title: Pricing
         <h2>
             <span class="text-4xl font-light block mb-2">Pricing</span>
         </h2>
-        <p class="mb-2">Our pricing is Organization-based, not Usage-based. We sell software, not "seats" or artificial limits on your apps or infrastructure. Start a <i>30-day free trial</i> and then pay a fair and fixed monthly price.</p>
-        <p>Your AWS usage costs remain your responsibility.</p>
+        <p class="mb-2">Our pricing is organization-based, not usage-based. We sell software, not seats or artificial limits on your apps or infrastructure. Your AWS usage costs remain your responsibility.</p>
+        <p>Start a <i>30-day free trial</i> and then pay a fair and fixed monthly price.</p>
       </section>
     </div>
    <div class="grid grid-cols-3 gap-4">
