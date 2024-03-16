@@ -202,7 +202,7 @@ function sidebarGuide() {
       items: [
         { text: 'Getting Started', link: '/guide/' },
         { text: 'Organization', link: '/guide/organization' },
-        { text: 'Billing', link: '/guide/billing' },
+        // { text: 'Billing', link: '/guide/billing' },
         { text: 'AWS Provider', link: '/guide/provider' },
       ],
     },

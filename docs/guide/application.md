@@ -1,6 +1,6 @@
 # Applications
 
-An Application is the scafollding for your project codebase. Thunder relies on the AWS Cloud Development Kit (CDK) for its underlying features. 
+An Application is the scafolding for your project codebase. Thunder relies on the AWS Cloud Development Kit (CDK) for its underlying features. 
 
 The AWS Cloud Development Kit (CDK) is an open-source software development framework for defining cloud infrastructure.
 
