@@ -6,7 +6,7 @@ Environments in Thunder contain metadata regarding:
 
 ## AWS Account and Region
 
-When you create an environment, you can select your [Provider](/guide/provider.md). Thunder supplies the Provider metadata to the CDK template.
+When you create an environment, you can select your [Provider](/docs/provider.md). Thunder supplies the Provider metadata to the CDK template.
 
 An Environment in Thunder is an extension to the `Environments` construct in AWS CDK. 
 
