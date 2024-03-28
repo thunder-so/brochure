@@ -18,7 +18,7 @@ export default () => {
   }
 
   function findCurrentIndex() {
-    return allAuthors.value.findIndex(p => `${site.value.base}blog${p.href}` === route.path)
+    return allAuthors.value.findIndex(p => `${site.value.base}guide${p.href}` === route.path)
   }
 
   const currentAuthor = computed(() => allAuthors.value[findCurrentIndex()])

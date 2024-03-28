@@ -9,8 +9,14 @@
  * -------------------------------------------------------------------------- */
 
   :root {
-    --vp-font-family-base: 'Atkinson Hyperledgible', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --vp-font-family-heading: Lexend, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+    /* --vp-font-family-base: 'Atkinson Hyperledgible', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    --vp-font-family-base: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     --vp-font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', monospace;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--vp-font-family-heading);
   }
 
   h1 {
@@ -187,7 +193,7 @@
     justify-content: center;
     align-items: center;
     margin: 0 auto;
-    max-width: 650px;
+    max-width: 700px;
   }
 
   .founder {

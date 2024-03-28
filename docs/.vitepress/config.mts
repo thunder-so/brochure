@@ -91,7 +91,7 @@ export default defineConfig({
     [
       "link", {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap',
+        href: 'https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap',
       }
     ]
   ],
@@ -121,12 +121,12 @@ export default defineConfig({
     // },
     nav: nav(),
     sidebar: {
-      '/guide/': sidebarGuide(),
+      '/docs/': sidebarDocs(),
       '/config/': sidebarConfig(),
     },
     blog: {
-      title: 'The Cloud Blog',
-      description: 'Educational content and resources on how web developers can leverage the cloud.',
+      title: 'Developer Guides',
+      description: 'Learn how to ship code quickly and reliably.',
     },
   },
   vite: {
@@ -187,42 +187,50 @@ export default defineConfig({
 
 function nav() {
   return [
-    { text: 'Guide', link: '/guide/', activeMatch: '/guide/' },
+    { text: 'Documentation', link: '/docs/', activeMatch: '/docs/' },
     // { text: 'Configs', link: '/config/', activeMatch: '/config/' },
-    { text: 'Blog', link: '/blog/', activeMatch: '/blog/' },
+    { text: 'Guides', link: '/guide/', activeMatch: '/guide/' },
     { text: 'Pricing', link: '/pricing/', activeMatch: '/pricing/' },
   ]
 }
 
-function sidebarGuide() {
+function sidebarDocs() {
   return [
     {
       text: 'Introduction',
       collapsible: true,
       items: [
-        { text: 'Getting Started', link: '/guide/' },
-        { text: 'Organization', link: '/guide/organization' },
-        // { text: 'Billing', link: '/guide/billing' },
-        { text: 'AWS Provider', link: '/guide/provider' },
+        { text: 'Getting Started', link: '/docs/' },
+        { text: 'Organization', link: '/docs/organization' },
+        // { text: 'Billing', link: '/docs/billing' },
+        { text: 'AWS Provider', link: '/docs/provider' },
       ],
     },
     {
       text: 'Concepts',
       collapsible: true,
       items: [
-        { text: 'Application', link: '/guide/application' },
-        { text: 'Environment', link: '/guide/environment' },
-        { text: 'Stack', link: '/guide/stack' },
-        { text: 'Installation', link: '/guide/installation' },
+        { text: 'Application', link: '/docs/application' },
+        { text: 'Environment', link: '/docs/environment' },
+        { text: 'Stack', link: '/docs/stack' },
+        // { text: 'Installation', link: '/docs/installation' },
       ],
     },
     {
       text: 'Stacks',
       collapsible: true,
       items: [
-        { text: 'Static Site Generator (SSG)', link: '/guide/ssg' },
+        { text: 'Static Site Generator (SSG)', link: '/docs/static-site-generator' },
       ],
     },
+    // {
+    //   text: 'Architecture',
+    //   collapsible: true,
+    //   items: [
+    //     { text: 'Modern Three Tier Pattern', link: '/docs/three-tier-pattern' },
+    //     { text: 'Backend for Frontend Pattern', link: '/docs/backend-for-frontend' },
+    //   ],
+    // },
   ]
 }
 
