@@ -129,7 +129,8 @@
     --vp-c-brand: var(--vp-c-brand-1);
 
     --vp-home-hero-name-color: var(--vp-c-brand);
-    --vp-button-brand-bg: var(--vp-c-brand-1);
+    --vp-button-brand-bg: var(--vp-c-brand);
+    --vp-button-brand-text: var(--vp-c-gray-1);
     /* --vp-nav-bg-color: var(--vp-sidebar-bg-color); */
   }
 
@@ -187,12 +188,6 @@
   .focus {
     position: relative;
     z-index: 10;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
     max-width: 700px;
   }
 
@@ -259,10 +254,10 @@
   * -------------------------------------------------------------------------- */
 
   .actions {
-    display: flex;
+    /* display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
     padding-top: 24px;
   }
 
@@ -281,6 +276,10 @@
     padding: 6px;
   }
 
+  .VPButton {
+    border-radius: 3px !important;
+  }
+
   a.btn {
     border-color: var(--vp-button-brand-border);
     color: var(--vp-button-brand-text);
@@ -292,7 +291,6 @@
     text-decoration: none;
     white-space: nowrap;
     transition: color 0.25s, border-color 0.25s, background-color 0.25s;
-    border-radius: 20px;
     padding: 0 20px;
     line-height: 38px;
     font-size: 14px;
@@ -300,8 +298,8 @@
 
   a.btn:hover {
     border-color: var(--vp-button-brand-hover-border);
-    color: var(--vp-button-brand-hover-text);
-    background-color: var(--vp-button-brand-hover-bg);
+    /* color: var(--vp-button-brand-hover-text); */
+    /* background-color: var(--vp-button-brand-hover-bg); */
   }
 
 

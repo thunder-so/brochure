@@ -6,7 +6,7 @@ description: Thunder simplifies AWS deployment for front-end engineers. Deploy J
 
 hero:
   name: AWS Simplified
-  text: for Front-end Engineers.
+  text: for Web Developers.
   tagline: Thunder is the lightning-fast deployment platform designed specifically for web developers and teams
   actions:
     - theme: brand

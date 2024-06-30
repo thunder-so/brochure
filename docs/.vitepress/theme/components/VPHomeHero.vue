@@ -15,8 +15,8 @@ const { frontmatter: fm } = useData()
     :image="fm.hero.image"
     :actions="fm.hero.actions"
   >
-  <template #home-hero-image><slot name="home-hero-image" /></template>
-  <template #home-hero-info><slot name="home-hero-info" /></template>
+    <template #home-hero-image><slot name="home-hero-image" /></template>
+    <template #home-hero-info><slot name="home-hero-info" /></template>
 
   </VPHero>
 </template>

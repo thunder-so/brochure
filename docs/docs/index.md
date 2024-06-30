@@ -11,7 +11,7 @@ AWS Console provides an impressive and overwhelming array of products and config
 
 Amazon have adressed this problem themselves with products such as [Amplify](https://docs.amplify.aws/), [CodeCatalyst](https://codecatalyst.aws/) and [Serverless Application Model (SAM)](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html). These products are abstractions of CDK and CloudFormation but with much improved DX. However, they feel far short of the integrated DX provided by black-box PaaS products such as [Vercel](https://vercel.com/), [Netlify](http://netlify.com/), [Render](https://render.com/), etc.
 
-Thunder is differenciated from the black-box PaaS who are in the business of upselling compute. It is also distinct because it does not store or handle the user's code, nor is the user required to learn/integrate a new SDK apart from the ones provided by AWS. 
+Thunder is differenciated from the black-box PaaS who are in the business of upselling compute. It is also distinct because it neither stores or handles the user's code, nor is the user required to learn/integrate a new SDK apart from the ones provided by AWS. 
 
 Thunder aims to provide the developer experience of a modern PaaS for your own AWS account.
 

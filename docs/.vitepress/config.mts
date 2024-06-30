@@ -151,6 +151,12 @@ export default defineConfig({
           )
         },
         {
+          find: /^.*\/VPNavBar\.vue$/,
+          replacement: fileURLToPath(
+            new URL('./theme/components/VPNavBar.vue', import.meta.url)
+          )
+        },
+        {
           find: /^.*\/VPHomeHero\.vue$/,
           replacement: fileURLToPath(
             new URL('./theme/components/VPHomeHero.vue', import.meta.url)
@@ -187,7 +193,7 @@ export default defineConfig({
 
 function nav() {
   return [
-    { text: 'Documentation', link: '/docs/', activeMatch: '/docs/' },
+    { text: 'Docs', link: '/docs/', activeMatch: '/docs/' },
     // { text: 'Configs', link: '/config/', activeMatch: '/config/' },
     { text: 'Guides', link: '/guide/', activeMatch: '/guide/' },
     { text: 'Pricing', link: '/pricing/', activeMatch: '/pricing/' },

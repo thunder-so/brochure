@@ -24,15 +24,6 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
 <template>
   <div class="VPHero" :class="{ 'has-image': image || heroImageSlotExists }">
     <div class="container">
-      <!-- <div v-if="image || heroImageSlotExists" class="image">
-        <div class="image-container">
-          <div class="image-bg" />
-          <slot name="home-hero-image">
-            <VPImage v-if="image" class="image-src" :image="image" />
-          </slot>
-        </div>
-      </div> -->
-
       <div class="focus">
         <slot name="home-hero-info">
           <h1 v-if="name" class="name">
@@ -54,6 +45,16 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
           </div>
         </div>
       </div>
+
+      <!-- <div v-if="image || heroImageSlotExists" class="image">
+        <div class="image-container">
+          <div class="image-bg" />
+          <slot name="home-hero-image">
+            <VPImage v-if="image" class="image-src" :image="image" />
+          </slot>
+        </div>
+      </div> -->
+
     </div>
   </div>
 </template>
@@ -61,10 +62,10 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
 <style scoped>
 .VPHero {
   margin-top: calc((var(--vp-nav-height) + var(--vp-layout-top-height, 0px)) * -1);
-  padding: calc(var(--vp-nav-height) + var(--vp-layout-top-height, 0px) + 48px) 24px 48px;
+  padding: calc(var(--vp-nav-height) + var(--vp-layout-top-height, 0px) + 128px) 24px 128px;
 }
 
-@media (min-width: 640px) {
+/* @media (min-width: 640px) {
   .VPHero {
     padding: calc(var(--vp-nav-height) + var(--vp-layout-top-height, 0px) + 80px) 48px 64px;
   }
@@ -74,7 +75,7 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
   .VPHero {
     padding: calc(var(--vp-nav-height) + var(--vp-layout-top-height, 0px) + 80px) 64px 64px;
   }
-}
+} */
 
 .name {
   letter-spacing: -0.4px;
@@ -103,17 +104,17 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
   }
 }
 .tagline {
-  padding-top: 8px;
+  padding-top: 16px;
   font-size: 18px;
   line-height: 28px;
-  font-weight: 500;
+  font-weight: 300;
   white-space: pre-wrap;
   color: var(--vp-c-text-2);
 }
 
 @media (min-width: 640px) {
   .tagline {
-    padding-top: 12px;
+    padding-top: 24px;
     line-height: 32px;
     font-size: 20px;
   }
