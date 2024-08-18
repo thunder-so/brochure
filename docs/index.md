@@ -67,7 +67,7 @@ features:
 </div>
 </section>
 
-<Frameworks />
+<!-- <Frameworks /> -->
 
 <section class="segment">
 <div class="container">

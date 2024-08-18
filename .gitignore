@@ -42,3 +42,6 @@ pnpm-debug.log*
 docs/.vitepress/cache
 docs/.vitepress/dist
 docs/.vitepress/default
+
+# AWS CDK
+cdk.out
