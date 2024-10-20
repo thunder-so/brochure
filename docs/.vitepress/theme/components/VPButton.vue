@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { normalizeLink } from '../support/utils'
-import { EXTERNAL_URL_RE } from '../../shared'
+import { normalizeLink } from 'vitepress/dist/client/theme-default/support/utils.js'
+import { EXTERNAL_URL_RE } from 'vitepress/dist/client/shared.js'
 
 interface Props {
   tag?: string
@@ -52,14 +52,14 @@ const component = computed(() => {
 }
 
 .VPButton.medium {
-  border-radius: 20px;
-  padding: 0 20px;
-  line-height: 38px;
+  border-radius: 3px;
+  padding: 12px 20px;
+  line-height: 1;
   font-size: 14px;
 }
 
 .VPButton.big {
-  border-radius: 24px;
+  border-radius: 3px;
   padding: 0 24px;
   line-height: 46px;
   font-size: 16px;

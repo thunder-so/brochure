@@ -64,10 +64,10 @@
   }
 
   .dark {
-    --vp-c-bg: #1b1b1f;
-    --vp-c-bg-alt: #161618;
-    --vp-c-bg-elv: #202127;
-    --vp-c-bg-soft: #202127;
+    --vp-c-bg: #030711;
+    --vp-c-bg-alt: #0F1629;
+    --vp-c-bg-elv: #0F1629;
+    --vp-c-bg-soft: #0F1629;
   }
 
 /**
@@ -125,13 +125,14 @@
 
     --vp-c-brand-1: #EC7211;
     --vp-c-brand-2: #FF9900;
-    --vp-c-brand-3: #FFFC00;
+    --vp-c-brand-3: #fffc00;
     --vp-c-brand: var(--vp-c-brand-1);
 
     --vp-home-hero-name-color: var(--vp-c-brand);
     --vp-button-brand-bg: var(--vp-c-brand);
     --vp-button-brand-text: var(--vp-c-gray-1);
-    /* --vp-nav-bg-color: var(--vp-sidebar-bg-color); */
+    --vp-nav-bg-color: var(--vp-c-bg-alt);
+    --vp-button-brand-hover-bg: #EC7211;
   }
 
   .dark {
@@ -189,6 +190,7 @@
     position: relative;
     z-index: 10;
     max-width: 700px;
+    margin: 0 auto;
   }
 
   .founder {
@@ -250,35 +252,29 @@
 
   
 /**
+  * Component: VPNavBar
+  * -------------------------------------------------------------------------- */
+  .menu + .social-links {
+    margin-right: 0;
+  }
+  
+  .menu + .social-links::after {
+    margin-right: 8px;
+    margin-left: 8px;
+    width: 1px;
+    height: 24px;
+    background-color: var(--vp-c-divider);
+    content: "";
+  }
+
+  .VPNavBar .VPButton {
+    margin-left: 8px;
+  }
+
+
+  /**
   * Component: Buttons
   * -------------------------------------------------------------------------- */
-
-  .actions {
-    /* display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center; */
-    padding-top: 24px;
-  }
-
-  .actions.align-left {
-    justify-content: left;
-  }
-
-  @media (min-width: 640px) {
-    .actions {
-      padding-top: 32px;
-    }
-  }
-
-  .action {
-    flex-shrink: 0;
-    padding: 6px;
-  }
-
-  .VPButton {
-    border-radius: 3px !important;
-  }
 
   a.btn {
     border-color: var(--vp-button-brand-border);

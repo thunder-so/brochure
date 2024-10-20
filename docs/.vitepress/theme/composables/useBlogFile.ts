@@ -17,9 +17,9 @@ export default () => {
   }
 
   function folderDir(name: string): string {
-    // @ts-expect-error: import.meta is supported
+    // @ts-ignore
     const dirname = path.dirname(fileURLToPath(import.meta.url))
-    return path.resolve(dirname, `../../../guide/${name}`)
+    return path.resolve(dirname, `../../../blog/${name}`)
   }
 
   return { folderDir, readFrontMatter }

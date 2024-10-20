@@ -11,6 +11,7 @@ import VPNavBarSearch from 'vitepress/dist/client/theme-default/components/VPNav
 import VPNavBarSocialLinks from 'vitepress/dist/client/theme-default/components/VPNavBarSocialLinks.vue'
 import VPNavBarTitle from 'vitepress/dist/client/theme-default/components/VPNavBarTitle.vue'
 import VPNavBarTranslations from 'vitepress/dist/client/theme-default/components/VPNavBarTranslations.vue'
+import VPButton from 'vitepress/dist/client/theme-default/components/VPButton.vue'
 
 defineProps<{
   isScreenOpen: boolean
@@ -49,12 +50,28 @@ watchPostEffect(() => {
         <div class="curtain" />
         <div class="content-body">
           <slot name="nav-bar-content-before" />
-          <VPNavBarSearch class="search" />
+          <!-- <VPNavBarSearch class="search" /> -->
           <VPNavBarMenu class="menu" />
-          <VPNavBarTranslations class="translations" />
-          <VPNavBarAppearance class="appearance" />
+          <!-- <VPNavBarTranslations class="translations" />
+          <VPNavBarAppearance class="appearance" /> -->
           <VPNavBarSocialLinks class="social-links" />
-          <VPNavBarExtra class="extra" />
+          <!-- <VPNavBarExtra class="extra" /> -->
+          
+          <VPButton
+              tag="a"
+              size="medium"
+              theme="alt"
+              text="Sign In"
+              href="https://console.thunder.so/login"
+            />
+          <VPButton
+              tag="a"
+              size="medium"
+              theme="brand"
+              text="Sign Up"
+              href="https://console.thunder.so/login"
+            />
+
           <slot name="nav-bar-content-after" />
           <VPNavBarHamburger class="hamburger" :active="isScreenOpen" @click="$emit('toggle-screen')" />
         </div>
@@ -71,6 +88,7 @@ watchPostEffect(() => {
   height: var(--vp-nav-height);
   pointer-events: none;
   white-space: nowrap;
+  background-color: var(--vp-nav-bg-color);
 }
 
 @media (min-width: 768px) {
@@ -86,7 +104,6 @@ watchPostEffect(() => {
 
   .VPNavBar:not(.has-sidebar):not(.top) {
     border-bottom-color: var(--vp-c-gutter);
-    background-color: var(--vp-nav-bg-color);
   }
 }
 

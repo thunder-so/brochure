@@ -62,7 +62,7 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
 <style scoped>
 .VPHero {
   margin-top: calc((var(--vp-nav-height) + var(--vp-layout-top-height, 0px)) * -1);
-  padding: calc(var(--vp-nav-height) + var(--vp-layout-top-height, 0px) + 128px) 24px 128px;
+  padding: calc(var(--vp-nav-height) + var(--vp-layout-top-height, 0px) + 164px) 24px 164px;
 }
 
 /* @media (min-width: 640px) {
@@ -79,51 +79,69 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
 
 .name {
   letter-spacing: -0.4px;
-  font-size: 32px;
-  line-height: 40px;
+  font-size: 24px;
+  line-height: 36px;
   font-weight: 700;
   white-space: pre-wrap;
+  text-align: center;
 }
 
 .clip {
   display: block;
-  color: var(--vp-home-hero-name-color);
+  color: #FFF;
 }
 
 @media (min-width: 640px) {
   .name {
-    font-size: 48px;
-    line-height: 56px;
+    font-size: 28px;
+    line-height: 42px;
   }
 }
 
 @media (min-width: 960px) {
   .name {
-    line-height: 64px;
-    font-size: 56px;
+    font-size: 32px;
+    line-height: 48px;
   }
 }
+
 .tagline {
-  padding-top: 16px;
+  padding-top: 8px;
   font-size: 18px;
   line-height: 28px;
   font-weight: 300;
   white-space: pre-wrap;
   color: var(--vp-c-text-2);
+  text-align: center;
 }
 
 @media (min-width: 640px) {
   .tagline {
-    padding-top: 24px;
-    line-height: 32px;
     font-size: 20px;
+    line-height: 32px;
   }
 }
 
 @media (min-width: 960px) {
   .tagline {
-    line-height: 36px;
-    font-size: 24px;
+    font-size: 20px;
+    line-height: 32px;
   }
 }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding-top: 24px;
+
+}
+
+.action {
+  display: inline-block;
+}
+
+
 </style>

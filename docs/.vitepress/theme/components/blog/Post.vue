@@ -21,13 +21,13 @@ const author = findByName(props.post.author)
       </PostIcon>
     </div>
     <h2 class="mb-2 text-2xl font-bold tracking-tight text-[color:var(--vp-c-brand-light)] dark:text-[color:var(--vp-c-brand-dark)]">
-      <a :href="`${site.base}guide${post.href}`">{{ post.title }}</a>
+      <a :href="`${site.base}blog${post.href}`">{{ post.title }}</a>
     </h2>
     <p class="mb-5 font-light" v-html="post.excerpt" />
     <div class="flex">
       <!-- <PostAuthor :author="author" /> -->
       <a
-        :href="`${site.base}guide${post.href}`"
+        :href="`${site.base}blog${post.href}`"
         class="inline-flex items-center font-medium hover:text-[color:var(--vp-c-brand-dark)]"
       >
         Read more

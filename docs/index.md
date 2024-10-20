@@ -5,13 +5,16 @@ title: Deploy JavaScript Apps on AWS
 description: Thunder simplifies AWS deployment for front-end engineers. Deploy JavaScript and TypeScript applications on AWS in minutes without the pain of configuration. Sign up for a 30-day free trial with no credit card required.
 
 hero:
-  name: AWS Simplified
-  text: for Web Developers.
-  tagline: Thunder is the lightning-fast deployment platform designed specifically for web developers and teams
+  name: The Platform for Web Artisans
+  text:
+  tagline: Thunder is the deployment platform for web developers on AWS.
   actions:
     - theme: brand
       text: Sign up using Github
       link: https://console.thunder.so/login
+    - theme: alt
+      text: View demo
+      link: /demo
 
 features:
 - icon: ⚡

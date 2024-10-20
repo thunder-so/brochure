@@ -31,13 +31,13 @@ const author = findByName(post.value.author)
     <footer class="VPDocFooter">
       <div class="prev-next">
         <div class="pager">
-          <a class="pager-link prev" v-if="prevPost" :href="`${site.base}guide${prevPost.href}`">
+          <a class="pager-link prev" v-if="prevPost" :href="`${site.base}blog${prevPost.href}`">
             <span class="desc">Previous post</span>
             <span class="title">{{ prevPost.title }}</span>
           </a>
         </div>
         <div class="pager has-prev">
-          <a class="pager-link next" v-if="nextPost" :href="`${site.base}guide${nextPost.href}`">
+          <a class="pager-link next" v-if="nextPost" :href="`${site.base}blog${nextPost.href}`">
             <span class="desc">Next post</span>
             <span class="title">{{ nextPost.title }}</span>
           </a>

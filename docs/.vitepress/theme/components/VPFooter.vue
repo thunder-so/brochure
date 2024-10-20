@@ -16,7 +16,7 @@ const { hasSidebar } = useSidebar()
           <ul>
             <!-- <li><a href="/features/">Features</a></li> -->
             <li><a href="/docs/">Documentation</a></li>
-            <li><a href="/guide/">Developer Guides</a></li>
+            <li><a href="/blog/">Developer Blog</a></li>
           </ul>
         </div>
 

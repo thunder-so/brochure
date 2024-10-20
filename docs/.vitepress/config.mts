@@ -16,7 +16,7 @@ export default defineConfig({
   // Sitemap
   lastUpdated: true,
   buildEnd: async ({ outDir }) => {
-    const sitemap = new SitemapStream({ hostname: 'https://www.thunder.so/' })
+    const sitemap = new SitemapStream({ hostname: 'https://thunder.so/' })
     const pages = await createContentLoader('*.md').load()
     const writeStream = createWriteStream(resolve(outDir, 'sitemap.xml'))
 
@@ -122,10 +122,10 @@ export default defineConfig({
     nav: nav(),
     sidebar: {
       '/docs/': sidebarDocs(),
-      '/config/': sidebarConfig(),
+      // '/config/': sidebarConfig(),
     },
     blog: {
-      title: 'Developer Guides',
+      title: 'Developer Blog',
       description: 'Learn how to ship code quickly and reliably.',
     },
   },
@@ -154,6 +154,12 @@ export default defineConfig({
           find: /^.*\/VPNavBar\.vue$/,
           replacement: fileURLToPath(
             new URL('./theme/components/VPNavBar.vue', import.meta.url)
+          )
+        },
+        {
+          find: /^.*\/VPButton\.vue$/,
+          replacement: fileURLToPath(
+            new URL('./theme/components/VPButton.vue', import.meta.url)
           )
         },
         {
@@ -195,7 +201,7 @@ function nav() {
   return [
     { text: 'Docs', link: '/docs/', activeMatch: '/docs/' },
     // { text: 'Configs', link: '/config/', activeMatch: '/config/' },
-    { text: 'Guides', link: '/guide/', activeMatch: '/guide/' },
+    { text: 'Blog', link: '/blog/', activeMatch: '/blog/' },
     { text: 'Pricing', link: '/pricing/', activeMatch: '/pricing/' },
   ]
 }
@@ -203,32 +209,46 @@ function nav() {
 function sidebarDocs() {
   return [
     {
-      text: 'Introduction',
-      collapsible: true,
       items: [
-        { text: 'Getting Started', link: '/docs/' },
-        { text: 'Organization', link: '/docs/organization' },
-        // { text: 'Billing', link: '/docs/billing' },
-        { text: 'AWS Provider', link: '/docs/provider' },
+        { text: 'Introduction', link: '/docs/' },
+        { text: 'Concepts', link: '/docs/concepts' },
       ],
     },
     {
-      text: 'Concepts',
+      text: 'Get Started',
       collapsible: true,
       items: [
-        { text: 'Application', link: '/docs/application' },
-        { text: 'Environment', link: '/docs/environment' },
-        { text: 'Stack', link: '/docs/stack' },
-        // { text: 'Installation', link: '/docs/installation' },
+        { text: 'Create React App', link: '/docs/start/react' },
+        { text: 'Next.js Static', link: '/docs/start/next-static' },
+        { text: 'Vue.js', link: '/docs/start/vue' },
+        { text: 'Svelte', link: '/docs/start/svelte' },
+        { text: 'Astro', link: '/docs/start/astro' },
+        { text: 'Gatsby', link: '/docs/start/gatsby' },
+        { text: 'Vitepress', link: '/docs/start/vitepress' },
       ],
     },
     {
       text: 'Stacks',
       collapsible: true,
       items: [
-        { text: 'Static Site Generator (SSG)', link: '/docs/static-site-generator' },
+        { text: 'Single Page Applications (SPA)', link: '/docs/single-page-application' },
       ],
     },
+    {
+      text: 'How To',
+      collapsible: true,
+      items: [
+        { text: 'Add an AWS Account', link: '/docs/aws' },
+        { text: 'Connect with Github', link: '/docs/github' },
+        { text: 'Install an Application', link: '/docs/application' },
+        { text: 'Deploy code', link: '/docs/deployments' },
+        { text: 'Rollback', link: '/docs/rollback' },
+        { text: 'Custom Domains', link: '/docs/domains' },
+        { text: 'Monorepo Support', link: '/docs/monorepo' },
+        { text: 'Environment Variables', link: '/docs/environment' },
+      ],
+    },
+    
     // {
     //   text: 'Architecture',
     //   collapsible: true,
