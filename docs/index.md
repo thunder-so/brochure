@@ -16,20 +16,34 @@ hero:
       text: View demo
       link: /demo
 
-features:
-- icon: ⚡
-# - icon:
-#     dark: /dark-feature-icon.svg
-#     light: /light-feature-icon.svg
-  title: "Static Site Generators (SSG)"
-  details: Deploy landing pages and documentation sites quickly using Github, AWS S3 and CloudFront.
-- icon:  💪
-  title: "Single Page Applications (SPA)"
-  details: Deploy full stack applications using Lambda or Fargate for Server-Side Rendering (SSR).
-- icon: 🔥
-  title: "Preview and Ship"
-  details: Trigger preview deployments with a git push. Streamlined workflows designed specifically for web developers.
+# features:
+# - icon: ⚡
+#   title: "Static Site Generators (SSG)"
+#   details: Deploy landing pages and documentation sites quickly using Github, AWS S3 and CloudFront.
+# - icon:  💪
+#   title: "Single Page Applications (SPA)"
+#   details: Deploy full stack applications using Lambda or Fargate for Server-Side Rendering (SSR).
+# - icon: 🔥
+#   title: "Preview and Ship"
+#   details: Trigger preview deployments with a git push. Streamlined workflows designed specifically for web developers.
 ---
+<section class="segment hallmarks">
+  <div class="container">
+      <div class="grid grid-cols-2 grid-rows-1 gap-4">
+        <article class="hallmark">
+          <h3>Single Page Applications (SPA)</h3>
+          <p>Server pre-rendered pages stored in S3 <br />and served from CloudFront</p>
+          <img src="/images/SPA.png" alt="Single Page Applications" class="mx-auto w-auto h-auto">
+        </article>
+        <article class="hallmark">
+          <h3>Seamless GitOps</h3>
+          <p>Push to production and revalidate CDN cache <br />directly from git</p>
+          <img src="/images/GitOps.png" alt="GitOps" class="mx-auto w-auto h-auto">
+        </article>
+      </div>
+  </div>
+</section>
+
 
 <section class="segment">
 <div class="container">

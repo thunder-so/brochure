@@ -109,7 +109,7 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
   padding-top: 8px;
   font-size: 18px;
   line-height: 28px;
-  font-weight: 300;
+  font-weight: 400;
   white-space: pre-wrap;
   color: var(--vp-c-text-2);
   text-align: center;
