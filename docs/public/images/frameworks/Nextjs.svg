@@ -1,1 +1,5 @@
-<svg fill="none" height="15" viewBox="0 0 15 15" width="15" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="m0 7.5c0-4.14214 3.35786-7.5 7.5-7.5 4.1421 0 7.5 3.35786 7.5 7.5 0 2.587-1.3098 4.8681-3.3025 6.2163l-6.79063-9.50688c-.12634-.17687-.35247-.25186-.55946-.18553s-.34741.25879-.34741.47615v7.49996h1v-5.93973l5.8299 8.16183c-1.00329.498-2.1339.7779-3.3299.7779-4.14214 0-7.5-3.3579-7.5-7.5zm10 2.5v-6h1v6z" fill="#000" fill-rule="evenodd"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <path d="M0,7.5C0,3.358 3.358,0 7.5,0C11.642,0 15,3.358 15,7.5C15,10.087 13.69,12.368 11.698,13.716L4.907,4.209C4.781,4.033 4.554,3.958 4.347,4.024C4.14,4.09 4,4.283 4,4.5L4,12L5,12L5,6.06L10.83,14.222C9.827,14.72 8.696,15 7.5,15C3.358,15 0,11.642 0,7.5ZM10,10L10,4L11,4L11,10L10,10Z" style="fill:white;"/>
+</svg>

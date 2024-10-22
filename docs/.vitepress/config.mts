@@ -224,6 +224,7 @@ function sidebarDocs() {
         { text: 'Svelte', link: '/docs/start/svelte' },
         { text: 'Astro', link: '/docs/start/astro' },
         { text: 'Gatsby', link: '/docs/start/gatsby' },
+        { text: 'Vite', link: '/docs/start/vite' },
         { text: 'Vitepress', link: '/docs/start/vitepress' },
       ],
     },

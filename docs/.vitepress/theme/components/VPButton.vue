@@ -2,6 +2,8 @@
 import { computed } from 'vue'
 import { normalizeLink } from 'vitepress/dist/client/theme-default/support/utils.js'
 import { EXTERNAL_URL_RE } from 'vitepress/dist/client/shared.js'
+import VPImage from 'vitepress/dist/client/theme-default/components/VPImage.vue'
+
 
 interface Props {
   tag?: string
@@ -9,6 +11,7 @@ interface Props {
   theme?: 'brand' | 'alt' | 'sponsor'
   text: string
   href?: string
+  icon?: string
 }
 const props = withDefaults(defineProps<Props>(), {
   size: 'medium',
@@ -33,6 +36,12 @@ const component = computed(() => {
     :target="isExternal ? '_blank' : undefined"
     :rel="isExternal ? 'noreferrer' : undefined"
   >
+    <div v-if="icon" class="icon">
+      <VPImage
+        :image="icon"
+      />
+    </div>
+
     {{ text }}
   </component>
 </template>

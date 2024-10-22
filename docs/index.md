@@ -10,8 +10,9 @@ hero:
   tagline: Thunder is the deployment platform for web developers on AWS.
   actions:
     - theme: brand
-      text: Sign up using Github
+      text: "Sign up using Github"
       link: https://console.thunder.so/login
+      icon: github
     - theme: alt
       text: View demo
       link: /demo
@@ -27,6 +28,9 @@ hero:
 #   title: "Preview and Ship"
 #   details: Trigger preview deployments with a git push. Streamlined workflows designed specifically for web developers.
 ---
+
+<Frameworks />
+
 <section class="segment hallmarks">
   <div class="container">
       <div class="grid grid-cols-2 grid-rows-1 gap-4">
@@ -37,13 +41,12 @@ hero:
         </article>
         <article class="hallmark">
           <h3>Seamless GitOps</h3>
-          <p>Push to production and revalidate CDN cache <br />directly from git</p>
+          <p>Push to production and rebuild CDN cache <br />directly from git</p>
           <img src="/images/GitOps.png" alt="GitOps" class="mx-auto w-auto h-auto">
         </article>
       </div>
   </div>
 </section>
-
 
 <section class="segment">
 <div class="container">
@@ -84,7 +87,6 @@ hero:
 </div>
 </section>
 
-<Frameworks />
 
 <section class="segment">
 <div class="container">

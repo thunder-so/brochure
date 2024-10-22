@@ -8,6 +8,7 @@ export interface HeroAction {
   theme?: 'brand' | 'alt'
   text: string
   link: string
+  icon?: string
 }
 
 defineProps<{
@@ -134,7 +135,7 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 16px;
   padding-top: 24px;
 
 }
