@@ -16,17 +16,6 @@ hero:
     - theme: alt
       text: View demo
       link: /demo
-
-# features:
-# - icon: ⚡
-#   title: "Static Site Generators (SSG)"
-#   details: Deploy landing pages and documentation sites quickly using Github, AWS S3 and CloudFront.
-# - icon:  💪
-#   title: "Single Page Applications (SPA)"
-#   details: Deploy full stack applications using Lambda or Fargate for Server-Side Rendering (SSR).
-# - icon: 🔥
-#   title: "Preview and Ship"
-#   details: Trigger preview deployments with a git push. Streamlined workflows designed specifically for web developers.
 ---
 
 <Frameworks />
@@ -48,7 +37,7 @@ hero:
   </div>
 </section>
 
-<section class="segment">
+<!-- <section class="segment">
 <div class="container">
   <div class="focus">
     <section class="intro text-center mb-10">
@@ -56,7 +45,6 @@ hero:
         <span class="text-4xl font-light block mb-2">Deploy your next project on AWS</span>
         <span class="text-2xl font-light">without the pain of configuration</span>
       </h2>
-      <!-- We know the AWS Console is an intimidating behemoth which requires week-long courses to even scratch the surface. -->
       <p>We built Thunder so you can focus on building and shipping your application without ever juggling infrastructure-as-code. Let us handle the underlying complexity.</p>
     </section>
   </div>
@@ -85,10 +73,10 @@ hero:
     </article>
   </section>
 </div>
-</section>
+</section> -->
 
 
-<section class="segment">
+<!-- <section class="segment">
 <div class="container">
   <div class="founder">
     <blockquote>"Open source web application frameworks should be easier to run on the cloud."</blockquote>
@@ -108,17 +96,16 @@ hero:
     </p>
   </div>
 </div>
-</section>
+</section> -->
 
 <section class="segment">
 <div class="container">
   <div class="focus">
     <section class="intro text-center mb-10">
-      <h2><span class="text-4xl font-light block mb-2">Deploy JS/TS apps on AWS in Minutes</span></h2>
-      <p>Sign up now and get started with a 30-day free trial. No credit card required.</p>
-      <div class="actions">
+      <h2><span class="text-4xl font-light block mb-2">Deploy SPA apps on AWS in Minutes</span></h2>
+      <div class="actions mt-6">
         <div class="action">
-          <a class="VPButton btn medium brand" href="https://console.thunder.so/login">Sign up using Github</a>
+          <a class="VPButton btn medium brand" href="https://console.thunder.so/login">Get started free</a>
         </div>
       </div>
     </section>

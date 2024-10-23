@@ -72,8 +72,8 @@ const frameworks = [
 
 
 .framework img {
-    max-width: 92px;
-    height: 92px;
+    max-width: 72px;
+    height: 72px;
     display: block;
 }
 

@@ -4,7 +4,6 @@ import { h } from 'vue'
 import 'uno.css'
 import './overrides.css'
 import './tailwind.postcss'
-import Feature from './components/uno/Feature.vue'
 import Frameworks from './components/uno/Frameworks.vue'
 import Posts from './components/blog/Posts.vue'
 import Post from './components/blog/Post.vue'
@@ -22,7 +21,6 @@ export default {
     })
   },
   enhanceApp({ app, router, siteData }: { app: App, router, siteData }) {
-    app.component('Feature', Feature)
     app.component('Frameworks', Frameworks)
     app.component('Posts', Posts)
     app.component('Post', Post)
