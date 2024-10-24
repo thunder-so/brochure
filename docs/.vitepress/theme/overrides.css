@@ -38,7 +38,7 @@
     line-height: 1.4;
     margin-bottom: 1rem;
     font-size: 1rem;
-    font-weight: 300;
+    font-weight: 400;
   }
 
 /**
@@ -119,8 +119,9 @@
     --vp-home-hero-name-color: var(--vp-c-brand);
     
     --vp-button-brand-bg: var(--vp-c-brand);
-    --vp-button-brand-hover-bg: var(--vp-c-brand-1);
+    --vp-button-brand-hover-bg: #cccc00;
     --vp-button-brand-text: var(--vp-c-gray-1);
+    --vp-button-brand-hover-text: #000;
 
     --vp-nav-bg-color: var(--vp-c-bg-alt);
 
@@ -160,6 +161,10 @@
   a.pager-link:active,
   a.pager-link:focus {
     text-decoration: none !important;
+  }
+
+  .text-muted-foreground {
+    color: var(--vp-c-text-2);
   }
 
 /**

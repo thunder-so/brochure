@@ -3,120 +3,195 @@ layout: home
 title: Pricing
 ---
 
-<section class="segment pricing">
+<script setup lang="ts">
+  import VPButton from 'vitepress/dist/client/theme-default/components/VPButton.vue'
+</script>
+
+<section class="segment pricing mt-12">
   <div class="container">
-    <div class="focus">
-      <section class="intro text-center mb-10">
-        <h2>
-            <span class="text-4xl font-light block mb-2">Pricing</span>
-        </h2>
-        <p class="mb-2">Our pricing is organization-based, not usage-based. We sell software, not seats or artificial limits on your apps or infrastructure. Your AWS usage costs remain your responsibility.</p>
-        <p>Start a <i>30-day free trial</i> and then pay a fair and fixed monthly price.</p>
-      </section>
-    </div>
-   <div class="grid grid-cols-3 gap-4">
-      <div class="tier">
-        <h3>Free forever</h3>
-        <p>Made for builders</p>
-        <ol>
-            <li>Static Site Generators (SSG)</li>
-            <li>Deploy on S3 + CloudFront</li>
-            <li>1 AWS Account (us-east-1)</li>
-            <li>Unlimited applications</li>
-            <li>Automated deploys</li>
-        </ol>
-        <div class="price-tag">
-            <span class="symbol">$</span>
-            <span class="amount">0</span>
-            <span class="after">/month</span>
-        </div>
-        <div class="actions">
-          <a class="btn btn-primary" href="https://console.thunder.so/login">Sign up now</a>
-        </div>
+      <div class="focus">
+        <section class="intro text-center mb-10">
+          <h2>
+              <span class="text-3xl font-light block mb-2">Plans and Pricing</span>
+          </h2>
+          <p class="mb-2">Our pricing is organization-based. Your AWS usage costs remain your responsibility.</p>
+        </section>
       </div>
-      <div class="tier">
-        <h3>Pro</h3>
-        <p>Made for full-stack developers</p>
-        <ol>
-            <li>Server Side Rendering (SSR)</li>
-            <li>Deploy on Lambda and ECS Fargate</li>
-            <li>Multiple Services (backend, frontend)</li>
-            <li>Multiple Environments (preview, production)</li>
-            <li>Custom Deployment Triggers</li>
-        </ol>
-        <div class="price-tag">
-            <span class="symbol">$</span>
-            <span class="amount">25</span>
-            <span class="after">/month</span>
-        </div>
-        <div class="actions">
-          <a class="btn btn-primary" href="https://console.thunder.so/login">Start 30-day free trial</a>
-        </div>
-      </div>
-      <div class="tier">
-        <h3>Teams</h3>
-        <p>Made for organizations of all sizes</p>
-        <ol>
-            <li>All Pro features included</li>
-            <li>Github Organizations</li>
-            <li>Multiple AWS Accounts</li>
-            <li>SOC2 Compliance</li>
-            <li>Priority email support & SLAs</li>
-        </ol>
-        <div class="price-tag">
-            <span class="symbol">$</span>
-            <span class="amount">99</span>
-            <span class="after">/month</span>
-        </div>
-        <div class="actions">
-          <a class="btn btn-primary" href="https://console.thunder.so/login">Start 30-day free trial</a>
-        </div>
-      </div>
-      <div class="tier">
-        <h3>Early Adopter</h3>
-        <p>Offer available during beta program only</p>
-        <ol>
-          <li>Lifetime access</li>
-          <li>All Pro and Teams features, when available</li>
-          <li>Migration assistance</li>
-          <li>Priority email support</li>
-          <li>Private support channel (Discord/Slack)</li>
-        </ol>
-        <div class="price-tag">
-            <span class="symbol">$</span>
-            <span class="amount">299</span>
-            <span class="extra">One-time. Lifetime license.</span>
-        </div>
-        <div class="actions">
-          <a class="btn btn-primary" href="https://console.thunder.so/login">Sign up and pay</a>
-        </div>
-      </div>
-      <div class="tier">
-        <h3>Enterprise</h3>
-        <p>Made for large teams solving big problems</p>
-        <ol>
-          <li>All features included</li>
-          <li>SOC2 Compliance</li>
-          <li>SSO/SAML for Thunder Console</li>
-          <li>Priority email support & SLAs</li>
-          <li>Private support channel (Discord/Slack)</li>
-        </ol>
-        <div class="actions align-left">
-          <a class="btn btn-primary" href="mailto:support@thunder.so">Contact Sales</a>
-        </div>
-      </div>
-      <div class="info">
-        <p>All plans include</p>
-        <ol>
-          <li>100% data ownership</li>
-          <li>Forever data retention</li>
-          <li>Privacy law compliance</li>
-          <li>Enterprise-grade security</li>
-          <li>No vendor lock-in</li>
-          <li>Apps keep working if you cancel</li>
-        </ol>
-      </div>
-    </div>
+  </div>
+
+  <div class="container">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr>
+          <th class="p-3"></th>
+          <th class="p-3 text-center w-1/4">
+            <div class="text-xl font-semibold">Free</div>
+            <div class="font-normal text-muted-foreground mt-2">Made for web artisans</div>
+          </th>
+          <th class="p-3 text-center w-1/4">
+            <div class="text-xl font-semibold">Pro</div>
+            <div class="font-normal text-muted-foreground mt-2">Made for full-stack developers</div>
+          </th>
+          <th class="p-3 text-center w-1/4">
+            <div class="text-xl font-semibold">Lifetime</div>
+            <div class="font-normal text-muted-foreground mt-2">Available during beta program</div>
+          </th>
+        </tr>
+        <tr>
+          <th class="p-3"></th>
+          <th class="p-3 text-center">
+          </th>
+          <th class="p-3 text-center">
+            <div class="font-normal text-xl">
+              <span class="">$</span>
+              <span class="">15</span>
+              <span class="">/month</span>
+            </div>
+            <div class="font-normal text-muted-foreground mt-1">
+              <span class="">Billed monthly</span>
+            </div>
+          </th>
+          <th class="p-3 text-center">
+            <div class="font-normal text-xl">
+              <span class="">$</span>
+              <span class="">149</span>
+              <span class=""></span>
+            </div>
+            <div class="font-normal text-muted-foreground mt-1">
+              <span class="">One-time payment</span>
+            </div>
+          </th>
+        </tr>
+        <tr>
+          <th class="p-3"></th>
+          <th class="p-3 text-center">
+            <div class="actions">
+              <VPButton
+                tag="a"
+                size="medium"
+                theme="brand"
+                text="Sign Up"
+                href="https://console.thunder.so/login"
+              />
+            </div>
+          </th>
+          <th class="p-3 text-center">
+            <div class="actions">
+               <VPButton
+                  tag="a"
+                  size="medium"
+                  theme="brand"
+                  text="Get started free"
+                  href="https://console.thunder.so/login"
+                />
+            </div>
+          </th>
+          <th class="p-3 text-center">
+            <div class="actions">
+              <VPButton
+                tag="a"
+                size="medium"
+                theme="brand"
+                text="Sign Up and Pay"
+                href="https://console.thunder.so/login"
+              />
+            </div>
+          </th>
+        </tr>
+        <!-- <tr>
+          <td class="p-3">
+            <h3>Unlimited Applications</h3>
+            <p class="text-sm text-muted-foreground mt-1">No limits on Apps, Environments and Services</p>
+          </td>
+          <td class="p-3 text-center">
+            <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+          </td>
+          <td class="p-3 text-center">
+            <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+          </td>
+          <td class="p-3 text-center">
+            <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+          </td>
+        </tr> -->
+        <tr>
+          <td class="p-3">
+            <h3>Single Page Applications (SPA)</h3>
+            <p class="text-sm text-muted-foreground mt-1">Hosted on S3 and CloudFront</p>
+          </td>
+          <td class="p-3 text-center">
+            <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+          </td>
+          <td class="p-3 text-center">
+            <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+          </td>
+          <td class="p-3 text-center">
+            <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+          </td>
+        </tr>
+        <tr>
+          <td class="p-3">
+            <h3>Static Site Generators (SSG)</h3>
+            <p class="text-sm text-muted-foreground mt-1">Server pre-rendered pages using CodeBuild</p>
+          </td>
+          <td class="p-3 text-center">
+            <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+          </td>
+          <td class="p-3 text-center">
+            <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+          </td>
+          <td class="p-3 text-center">
+            <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+          </td>
+        </tr>
+        <tr>
+          <td class="p-3">
+            <h3>Git Push to Deploy</h3>
+            <p class="text-sm text-muted-foreground mt-1">Automatic build and deploy with CodePipeline</p>
+          </td>
+          <td class="p-3 text-center">
+            <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+          </td>
+          <td class="p-3 text-center">
+            <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+          </td>
+          <td class="p-3 text-center">
+            <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+          </td>
+        </tr>
+        <tr>
+          <td class="p-3">
+            <h3>Server Side Rendering (SSR)</h3>
+            <p class="text-sm text-muted-foreground mt-1">Fast responses via Lambda</p>
+          </td>
+          <td class="p-3 text-center">
+            <!-- <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" /> -->
+          </td>
+          <td class="p-3 text-center">
+            <!-- <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" /> -->
+            <span class="text-xs text-muted-foreground ml-2">Coming Soon</span>
+          </td>
+          <td class="p-3 text-center">
+            <!-- <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" /> -->
+            <span class="text-xs text-muted-foreground ml-2">Coming Soon</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="p-3">
+            <h3>Multiple AWS Accounts</h3>
+            <p class="text-sm text-muted-foreground mt-1">Deploy environments in different accounts</p>
+          </td>
+          <td class="p-3 text-center">
+            <!-- <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" /> -->
+          </td>
+          <td class="p-3 text-center">
+            <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+          </td>
+          <td class="p-3 text-center">
+            <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+          </td>
+        </tr>
+      </thead>
+    </table>
   </div>
 </section>
 
