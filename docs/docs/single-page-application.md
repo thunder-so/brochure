@@ -1,12 +1,17 @@
-# Stacks
+# Single Page Application (SPA) Stack
 
-Stacks are logical deployment units within a CDK application. Represents a set of AWS resources that can be created, updated, or deleted together.
+Thunder is built on top of open-source AWS CDK stack to deploy single page applications (SPA) and static site generators (SSG) on S3 and CloudFront.
 
-Construct Libraries are pre-built and reusable components that encapsulate best practices and patterns for various AWS resources. Accelerates development by simplifying the creation of common infrastructure components.
+> [https://github.com/thunder-so/cdk-spa](https://github.com/thunder-so/cdk-spa)
 
-# Static Site Generator
+- Fast responses from CloudFront
+- Automatic upload of the build files for CSR and static assets to S3 with optimized caching rules
+- Automatic build and deploy with CodeBuild and CodePipeline from Github repository.
+- Publicly available by a custom domain (or subdomain) via Route53
 
-Deploy JavaScript/TypeScript static site generators (SSG) on AWS using our open source stacks.
+<img src="/images/SPA.png" alt="Single Page Applications" class="mx-auto w-auto h-auto">
+
+The benefits of using static site generators:
 
 - HTML is generated on the build server.
 - Full crawler readability; Great for SEO

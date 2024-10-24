@@ -45,7 +45,7 @@ const { hasSidebar } = useSidebar()
         <div class="footer-meta">
           <div class="flex space-between mb-1">
             <Thunder class="w-6 mr-2" />
-            <h3>thunder.so</h3>
+            <h3>thunder</h3>
           </div>
           <p v-if="theme.footer.message" class="message mb-2" v-html="theme.footer.message"></p>
           <p>CloudBits, Inc.

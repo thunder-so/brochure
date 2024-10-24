@@ -110,7 +110,8 @@
     --vp-c-default-3: var(--vp-c-gray-3);
     --vp-c-default-soft: var(--vp-c-gray-soft);
 
-    --vp-c-brand-1: #EC7211;
+    /* --vp-c-brand-1: #EC7211; */
+    --vp-c-brand-1: #3B82F6;
     --vp-c-brand-2: #FF9900;
     --vp-c-brand-3: #fffc00;
     --vp-c-brand: var(--vp-c-brand-3);
@@ -118,7 +119,7 @@
     --vp-home-hero-name-color: var(--vp-c-brand);
     
     --vp-button-brand-bg: var(--vp-c-brand);
-    --vp-button-brand-hover-bg: #EC7211;
+    --vp-button-brand-hover-bg: var(--vp-c-brand-1);
     --vp-button-brand-text: var(--vp-c-gray-1);
 
     --vp-nav-bg-color: var(--vp-c-bg-alt);
@@ -180,22 +181,9 @@
     margin: 0 auto;
   }
 
-  .founder {
-    max-width: 650px;
-    margin: 0 auto;
-    border: 1px solid var(--vp-c-bg-soft);
-    border-radius: 12px;
-    padding: 24px;
-    height: 100%;
-    background-color: var(--vp-sidebar-bg-color);
-    transition: border-color 0.25s, background-color 0.25s;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .founder p {
-    color: var(--vp-c-text-2);
-    margin-bottom: 0.5rem;
+  .title {
+    font-family: var(--vp-font-family-heading);
+    font-weight: 400;
   }
 
 
@@ -262,6 +250,29 @@
   article.hallmark img {
     max-width: 540px;
   }
+
+
+/**
+ * Frameworks
+ *
+ */
+ .frameworks {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.frameworks .focus {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.frameworks h3 {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  font-weight: 400;
+  margin-bottom: 0.75rem;
+}
 
   
 /**
@@ -357,13 +368,13 @@
   section.pricing ol {
     margin-top: 1rem;
   }
-  section.pricing .tier li {
-    /* background-image: url('/images/tick.svg');
+  /* section.pricing .tier li {
+    background-image: url('/images/tick.svg');
     background-repeat: no-repeat;
     background-size: 16px;
     background-position: left center;
-    padding-left: 1.5rem; */
-  }
+    padding-left: 1.5rem;
+  } */
 
   section.pricing li::before {
     content: "";

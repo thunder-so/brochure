@@ -17,8 +17,20 @@ hero:
       text: View demo
       link: /demo
 ---
+<script setup lang="ts">
+  import VPButton from 'vitepress/dist/client/theme-default/components/VPButton.vue'
+</script>
 
-<Frameworks />
+<section class="segment frameworks">
+    <div class="container">
+        <div class="focus">
+            <h3>Deploy your next project on AWS</h3>
+            <p>Get setup in 2 minutes with seamless CI/CD with your Github repository.</p>
+        </div>
+        <Frameworks />
+    </div>
+</section>
+
 
 <section class="segment hallmarks">
   <div class="container">
@@ -105,7 +117,13 @@ hero:
       <h2><span class="text-4xl font-light block mb-2">Deploy SPA apps on AWS in Minutes</span></h2>
       <div class="actions mt-6">
         <div class="action">
-          <a class="VPButton btn medium brand" href="https://console.thunder.so/login">Get started free</a>
+          <VPButton
+              tag="a"
+              size="medium"
+              theme="brand"
+              text="Get started free"
+              href="https://console.thunder.so/login"
+          />
         </div>
       </div>
     </section>
