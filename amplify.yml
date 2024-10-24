@@ -4,10 +4,10 @@ frontend:
     preBuild:
       commands:
         - nvm use 18
-        - npx pnpm i --store=node_modules/.pnpm-store
+        - npm install
     build:
       commands:
-        -  npx pnpm run build
+        -  npm run docs:build
   artifacts:
     baseDirectory: docs/.vitepress/dist
     files:
