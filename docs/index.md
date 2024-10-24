@@ -1,8 +1,8 @@
 ---
 layout: home
 
-title: Deploy JavaScript Apps on AWS
-description: Thunder simplifies AWS deployment for front-end engineers. Deploy JavaScript and TypeScript applications on AWS in minutes without the pain of configuration. Sign up for a 30-day free trial with no credit card required.
+title: Platform for Web Artisans
+description: Thunder simplifies deployments on AWS for front-end engineers. Deploy React, Vue, Svelte, Next.js, Astro, Vite on AWS in minutes with seamless CI/CD integration with Github.
 
 hero:
   name: The Platform for Web Artisans
