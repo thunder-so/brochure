@@ -186,7 +186,7 @@
     margin: 0 auto;
   }
 
-  .title {
+  .VPNavBarTitle .title {
     font-family: var(--vp-font-family-heading);
     font-weight: 400;
   }
@@ -537,15 +537,14 @@
     color: var(--vp-c-text-2);
   }
   
-  .title {
+  /* .title {
     display: block;
     line-height: 20px;
     font-size: 14px;
-    font-weight: 500;
     color: var(--vp-c-brand-1);
     transition: color 0.25s;
     border-bottom: 0 !important;
-  }
+  } */
 
 
   /**
