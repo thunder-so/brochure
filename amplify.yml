@@ -7,7 +7,7 @@ frontend:
         - npm install --legacy-peer-deps
     build:
       commands:
-        -  npm run docs:build
+        -  npm run build
   artifacts:
     baseDirectory: docs/.vitepress/dist
     files:
