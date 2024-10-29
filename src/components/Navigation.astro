@@ -26,12 +26,6 @@ const menuitems = [
   <Astronav>
     <div class="flex flex-col lg:flex-row lg:justify-between">
         <div class="flex items-center justify-between">
-          <!-- <div class="brand py-2">
-            <a class="flex space-between" href="/">
-              <img src={Brand.src} alt="thunder.so platform" width="24" height="24" />
-              <h3 class="text-md ml-2">thunder</h3>
-            </a>
-          </div> -->
           <Brand />
 
           <div class="flex lg:hidden">
@@ -98,6 +92,14 @@ header.scrolled {
   border-bottom: 1px solid var(--border);
   background-color: var(--bg);
 }
+
+@media (max-width: 1024px) {
+  header.navigation {
+    background-color: var(--bg);
+    border-bottom: 1px solid transparent;
+  }
+}
+
 
 header.navigation a:hover {
   text-decoration: none;

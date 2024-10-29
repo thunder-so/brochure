@@ -35,16 +35,16 @@ import Frameworks from '../components/Frameworks.astro';
 
   <section class="segment hallmarks">
     <div class="container">
-        <div class="grid grid-cols-2 grid-rows-1 gap-4">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <article class="hallmark">
             <h3>Single Page Applications (SPA)</h3>
             <p>Server pre-rendered pages stored in S3 <br />and served from CloudFront</p>
-            <img src="/SPA.png" alt="Single Page Applications" class="mx-auto w-auto h-auto">
+            <img src="/SPA.png" alt="Single Page Applications" class="mx-auto w-full h-auto">
           </article>
           <article class="hallmark">
             <h3>Seamless GitOps</h3>
             <p>Push to production and rebuild CDN cache <br />directly from git</p>
-            <img src="/GitOps.png" alt="GitOps" class="mx-auto w-auto h-auto">
+            <img src="/GitOps.png" alt="GitOps" class="mx-auto w-full h-auto">
           </article>
         </div>
     </div>
@@ -107,7 +107,8 @@ import Frameworks from '../components/Frameworks.astro';
 
 <style>
 .hero {
-  padding: 48px 0;
+  margin-top: 65px;
+  padding: 72px 0;
 }
 
 @media (min-width: 640px) {
