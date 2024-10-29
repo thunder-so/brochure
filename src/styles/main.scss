@@ -24,6 +24,7 @@
   // Backgrounds
   --bg: #030711;
   --bg-alt: #0F1629;
+  --bg-shade: #3F4454;
   --bg-elv: #0F1629;
   --bg-soft: #0F1629;
 
@@ -134,33 +135,10 @@ section.segment {
   @apply mt-32 mb-32;
 }
 
-/** 
- * NAVIGATION
- */ 
-header.navigation {
-  position: fixed;
-  top: 0px;
-  left: 0;
-  z-index: 999;
-  width: 100%;
-  // pointer-events: none;
-  transition: background-color 0.5s;
-  background-color: var(--bg-alt);
-  font-family: var(--font-family-heading);
-  text-rendering: optimizeLegibility;
-}
-
-header.navigation a:hover {
-  text-decoration: none;
-}
-
 main.body {
   margin-top: var(--layout-top-height);
 }
 
-/** 
- * FRAMEWORKS
- */ 
 .frameworks {
   display: flex;
   gap: 16px;

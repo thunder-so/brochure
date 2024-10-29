@@ -4,6 +4,8 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 import Button from './Button.astro';
 import Brand from './Brand.astro';
 
+const { class: additionalClass } = Astro.props;
+
 const menuitems = [
   {
     title: "Docs",
@@ -19,7 +21,7 @@ const menuitems = [
   },
 ];
 ---
-<header class="navigation">
+<header id="header" class:list={[additionalClass, "navigation"]}>
 <div class="max-w-screen-xl mx-auto px-5 py-3">
   <Astronav>
     <div class="flex flex-col lg:flex-row lg:justify-between">
@@ -62,3 +64,42 @@ const menuitems = [
   </Astronav>
 </div>
 </header>
+
+<script>
+  if (typeof window !== 'undefined') {
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('header');
+      if (header) { 
+        if (window.scrollY > 50) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      }
+    });
+  }
+</script>
+
+<style>
+header.navigation {
+  position: fixed;
+  top: 0px;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  transition: background-color 0.25s;
+  font-family: var(--font-family-heading);
+  text-rendering: optimizeLegibility;
+  border-bottom: 1px solid transparent;
+}
+
+header.documentation,
+header.scrolled {
+  border-bottom: 1px solid var(--border);
+  background-color: var(--bg);
+}
+
+header.navigation a:hover {
+  text-decoration: none;
+}
+</style>

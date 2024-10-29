@@ -12,7 +12,7 @@ Thunder is built on top of open-source AWS CDK stack to deploy single page appli
 - Automatic build and deploy with CodeBuild and CodePipeline from Github repository.
 - Publicly available by a custom domain (or subdomain) via Route53
 
-<img src="/images/SPA.png" alt="Single Page Applications" class="mx-auto w-auto h-auto">
+<img src="/SPA.png" alt="Single Page Applications on AWS S3 and CloudFront" class="mx-auto w-auto h-auto">
 
 The benefits of using static site generators:
 

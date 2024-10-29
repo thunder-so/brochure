@@ -59,6 +59,10 @@ const resolvedImageWithDomain = new URL(
 			height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 		<!-- End Google Tag Manager (noscript) -->
 		
+		<div style="width: 600px; top: -100px;" class="absolute right-[400px] z-10 h-[150px] w-[400px] rotate-[0deg] transform rounded-full bg-gradient-to-tl from-[var(--bg)] via-[var(--bg-shade)] to-[var(--bg-alt)] blur-[150px]"></div>
+
+		<div class="fixed dotted-background h-full top-0 left-0 right-0 z-[-999]"><div class="absolute left-0 right-0 bottom-0 h-[300px]"></div></div>
+
 		<Navigation />
 		<slot />
 		<Footer />
@@ -72,3 +76,14 @@ const resolvedImageWithDomain = new URL(
 		</style>
 	</body>
 </html>
+
+<style>
+.dotted-background {
+	background-position: 0 0,14px 14px;
+	background-size: 16px 16px;
+	width: 100%;
+	background-image: radial-gradient(#181818 5%,#0000001f 15%);
+	background-color: var(--bg);
+	position: fixed !important;
+}
+</style>
