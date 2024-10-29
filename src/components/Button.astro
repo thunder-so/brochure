@@ -1,0 +1,43 @@
+---
+interface Props {
+  size?: "sm" | "md" | "lg";
+  block?: boolean;
+  variant?: "outline" | "primary" | "secondary" | "inverted";
+  class?: string;
+  [x: string]: any;
+}
+
+const {
+  size = "md",
+  variant = "primary",
+  block,
+  class: className,
+  href,
+  ...rest
+} = Astro.props;
+
+const sizes = {
+  sm: "px-5 py-3 rounded text-sm leading-none font-semibold",
+  md: "px-6 py-3.5 rounded text-md leading-none font-semibold",
+  lg: "px-6 py-3",
+};
+
+const variants = {
+  outline: "border border-1 text-[var(--button-outline-text)] border-[var(--button-outline-border)] hover:border-[var(--button-outline-hover-border)] hover:text-[var(--button-outline-hover-text)]",
+  primary: "bg-[var(--button-primary-bg)] text-[var(--button-primary-text)] hover:bg-[var(--button-primary-hover-bg)] hover:text-[var(--button-primary-hover-text)]",
+  secondary: "bg-[var(--button-secondary-bg)] text-[var(--button-secondary-text)] hover:bg-[var(--button-secondary-hover-bg)] hover:text-[var(--button-secondary-hover-text)]"
+};
+
+---
+
+<button
+  {...rest}
+  class:list={[
+    "rounded text-center transition",
+    block && "w-full",
+    sizes[size],
+    variants[variant],
+    className,
+  ]}
+  ><slot />
+</button>

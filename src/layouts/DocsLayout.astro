@@ -1,0 +1,83 @@
+---
+import type { MarkdownHeading } from 'astro'
+import { SEO } from "astro-seo";
+import Navigation from '../components/Navigation.astro';
+import Sidebar from '../components/docs/Sidebar.astro';
+import Markdown from '../components/docs/Markdown.astro';
+import "../styles/main.scss";
+import "../styles/docs.scss";
+
+interface Props {
+	title: string;
+	headings: MarkdownHeading[];
+}
+
+const { title, headings, ...data } = Astro.props
+
+const makeTitle = title
+  ? title + " | " + "Thunder"
+  : "Thunder - Deploy Apps on AWS like a Pro";
+
+const currentPage = Astro.url.pathname;
+const currentFile = `src/content/docs${currentPage.replace(/\/$/, '')}.mdx`
+
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		
+		<title>{makeTitle}</title>
+		<meta name="description" content="" />
+
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/thunder.svg" />
+		<meta name="generator" content={Astro.generator} />
+
+	</head>
+	<body>
+		<Navigation />
+		
+		<main class="layout">
+			<aside id="grid-sidebar" title="Site Navigation">
+			  <Sidebar currentPage={currentPage} />
+			</aside>
+			<div id="grid-main">
+			  <Markdown title={title} headings={headings}>
+				<slot />
+			  </Markdown>
+			</div>
+		</main>
+
+		<style is:global>
+			/* Improve Page speed */
+			/* https://css-tricks.com/almanac/properties/c/content-visibility/ */
+			img {
+			  content-visibility: auto;
+			}
+		</style>
+	</body>
+</html>
+
+<style>
+main.layout {
+  margin-top: 64px;
+}
+
+#grid-sidebar {
+  visibility: visible;
+  width: 18.5rem;
+  background-color: var(--bg);
+  border-inline-end: 1px solid var(--border);
+  position: fixed;
+  z-index: 1000;
+  inset-inline-start: 0;
+  overflow-y: auto;
+}
+
+#grid-main {
+  margin-inline-start: 18.5rem;
+  padding: 20px;
+} 
+</style>

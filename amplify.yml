@@ -4,12 +4,12 @@ frontend:
     preBuild:
       commands:
         - nvm use 18
-        - npm install --legacy-peer-deps
+        - npm install
     build:
       commands:
-        -  npm run build
+        - npm run astro check && npm run astro build
   artifacts:
-    baseDirectory: docs/.vitepress/dist
+    baseDirectory: dist
     files:
       - '**/*'
   cache:

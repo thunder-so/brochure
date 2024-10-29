@@ -1,0 +1,24 @@
+---
+import Logo from './public/thunder.svg';
+---
+
+<div class="brand py-2">
+    <a class="flex space-between" href="/">
+        <img src={Logo.src} alt="thunder.so platform" width="24" height="24" />
+        <h3 class="text-md ml-2">thunder</h3>
+    </a>
+</div>
+
+<style>
+.brand a:hover,
+.brand a:active {
+  text-decoration: none;
+}
+
+.brand h3 {
+    color: var(--text-highlight);
+    font-size: 1rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+}
+</style>

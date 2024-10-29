@@ -1,0 +1,23 @@
+---
+import type { MarkdownHeading } from 'astro'
+
+type Props = {
+  title: string
+  headings: MarkdownHeading[]
+}
+
+const { title, headings } = Astro.props
+---
+
+<article class="docs">
+    <h1 class="content-title">{title}</h1>
+    <slot />
+</article>
+
+<style>
+.docs {
+  @apply max-w-3xl;
+  margin: 0 auto;
+  padding: 48px 0 24px;
+}
+</style>

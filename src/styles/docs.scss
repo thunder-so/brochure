@@ -1,0 +1,536 @@
+/**
+ * Headings
+ * -------------------------------------------------------------------------- */
+
+.docs h1,
+.docs h2,
+.docs h3,
+.docs h4,
+.docs h5,
+.docs h6 {
+  position: relative;
+  font-weight: 600;
+  outline: none;
+  color: var(--text-highlight);
+}
+
+.docs h1 {
+  letter-spacing: -0.02em;
+  line-height: 40px;
+  font-size: 28px;
+}
+
+.docs h2 {
+  margin: 24px 0 16px;
+  padding-top: 24px;
+  letter-spacing: -0.02em;
+  line-height: 32px;
+  font-size: 24px;
+}
+
+.docs h3 {
+  margin: 32px 0 0;
+  letter-spacing: -0.01em;
+  line-height: 28px;
+  font-size: 20px;
+}
+
+.docs h4 {
+  margin: 24px 0 0;
+  letter-spacing: -0.01em;
+  line-height: 24px;
+  font-size: 18px;
+}
+
+.docs .header-anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: -0.87em;
+  font-weight: 500;
+  user-select: none;
+  opacity: 0;
+  text-decoration: none;
+  transition:
+    color 0.25s,
+    opacity 0.25s;
+}
+
+.docs .header-anchor:before {
+  content: var(--vp-header-anchor-symbol);
+}
+
+.docs h1:hover .header-anchor,
+.docs h1 .header-anchor:focus,
+.docs h2:hover .header-anchor,
+.docs h2 .header-anchor:focus,
+.docs h3:hover .header-anchor,
+.docs h3 .header-anchor:focus,
+.docs h4:hover .header-anchor,
+.docs h4 .header-anchor:focus,
+.docs h5:hover .header-anchor,
+.docs h5 .header-anchor:focus,
+.docs h6:hover .header-anchor,
+.docs h6 .header-anchor:focus {
+  opacity: 1;
+}
+
+@media (min-width: 768px) {
+  .docs h1 {
+    letter-spacing: -0.02em;
+    line-height: 40px;
+    font-size: 32px;
+  }
+}
+
+.docs h2 .header-anchor {
+  top: 24px;
+}
+
+/**
+ * Paragraph and inline elements
+ * -------------------------------------------------------------------------- */
+
+.docs p,
+.docs summary {
+  margin: 16px 0;
+}
+
+.docs p {
+  line-height: 28px;
+}
+
+.docs blockquote {
+  margin: 16px 0;
+  border-left: 2px solid var(--border);
+  padding-left: 16px;
+  transition: border-color 0.5s;
+  color: var(--text-highlight);
+}
+
+.docs blockquote > p {
+  margin: 0;
+  font-size: 16px;
+  transition: color 0.5s;
+}
+
+.docs a {
+  font-weight: 500;
+  // color: var(--vp-c-brand-1);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition:
+    color 0.25s,
+    opacity 0.25s;
+}
+
+// .docs a:hover {
+//   color: var(--vp-c-brand-2);
+// }
+
+.docs strong {
+  font-weight: 600;
+}
+
+/**
+ * Lists
+ * -------------------------------------------------------------------------- */
+
+.docs ul,
+.docs ol {
+  padding-left: 1.25rem;
+  margin: 16px 0;
+}
+
+.docs ul {
+  list-style: disc;
+}
+
+.docs ol {
+  list-style: decimal;
+}
+
+.docs li + li {
+  margin-top: 8px;
+}
+
+.docs li > ol,
+.docs li > ul {
+  margin: 8px 0 0;
+}
+
+/**
+ * Table
+ * -------------------------------------------------------------------------- */
+
+.docs table {
+  display: block;
+  border-collapse: collapse;
+  margin: 20px 0;
+  overflow-x: auto;
+}
+
+.docs tr {
+  background-color: var(--bg);
+  border-top: 1px solid var(--border);
+  transition: background-color 0.5s;
+}
+
+.docs tr:nth-child(2n) {
+  background-color: var(--bg-alt);
+}
+
+.docs th,
+.docs td {
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+}
+
+.docs th {
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-highlight);
+  background-color: var(--bg-alt);
+}
+
+.docs td {
+  font-size: 14px;
+}
+
+/**
+ * Decorational elements
+ * -------------------------------------------------------------------------- */
+
+.docs hr {
+  margin: 16px 0;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+/**
+ * Custom Block
+ * -------------------------------------------------------------------------- */
+
+.docs .custom-block {
+  margin: 16px 0;
+}
+
+.docs .custom-block p {
+  margin: 8px 0;
+  line-height: 24px;
+}
+
+.docs .custom-block p:first-child {
+  margin: 0;
+}
+
+.docs .custom-block div[class*='language-'] {
+  margin: 8px 0;
+  border-radius: 8px;
+}
+
+.docs .custom-block div[class*='language-'] code {
+  font-weight: 400;
+  background-color: transparent;
+}
+
+.docs .custom-block .vp-code-group .tabs {
+  margin: 0;
+  border-radius: 8px 8px 0 0;
+}
+
+/**
+ * Code
+ * -------------------------------------------------------------------------- */
+
+/* inline code */
+.docs :not(pre, h1, h2, h3, h4, h5, h6) > code {
+  color: var(--code-color);
+}
+
+.docs :not(pre) > code {
+  border-radius: 4px;
+  padding: 3px 6px;
+  background-color: var(--code-bg);
+  transition:
+    color 0.25s,
+    background-color 0.5s;
+}
+
+.docs h1 > code,
+.docs h2 > code,
+.docs h3 > code,
+.docs h4 > code {
+  font-size: 0.9em;
+}
+
+.docs div[class*='language-'],
+.vp-block {
+  position: relative;
+  margin: 16px -24px;
+  background-color: var(--code-bg);
+  overflow-x: auto;
+  transition: background-color 0.5s;
+}
+
+@media (min-width: 640px) {
+  .docs div[class*='language-'],
+  .vp-block {
+    border-radius: 8px;
+    margin: 16px 0;
+  }
+}
+
+@media (max-width: 639px) {
+  .docs li div[class*='language-'] {
+    border-radius: 8px 0 0 8px;
+  }
+}
+
+.docs div[class*='language-'] + div[class*='language-'],
+.docs div[class$='-api'] + div[class*='language-'],
+.docs div[class*='language-'] + div[class$='-api'] > div[class*='language-'] {
+  margin-top: -8px;
+}
+
+.docs [class*='language-'] pre,
+.docs [class*='language-'] code {
+  /*rtl:ignore*/
+  direction: ltr;
+  /*rtl:ignore*/
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+.docs [class*='language-'] pre {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 20px 0;
+  background: transparent;
+  overflow-x: auto;
+}
+
+.docs [class*='language-'] code {
+  display: block;
+  padding: 0 24px;
+  width: fit-content;
+  min-width: 100%;
+  color: var(--code-color);
+  transition: color 0.5s;
+}
+
+.docs [class*='language-'] code .highlighted {
+  transition: background-color 0.5s;
+  margin: 0 -24px;
+  padding: 0 24px;
+  width: calc(100% + 2 * 24px);
+  display: inline-block;
+}
+
+.docs [class*='language-'] code .diff {
+  transition: background-color 0.5s;
+  margin: 0 -24px;
+  padding: 0 24px;
+  width: calc(100% + 2 * 24px);
+  display: inline-block;
+}
+
+.docs [class*='language-'] code .diff::before {
+  position: absolute;
+  left: 10px;
+}
+
+.docs [class*='language-'] .has-focused-lines .line:not(.has-focus) {
+  filter: blur(0.095rem);
+  opacity: 0.4;
+  transition:
+    filter 0.35s,
+    opacity 0.35s;
+}
+
+.docs [class*='language-'] .has-focused-lines .line:not(.has-focus) {
+  opacity: 0.7;
+  transition:
+    filter 0.35s,
+    opacity 0.35s;
+}
+
+.docs [class*='language-']:hover .has-focused-lines .line:not(.has-focus) {
+  filter: blur(0);
+  opacity: 1;
+}
+
+.docs div[class*='language-'].line-numbers-mode {
+  /*rtl:ignore*/
+  padding-left: 32px;
+}
+
+.docs .line-numbers-wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  /*rtl:ignore*/
+  left: 0;
+  z-index: 3;
+  /*rtl:ignore*/
+  border-right: 1px solid var(--border);
+  padding-top: 20px;
+  width: 32px;
+  text-align: center;
+  font-family: var(--font-family-mono);
+  transition:
+    border-color 0.5s,
+    color 0.5s;
+}
+
+.docs [class*='language-'] > button.copy {
+  /*rtl:ignore*/
+  direction: ltr;
+  position: absolute;
+  top: 12px;
+  /*rtl:ignore*/
+  right: 12px;
+  z-index: 3;
+  border: 1px solid var(--vp-code-copy-code-border-color);
+  border-radius: 4px;
+  width: 40px;
+  height: 40px;
+  background-color: var(--vp-code-copy-code-bg);
+  opacity: 0;
+  cursor: pointer;
+  background-image: var(--vp-icon-copy);
+  background-position: 50%;
+  background-size: 20px;
+  background-repeat: no-repeat;
+  transition:
+    border-color 0.25s,
+    background-color 0.25s,
+    opacity 0.25s;
+}
+
+.docs [class*='language-']:hover > button.copy,
+.docs [class*='language-'] > button.copy:focus {
+  opacity: 1;
+}
+
+.docs [class*='language-'] > button.copy:hover,
+.docs [class*='language-'] > button.copy.copied {
+  border-color: var(--vp-code-copy-code-hover-border-color);
+  background-color: var(--vp-code-copy-code-hover-bg);
+}
+
+.docs [class*='language-'] > button.copy.copied,
+.docs [class*='language-'] > button.copy:hover.copied {
+  /*rtl:ignore*/
+  border-radius: 0 4px 4px 0;
+  background-color: var(--vp-code-copy-code-hover-bg);
+  background-image: var(--vp-icon-copied);
+}
+
+.docs [class*='language-'] > button.copy.copied::before,
+.docs [class*='language-'] > button.copy:hover.copied::before {
+  position: relative;
+  top: -1px;
+  /*rtl:ignore*/
+  transform: translateX(calc(-100% - 1px));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--vp-code-copy-code-hover-border-color);
+  /*rtl:ignore*/
+  border-right: 0;
+  border-radius: 4px 0 0 4px;
+  padding: 0 10px;
+  width: fit-content;
+  height: 40px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--vp-code-copy-code-active-text);
+  background-color: var(--vp-code-copy-code-hover-bg);
+  white-space: nowrap;
+  content: var(--vp-code-copy-copied-text-content);
+}
+
+.docs [class*='language-'] > span.lang {
+  position: absolute;
+  top: 2px;
+  /*rtl:ignore*/
+  right: 8px;
+  z-index: 2;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--code-color);
+  transition:
+    color 0.4s,
+    opacity 0.4s;
+}
+
+.docs [class*='language-']:hover > button.copy + span.lang,
+.docs [class*='language-'] > button.copy:focus + span.lang {
+  opacity: 0;
+}
+
+/**
+ * Component: Team
+ * -------------------------------------------------------------------------- */
+
+.docs .VPTeamMembers {
+  margin-top: 24px;
+}
+
+.docs .VPTeamMembers.small.count-1 .container {
+  margin: 0 !important;
+  max-width: calc((100% - 24px) / 2) !important;
+}
+
+.docs .VPTeamMembers.small.count-2 .container,
+.docs .VPTeamMembers.small.count-3 .container {
+  max-width: 100% !important;
+}
+
+.docs .VPTeamMembers.medium.count-1 .container {
+  margin: 0 !important;
+  max-width: calc((100% - 24px) / 2) !important;
+}
+
+/**
+ * External links
+ * -------------------------------------------------------------------------- */
+
+/* prettier-ignore */
+:is(.vp-external-link-icon, .docs a[href*='://'], .docs a[target='_blank']):not(.no-icon)::after {
+  display: inline-block;
+  margin-top: -1px;
+  margin-left: 4px;
+  width: 11px;
+  height: 11px;
+  background: currentColor;
+  color: var(--default-3);
+  flex-shrink: 0;
+  --icon: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' %3E%3Cpath d='M0 0h24v24H0V0z' fill='none' /%3E%3Cpath d='M9 5v2h6.59L4 18.59 5.41 20 17 8.41V15h2V5H9z' /%3E%3C/svg%3E");
+  -webkit-mask-image: var(--icon);
+  mask-image: var(--icon);
+}
+
+.vp-external-link-icon::after {
+  content: '';
+}
+
+/* prettier-ignore */
+.external-link-icon-enabled :is(.docs a[href*='://'], .docs a[target='_blank'])::after {
+  content: '';
+  color: currentColor;
+}
