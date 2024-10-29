@@ -8,17 +8,17 @@ import "../styles/main.scss";
 interface Props {
 	title: string;
 }
-const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
-
-const resolvedImageWithDomain = new URL(
-  "./opengraph.jpg", Astro.site
-).toString();
-
 const { title } = Astro.props;
 
 const makeTitle = title
   ? title + " | " + "Thunder"
   : "Thunder - Deploy Apps on AWS like a Pro";
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+
+const resolvedImageWithDomain = new URL(
+  "./opengraph.jpg", Astro.site
+).toString();
 ---
 
 <!doctype html>
@@ -26,15 +26,12 @@ const makeTitle = title
 	<head>
 		<Snippets />
 		<meta charset="UTF-8" />
-		
 		<title>{makeTitle}</title>
-		<meta name="description" content="" />
 
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/thunder.svg" />
-		<meta name="generator" content={Astro.generator} />
 
-		<!-- <SEO
+		<SEO
 			title={makeTitle}
 			description=""
 			canonical={canonicalURL}
@@ -54,7 +51,7 @@ const makeTitle = title
 					alt: makeTitle,
 				},
 			}}
-		/> -->
+		/>
 	</head>
 	<body>
 		<Navigation />

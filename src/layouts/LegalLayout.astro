@@ -1,6 +1,5 @@
 ---
 import type { MarkdownHeading } from 'astro'
-import { SEO } from "astro-seo";
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 import Markdown from '../components/docs/Markdown.astro';
@@ -18,20 +17,18 @@ const makeTitle = title
   ? title + " | " + "Thunder"
   : "Thunder - Deploy Apps on AWS like a Pro";
 
-const currentPage = Astro.url.pathname;
+// const currentPage = Astro.url.pathname;
 
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8" />
-		
+		<meta charset="UTF-8" />		
 		<title>{makeTitle}</title>
 
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/thunder.svg" />
-		<meta name="generator" content={Astro.generator} />
 	</head>
 	<body>
 		<Navigation />

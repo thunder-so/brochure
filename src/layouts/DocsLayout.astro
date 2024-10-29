@@ -19,21 +19,46 @@ const makeTitle = title
   : "Thunder - Deploy Apps on AWS like a Pro";
 
 const currentPage = Astro.url.pathname;
-const currentFile = `src/content/docs${currentPage.replace(/\/$/, '')}.mdx`
+// const currentFile = `src/content/docs${currentPage.replace(/\/$/, '')}.mdx`
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+
+const resolvedImageWithDomain = new URL(
+  "./opengraph.jpg", Astro.site
+).toString();
 
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8" />
-		
+		<meta charset="UTF-8" />		
 		<title>{makeTitle}</title>
-		<meta name="description" content="" />
 
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/thunder.svg" />
-		<meta name="generator" content={Astro.generator} />
+
+		<SEO
+			title={makeTitle}
+			description=""
+			canonical={canonicalURL}
+			twitter={{
+				title: makeTitle,
+				site: "@_thunderso",
+				card: "summary_large_image",
+			}}
+			openGraph={{
+				basic: {
+					url: canonicalURL,
+					type: "website",
+					title: makeTitle,
+					image: resolvedImageWithDomain,
+				},
+				image: {
+					alt: makeTitle,
+				},
+			}}
+		/>
 
 	</head>
 	<body>
