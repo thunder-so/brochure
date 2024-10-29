@@ -1,6 +1,7 @@
 ---
 import type { MarkdownHeading } from 'astro'
 import { SEO } from "astro-seo";
+import Snippets from "../components/Snippets.astro";
 import Navigation from '../components/Navigation.astro';
 import Sidebar from '../components/docs/Sidebar.astro';
 import Markdown from '../components/docs/Markdown.astro';
@@ -32,6 +33,7 @@ const resolvedImageWithDomain = new URL(
 <!doctype html>
 <html lang="en">
 	<head>
+		<Snippets />
 		<meta charset="UTF-8" />		
 		<title>{makeTitle}</title>
 
