@@ -22,7 +22,7 @@ That’s it! Your app will be live on your CloudFront URL as soon as the build f
 
 ## Use Client-side Routing
 
-If you use Reach Router or [React Router](https://github.com/ReactTraining/react-router) for [client-side routing](https://facebook.github.io/create-react-app/docs/deployment#serving-apps-with-client-side-routing), you will need to direct all routing requests to `index.html`s so they can be handled by your routing library.
+If you use Reach Router or [React Router](https://github.com/ReactTraining/react-router) for [client-side routing](https://facebook.github.io/create-react-app/docs/deployment#serving-apps-with-client-side-routing), you will need to direct all routing requests to `index.html` so they can be handled by your routing library.
 
 You can do this easily by defining a Redirect Rule for your site. Go to the Redirects section for your app settings and add a rule with the following values:
 
