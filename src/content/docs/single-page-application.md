@@ -3,7 +3,7 @@ title: 'Single Page Application (SPA) Stack'
 description: 'Learn how to deploy Single Page Applications (SPA) and Static Site Generators (SSG) using Thunder, leveraging AWS CDK, S3, and CloudFront for optimized performance and scalability.'
 ---
 
-Thunder is built on top of open-source AWS CDK stack to deploy single page applications (SPA) and static site generators (SSG) on S3 and CloudFront.
+CDK-SPA is an open-source AWS CDK stack to deploy single page applications (SPA) and static site generators (SSG) on S3 and CloudFront, with Auto-deployment from Github repository.
 
 > [https://github.com/thunder-so/cdk-spa](https://github.com/thunder-so/cdk-spa)
 

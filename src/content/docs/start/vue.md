@@ -20,7 +20,7 @@ You can deploy a [Vue.js](https://vuejs.org/) site on AWS in under a minute. You
 That’s it! Your app will be live on your CloudFront URL as soon as the build finishes.
 
 
-## Use Client-side Routing
+<!-- ## Use Client-side Routing
 
 If you use Reach Router or [Vue Router](https://github.com/vuejs/vue-router) for [client-side routing](https://vuejs.org/v2/guide/routing.html), you will need to direct all routing requests to `index.html`s so they can be handled by your routing library.
 
@@ -30,4 +30,4 @@ You can do this easily by defining a Redirect Rule for your site. Go to the Redi
 | **Parameter**             | **Value**         |
 |---------------------------|-------------------|
 | Source Path               | `/*`              |
-| Destination Path          | `/index.html`     |
+| Destination Path          | `/index.html`     | -->

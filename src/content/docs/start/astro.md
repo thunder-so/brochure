@@ -19,7 +19,7 @@ You can deploy a [Astro](https://astro.build/) site on AWS in under a minute. Yo
 
 That’s it! Your app will be live on your CloudFront URL as soon as the build finishes.
 
-## Use Client-side Routing
+<!-- ## Use Client-side Routing
 
 You will need to direct all routing requests to `index.html`s so they can be handled by Astro.
 
@@ -29,4 +29,4 @@ You can do this easily by defining a Redirect Rule for your site. Go to the Redi
 | **Parameter**             | **Value**         |
 |---------------------------|-------------------|
 | Source Path               | `/*`              |
-| Destination Path          | `/index.html`     |
+| Destination Path          | `/index.html`     | -->
