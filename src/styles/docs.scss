@@ -135,26 +135,26 @@
  * Lists
  * -------------------------------------------------------------------------- */
 
-.docs ul.list,
-.docs ol.list {
+.docs ul,
+.docs ol {
   padding-left: 1.25rem;
   margin: 16px 0;
 }
 
-.docs ul.list {
+.docs ul {
   list-style: disc;
 }
 
-.docs ol.list {
+.docs ol {
   list-style: decimal;
 }
 
-.docs ul.list li + li {
+.docs ul li + li {
   margin-top: 8px;
 }
 
-.docs ul.list li > ol,
-.docs ul.list li > ul {
+.docs ul li > ol,
+.docs ul li > ul {
   margin: 8px 0 0;
 }
 
@@ -163,10 +163,13 @@
  * -------------------------------------------------------------------------- */
 
 .docs table {
-  display: block;
+  display: table;
   border-collapse: collapse;
   margin: 20px 0;
   overflow-x: auto;
+  width: 100%;
+  // table-layout: fixed;
+  box-sizing: border-box;
 }
 
 .docs tr {
@@ -183,6 +186,7 @@
 .docs td {
   border: 1px solid var(--border);
   padding: 8px 16px;
+  box-sizing: border-box;
 }
 
 .docs th {

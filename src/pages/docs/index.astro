@@ -34,14 +34,32 @@ const headings = [
 
 <DocsLayout title="" headings={headings}>
   <!-- <Content /> -->
+
+  <h1>Thunder Documentation</h1>
+  <p>Deploy modern web applications on AWS with ease. Built for modern frameworks and workflows.</p>
   
-  ## Prerequisites
+  <h2>Prerequisites</h2>
+  <p>Before you begin, make sure you have the following:</p>
 
-Before you begin, make sure you have the following:
+  <ul>
+    <li>A Github account</li>
+    <li>An AWS account (root or IAM access)</li>
+  </ul>
 
-  - A Github account
-  - An AWS account (root or IAM access)
+  <h2>Signup with Github</h2>
+  <p>Thunder uses a Github OAuth App to authenticate users. Your signup process will require you to authorize the app. On successful authorization, you will be redirected to Thunder and we will set up your account.</p>
 
-  <Frameworks />
+  <h2>Organizations</h2>
+  <p>Thunder console will prompt you to create an organization after you sign up. Your organization is the wrapper for your applications, AWS accounts and billing.</p>
+
+  <h2>AWS Accounts</h2>
+  <p>Thunder allows connecting multiple AWS account with ease. Thunder creates an IAM role in your AWS account which grants us the permission to provision cloud infrastructure on your behalf.</p>
+  <p>Learn how to <a href="/docs/howto/aws">Add an AWS Account</a>.</p>
+
+  <h2>Import Repositories</h2>
+  <p>When your organization is set up with an AWS account, you are ready to <a href="/docs/howto/application">import your projects from Github</a>.</p>
+  <p><a href="/docs/howto/github">Install the Thunder Github App</a> on your account to give Thunder access to your repositories. You can import repositories from your personal accounts and Github Organizations accounts.</p>
+
+  <!-- <Frameworks /> -->
 
 </DocsLayout>

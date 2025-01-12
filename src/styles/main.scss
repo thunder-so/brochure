@@ -172,6 +172,7 @@ starlight-tabs {
 }
 
 starlight-tabs .tab {
+  margin-top: 0px !important;
   margin-bottom: 0px !important;
 }
 
@@ -179,6 +180,7 @@ starlight-tabs ul[role="tablist"] {
   overflow: hidden;
   border-bottom: 0 !important;
   gap: 1rem;
+  margin: 0 !important;
 }
 
 starlight-tabs a[role="tab"] {

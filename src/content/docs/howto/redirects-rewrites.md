@@ -20,55 +20,27 @@ Use Cases:
 SEO Impact: 
 A 301 redirect passes most of the SEO value from the old URL to the new one, while a 302 redirect does not.
 
-| **Source**        | **Target**       | **Type**       |
-|-------------------|------------------|----------------| 
-| /docs/<*>         | /documents/<*>   | Redirect       |
+Using static paths:
 
-```ts
-export interface HostingProps {
-    redirects?: Array<{
-      source: string;
-      target: string;
-    }>;
-}
+| **Source**                 | **Destination**          |
+|----------------------------|--------------------------|
+| /home                      | /                        |
 
 
-private createRedirectFunction(redirects: Array<{ source: string; target: string }>): CloudFrontFunction {
-    const redirectFunctionCode = `
-        function handler(event) {
-            var request = event.request;
-            var uri = request.uri;
+Using wildcards:
 
-            ${redirects.map(redirect => {
-                // Convert wildcard patterns to regular expressions
-                const sourcePattern = redirect.source.replace(/\*/g, '(.*)');
-                const targetPattern = redirect.target.replace(/\*/g, '$1');
+| **Source**                 | **Destination**          |
+|----------------------------|--------------------------|
+| /guide/*                   | /blog/*                  |
+| /cms/*                     | /*                       |
 
-                return `
-                    var sourceRegex = new RegExp('^${sourcePattern}$');
-                    if (sourceRegex.test(uri)) {
-                        var newUri = uri.replace(sourceRegex, '${targetPattern}');
-                        return {
-                            statusCode: 301,
-                            statusDescription: 'Moved Permanently',
-                            headers: {
-                                location: { value: newUri }
-                            }
-                        };
-                    }
-                `;
-            }).join('')}
+Using placeholders:
 
-            return request;
-        }
-    `;
-
-    return new CloudFrontFunction(this, 'RedirectFunction', {
-        code: CloudFrontFunctionCode.fromInline(redirectFunctionCode),
-        comment: 'Function to handle dynamic redirects with wildcards',
-    });
-}
-```
+| **Source**                 | **Destination**          |
+|----------------------------|--------------------------|
+| /docs/:any                 | /:any                    |
+| /blog/posts/:postid        | /blog/:postid            |
+| /updates/:year/:month      | /changelog/:year/:month  |
 
 ## Rewrite
 
