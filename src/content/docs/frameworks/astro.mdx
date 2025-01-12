@@ -5,7 +5,7 @@ description: 'Learn how to deploy an Astro static single page application (SPA) 
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-Deploy your [Astro](https://astro.build/) static SPA to AWS with S3 and CloudFront for fast, reliable performance. This guide walks you through configuration and setup to get your site live.
+Deploy your static [Astro](https://astro.build/) SPA to AWS with S3 and CloudFront for fast, reliable performance. This guide walks you through configuration and setup to get your site live.
 
 The server pre-rendered pages produced by the build step will be stored in an S3 bucket and served using CloudFront CDN.
 
@@ -33,20 +33,19 @@ Use the following commands in the build step settings:
 | Build Command             | `npm run astro check && npm run astro build`      |
 | Output Directory          | `dist`           |
   </TabItem>
-  <TabItem label="yarn" icon="seti:yarn">
-| **Parameter**             | **Value**         |
-|---------------------------|-------------------|
-| Install Command           | `yarn install`    |
-| Build Command             | `yarn astro check && yarn astro build`      |
-| Output Directory          | `dist`           |
-  </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 | **Parameter**             | **Value**         |
 |---------------------------|-------------------|
 | Install Command           | `pnpm install`    |
 | Build Command             | `pnpm run astro check && pnpm run astro build`      |
 | Output Directory          | `dist`           |
-
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+| **Parameter**             | **Value**         |
+|---------------------------|-------------------|
+| Install Command           | `bun install`    |
+| Build Command             | `bun run astro check && bun run astro build`      |
+| Output Directory          | `dist`           |
   </TabItem>
 </Tabs>
 

@@ -29,7 +29,7 @@ export type Sidebar = Record<string, { text: string; link: string }[]>;
 export const sidebar: Sidebar = {
   '': [
     { text: 'Getting Started', link: 'docs' },
-    // { text: 'Concepts', link: 'docs/concepts' }
+    { text: 'How it works', link: 'docs/concepts' }
   ],
   'Frameworks': [
     { text: 'Create React App', link: 'docs/frameworks/react' },
@@ -41,18 +41,17 @@ export const sidebar: Sidebar = {
     { text: 'Vite', link: 'docs/frameworks/vite' },
     { text: 'Vitepress', link: 'docs/frameworks/vitepress' },
   ],
-  'Stacks': [
-    { text: 'Single Page Applications (SPA)', link: 'docs/single-page-application' },
-  ],
+  // 'Stacks': [
+  //   { text: 'Single Page Applications (SPA)', link: 'docs/single-page-application' },
+  // ],
   'How To': [
-    { text: 'Add an AWS Account', link: 'docs/aws' },
-    { text: 'Connect with Github', link: 'docs/github' },
-    { text: 'Install an Application', link: 'docs/application' },
-    { text: 'Deploy code', link: 'docs/deployments' },
-    { text: 'Rollback', link: 'docs/rollback' },
-    { text: 'Custom Domains', link: 'docs/domains' },
-    { text: 'Monorepo Support', link: 'docs/monorepo' },
-    { text: 'Environment Variables', link: 'docs/environment' },
+    { text: 'Add an AWS account', link: 'docs/howto/aws' },
+    { text: 'Connect with Github', link: 'docs/howto/github' },
+    { text: 'Import a repository', link: 'docs/howto/application' },
+    { text: 'Build configuration', link: 'docs/howto/configure' },
+    { text: 'Environment variables', link: 'docs/howto/environment' },
+    { text: 'Custom domains', link: 'docs/howto/domains' },
+    { text: 'Redirects and rewrites', link: 'docs/howto/redirects-rewrites' }
   ],
   // 'Architecture': [
   //   { text: 'Modern Three Tier Pattern', link: 'docs/three-tier-pattern' },
