@@ -1,0 +1,98 @@
+---
+title: 'Deploy Astro on AWS'
+description: 'Learn how to deploy an Astro static single page application (SPA) on AWS with S3 and CloudFront, leveraging server pre-rendered static pages served from global CDN for optimal performance.'
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Deploy your [Astro](https://astro.build/) static SPA to AWS with S3 and CloudFront for fast, reliable performance. This guide walks you through configuration and setup to get your site live.
+
+The server pre-rendered pages produced by the build step will be stored in an S3 bucket and served using CloudFront CDN.
+
+
+## Configure
+Update your astro.config.mjs to generate static files:
+
+```ts title="astro.config.mjs"
+import { defineConfig } from 'astro/config';
+ 
+export default defineConfig({
+  output: 'static',   // Must be 'static' or 'hybrid'
+});
+```
+
+## Build Settings
+
+Use the following commands in the build step settings:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+| **Parameter**             | **Value**         |
+|---------------------------|-------------------|
+| Install Command           | `npm install`    |
+| Build Command             | `npm run astro check && npm run astro build`      |
+| Output Directory          | `dist`           |
+  </TabItem>
+  <TabItem label="yarn" icon="seti:yarn">
+| **Parameter**             | **Value**         |
+|---------------------------|-------------------|
+| Install Command           | `yarn install`    |
+| Build Command             | `yarn astro check && yarn astro build`      |
+| Output Directory          | `dist`           |
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+| **Parameter**             | **Value**         |
+|---------------------------|-------------------|
+| Install Command           | `pnpm install`    |
+| Build Command             | `pnpm run astro check && pnpm run astro build`      |
+| Output Directory          | `dist`           |
+
+  </TabItem>
+</Tabs>
+
+That’s it! Your app will be live on your CloudFront URL as soon as the stack is installed.
+
+## Environment Variables
+
+Define and use environment variables during the build step in a type-safe manner as a string, number, enum, or boolean using the envField helper. 
+
+*Context*: Since you're building an SPA, set the context to <code>client</code>, as these variables will be used in the browser.
+
+*Access*: Use <code>public</code> access for these variables. Never store secret keys or sensitive information in public variables, as they will be exposed in the browser and accessible to anyone.
+
+Additional Properties: You can specify properties like *optional* or *default* in the object, but always ensure sensitive information is not included.
+
+```ts title="astro.config.mjs"
+import { defineConfig, envField } from 'astro/config';
+
+export default defineConfig({
+	env: {
+		schema: {
+			CLIENT_API_URL: envField.string({ 
+        context: "client",
+        access: "public", 
+        default: "my-api-url"
+      }),
+      CLIENT_SECRET: envField.string({ 
+        context: "client", 
+        access: "public", 
+        optional: false 
+      }),
+		}
+	}
+});
+```
+
+To access these in your Astro components:
+
+```ts title="index.astro"
+---
+import { CLIENT_API_URL, CLIENT_SECRET } from "astro:env/client";
+
+const data = await fetch(`${CLIENT_API_URL}/api`, {
+  headers: {
+    Authorization: `Bearer ${CLIENT_SECRET}`
+  }
+})
+---
+```

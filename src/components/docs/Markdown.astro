@@ -3,10 +3,11 @@ import type { MarkdownHeading } from 'astro'
 
 type Props = {
   title: string
-  headings: MarkdownHeading[]
+  headings?: MarkdownHeading[]
 }
 
 const { title, headings } = Astro.props
+// console.log("headings from components/Markdown.astro", headings)
 ---
 
 <article class="docs">

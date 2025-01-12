@@ -5,10 +5,10 @@ description: 'Explore the fundamental concepts and architecture used in deployin
 
 On a high-level, the steps you'll need to follow in order to deploy a project for the first time are:
 
-- Create an account at [console.thunder.so](https://console.thunder.so)
+- Create an account at [console.thunder.so](https://console.thunder.so) using Github
 - Create an Organization
 - Connect your AWS Account to your Organization 
-- Connect your GitHub account (personal or organization)
+- Connect your GitHub account (personal or organization) to provide access to repositories
 - Create a Application
 
 

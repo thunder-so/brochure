@@ -28,18 +28,18 @@ export type Sidebar = Record<string, { text: string; link: string }[]>;
 
 export const sidebar: Sidebar = {
   '': [
-    { text: 'Introduction', link: 'docs/introduction' },
-    { text: 'Concepts', link: 'docs/concepts' }
+    { text: 'Getting Started', link: 'docs' },
+    // { text: 'Concepts', link: 'docs/concepts' }
   ],
-  'Getting Started': [
-    { text: 'Create React App', link: 'docs/start/react' },
-    { text: 'Next.js Static', link: 'docs/start/next-static' },
-    { text: 'Vue.js', link: 'docs/start/vue' },
-    { text: 'Svelte', link: 'docs/start/svelte' },
-    { text: 'Astro', link: 'docs/start/astro' },
-    { text: 'Gatsby', link: 'docs/start/gatsby' },
-    { text: 'Vite', link: 'docs/start/vite' },
-    { text: 'Vitepress', link: 'docs/start/vitepress' },
+  'Frameworks': [
+    { text: 'Create React App', link: 'docs/frameworks/react' },
+    { text: 'Next.js Static', link: 'docs/frameworks/next-static' },
+    { text: 'Vue.js', link: 'docs/frameworks/vue' },
+    { text: 'Svelte', link: 'docs/frameworks/svelte' },
+    { text: 'Astro', link: 'docs/frameworks/astro' },
+    { text: 'Gatsby', link: 'docs/frameworks/gatsby' },
+    { text: 'Vite', link: 'docs/frameworks/vite' },
+    { text: 'Vitepress', link: 'docs/frameworks/vitepress' },
   ],
   'Stacks': [
     { text: 'Single Page Applications (SPA)', link: 'docs/single-page-application' },

@@ -7,8 +7,10 @@
  */
 :root {
   // Defaults  
-  --text-default: #8f9ba3;
+  --text-default: #acb1b5;
   --text-highlight: #FFF;
+  --sl-color-text-accent: var(--text-highlight);
+  --sl-color-white: #FFF;
   --default-1: var(--gray-1);
   --default-2: var(--gray-2);
   --default-3: var(--gray-3);
@@ -30,6 +32,8 @@
 
   // Borders
   --border: #1A2233;
+  --sl-color-gray-5: var(--border);
+  --sl-outline-offset-inside: #FFF;
   // --border: 216 34% 17%;
   --divider: #252D3D;
   --gutter: #000000;
@@ -158,3 +162,39 @@ main.body {
   margin-bottom: 0.75rem;
   color: var(--text-highlight);
 }
+
+/**
+  * Starlight Tabs
+  */
+starlight-tabs {
+  margin: 2rem 0;
+  // background-color: #0F111A;
+}
+
+starlight-tabs .tab {
+  margin-bottom: 0px !important;
+}
+
+starlight-tabs ul[role="tablist"] {
+  overflow: hidden;
+  border-bottom: 0 !important;
+  gap: 1rem;
+}
+
+starlight-tabs a[role="tab"] {
+  padding: 0.5rem 1rem !important;
+  border-bottom: 0 !important;
+  border-radius: 0.5rem;
+}
+
+starlight-tabs a[role="tab"]:hover {
+  background-color: #0F111A !important;
+}
+
+starlight-tabs a[role="tab"][aria-selected="true"] {
+  background-color: #0F1629 !important;
+}
+
+// starlight-tabs div[role="tabpanel"] {
+//   padding: 0 1rem !important;
+// }

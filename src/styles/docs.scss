@@ -21,8 +21,7 @@
 }
 
 .docs h2 {
-  margin: 24px 0 16px;
-  padding-top: 24px;
+  margin: 36px 0 16px;
   letter-spacing: -0.02em;
   line-height: 32px;
   font-size: 24px;
@@ -136,26 +135,26 @@
  * Lists
  * -------------------------------------------------------------------------- */
 
-.docs ul,
-.docs ol {
+.docs ul.list,
+.docs ol.list {
   padding-left: 1.25rem;
   margin: 16px 0;
 }
 
-.docs ul {
+.docs ul.list {
   list-style: disc;
 }
 
-.docs ol {
+.docs ol.list {
   list-style: decimal;
 }
 
-.docs li + li {
+.docs ul.list li + li {
   margin-top: 8px;
 }
 
-.docs li > ol,
-.docs li > ul {
+.docs ul.list li > ol,
+.docs ul.list li > ul {
   margin: 8px 0 0;
 }
 

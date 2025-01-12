@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "thunder-brochure",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
-    "@astrojs/mdx": "^3.1.8",
+    "@astrojs/mdx": "^4.0.0-beta.5",
     "@astrojs/sitemap": "^3.2.1",
-    "@astrojs/tailwind": "^5.1.2",
-    "astro": "^4.16.7",
+    "@astrojs/starlight": "^0.30.6",
+    "@astrojs/tailwind": "^5.1.4",
+    "astro": "^5.0.0-beta.12",
+    "astro-expressive-code": "^0.39.0",
     "astro-navbar": "^2.3.4",
     "astro-seo": "^0.8.4",
     "sass": "^1.80.4",
