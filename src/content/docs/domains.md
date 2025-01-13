@@ -1,4 +1,28 @@
 ---
-title: 'Domains'
+title: 'Custom domains'
 description: ''
 ---
+
+You can attach custom domains if you are using Amazon Route53.
+
+## Create Route53 Hosted Zone
+
+- Go to Route53 console
+- Click "Create hosted zone"
+- Enter your domain name
+- Note the NS records - update these at your domain registrar
+- Copy the Hosted Zone ID
+
+## Request ACM Certificate (us-east-1 region)
+
+- Go to AWS Certificate Manager
+- Click "Request certificate"
+- Add your domain (e.g., example.com and *.example.com)
+- Choose DNS validation
+- Copy the generated certificate ARN
+
+## Configure
+
+Enter your domain, Hosted Zone ID and the ARN of your certificate. Thunder will automatically configure your application to point to the domain.
+
+<img src="/screens/domains.png" alt="Custom domains using Route53" class="mx-auto w-auto h-auto">
