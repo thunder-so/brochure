@@ -45,13 +45,13 @@ export const sidebar: Sidebar = {
   //   { text: 'Single Page Applications (SPA)', link: 'docs/single-page-application' },
   // ],
   'How To': [
-    { text: 'Add an AWS account', link: 'docs/howto/aws' },
-    { text: 'Connect with Github', link: 'docs/howto/github' },
-    { text: 'Import a repository', link: 'docs/howto/application' },
-    { text: 'Build configuration', link: 'docs/howto/configure' },
-    { text: 'Environment variables', link: 'docs/howto/environment' },
-    { text: 'Custom domains', link: 'docs/howto/domains' },
-    { text: 'Redirects and rewrites', link: 'docs/howto/redirects-rewrites' }
+    { text: 'Add an AWS account', link: 'docs/aws' },
+    { text: 'Connect with Github', link: 'docs/github' },
+    { text: 'Import a repository', link: 'docs/import-repository' },
+    { text: 'Build configuration', link: 'docs/configure' },
+    { text: 'Environment variables', link: 'docs/environment' },
+    { text: 'Custom domains', link: 'docs/domains' },
+    { text: 'Redirects and rewrites', link: 'docs/redirects-rewrites' }
   ],
   // 'Architecture': [
   //   { text: 'Modern Three Tier Pattern', link: 'docs/three-tier-pattern' },
