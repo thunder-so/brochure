@@ -48,8 +48,8 @@ export const sidebar: Sidebar = {
     { text: 'Add an AWS account', link: 'docs/aws' },
     { text: 'Connect with Github', link: 'docs/github' },
     { text: 'Import a repository', link: 'docs/import-repository' },
-    { text: 'Build configuration', link: 'docs/configure' },
-    { text: 'Environment variables', link: 'docs/environment' },
+    { text: 'Build configuration', link: 'docs/build-config' },
+    { text: 'Environment variables', link: 'docs/environment-variables' },
     { text: 'Custom domains', link: 'docs/domains' },
     { text: 'Redirects and rewrites', link: 'docs/redirects-rewrites' }
   ],

@@ -5,7 +5,7 @@ description: 'Explore the fundamental concepts and architecture used in deployin
 
 ## Infrastructure
 
-Thunder install a CDK stack on your AWS account when you import a new repository. 
+Thunder installs a CDK stack on your AWS account when you import a new repository. 
 
 CDK-SPA is an open-source AWS CDK stack to deploy single page applications (SPA) and static site generators (SSG) on S3 and CloudFront.
 

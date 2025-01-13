@@ -7,7 +7,7 @@ Connect your Github accounts with Thunder.
 
 Click on the "Import Repositories" button. This action will redirect you to our Github App installation flow.
 
-<img src="/screens/import-repositories.png" alt="Import Repositories" class="mx-auto w-auto h-auto">
+<img src="/screens/import-repository-prompt.png" alt="Import Repositories" class="mx-auto w-auto h-auto">
 
 - Select Github Accounts: You will see a list of your Github accounts. Choose the appropriate account where you would like to install the app.
 
