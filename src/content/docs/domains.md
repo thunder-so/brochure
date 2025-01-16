@@ -1,6 +1,6 @@
 ---
 title: 'Custom domains'
-description: ''
+description: 'Learn how to attach custom domains to your application using Amazon Route53 and AWS Certificate Manager. Follow these steps to create a hosted zone, request an ACM certificate, and configure your domain settings.'
 ---
 
 You can attach custom domains if you are using Amazon Route53.

@@ -14,7 +14,7 @@ You can deploy a [Gatsby](https://www.gatsbyjs.com/) site on AWS in under a minu
 | **Parameter**             | **Value**         |
 |---------------------------|-------------------|
 | Install Command           | `npm install`     |
-| Build Command             | `npm run build`   |
+| Build Command             | `npx run build`   |
 | Output Directory          | `public`          |
 
 That’s it! Your app will be live on your CloudFront URL as soon as the build finishes.
