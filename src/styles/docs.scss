@@ -248,6 +248,10 @@
  * Code
  * -------------------------------------------------------------------------- */
 
+.docs .expressive-code {
+  margin-bottom: 1rem;
+}
+
 /* inline code */
 .docs :not(pre, h1, h2, h3, h4, h5, h6) > code {
   color: var(--code-color);

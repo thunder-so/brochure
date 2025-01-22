@@ -1,0 +1,90 @@
+---
+title: 'Deploy Vitepress on AWS'
+description: 'Learn how to deploy a VitePress site on AWS with S3 and CloudFront.'
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+You can deploy a [VitePress](https://vitepress.dev/) site on AWS in a few minutes with Thunder. Your site is served over a lightning-fast global CDN, comes with fully managed TLS certificates, and supports custom domains out of the box.
+
+The server pre-rendered pages produced by the build step will be stored in an S3 bucket and served using CloudFront CDN.
+
+## Build Settings
+
+Use the following commands in the build step settings:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh title="Install command"
+npm install
+```
+```sh title="Build command"
+npm run docs:build
+```
+```sh title="Output directory"
+docs/.vitepress/dist
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh title="Install command"
+npx pnpm install
+```
+```sh title="Build command"
+npx pnpm run docs:build
+```
+```sh title="Output directory"
+docs/.vitepress/dist
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh title="Install command"
+npx bun install
+```
+```sh title="Build command"
+npx bun run docs:build
+```
+```sh title="Output directory"
+docs/.vitepress/dist
+```
+  </TabItem>
+</Tabs>
+
+That’s it! Your app will be live on your CloudFront URL as soon as the build finishes.
+
+
+## Environment Variables
+
+Environment variables in VitePress are available at build time and can be used both in your config files and templates. For more information, refer to the official [Vite documentation on environment variables](https://vite.dev/guide/env-and-mode.html#env-variables).
+
+You can define them in a .env file at the root of your project:
+
+
+```sh title=".env"
+VITE_APP_NAME=test
+```
+
+Access the variable in your VitePress config:
+
+```ts title="docs/.vitepress/config.mts"
+export default async ({ mode }) => {
+  const env = loadEnv(mode || '', process.cwd())
+
+  const name = env.VITE_APP_NAME;
+
+  return defineConfig({ 
+    title: name,
+    /** */ 
+  })
+}
+
+```
+
+Use it in your templates:
+
+```mdx title="docs/index.md"
+<script setup>
+const name = import.meta.env.VITE_APP_NAME;
+</script>
+
+# {{ name }}
+
+```
