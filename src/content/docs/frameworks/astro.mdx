@@ -3,9 +3,13 @@ title: 'Deploy Astro on AWS'
 description: 'Learn how to deploy an Astro static single page application (SPA) on AWS with S3 and CloudFront, leveraging server pre-rendered static pages served from global CDN for optimal performance.'
 ---
 
-import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Tabs, TabItem, LinkButton } from '@astrojs/starlight/components';
 
 Deploy your static [Astro](https://astro.build/) SPA to AWS with S3 and CloudFront for fast, reliable performance. This guide walks you through configuration and setup to get your site live with Thunder.
+
+<LinkButton href="https://stackblitz.com/~/github.com/cloudbitsio/astro" target="_blank" variant="secondary" icon="external">
+  View code in StackBlitz
+</LinkButton>
 
 ## Configure
 Update your astro.config.mjs to generate static files:
@@ -24,12 +28,6 @@ Use the following commands in the build step settings:
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
-{/* | **Parameter**             | **Value**         |
-|---------------------------|-------------------|
-| Install Command           | `npm install`    |
-| Build Command             | `npm run astro check && npm run astro build`      |
-| Output Directory          | `dist`           | */}
-
 ```sh title="Install command"
 npm install
 ```
@@ -41,11 +39,6 @@ dist
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
-{/* | **Parameter**             | **Value**         |
-|---------------------------|-------------------|
-| Install Command           | ```pnpm install ```    |
-| Build Command             | `pnpm run astro check && pnpm run astro build`      |
-| Output Directory          | `dist`           | */}
 ```sh title="Install command"
 npx pnpm install
 ```
@@ -57,11 +50,6 @@ dist
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
-{/* | **Parameter**             | **Value**         |
-|---------------------------|-------------------|
-| Install Command           | `bun install`    |
-| Build Command             | `bun run astro check && bun run astro build`      |
-| Output Directory          | `dist`           | */}
 ```sh title="Install command"
 npx bun install
 ```

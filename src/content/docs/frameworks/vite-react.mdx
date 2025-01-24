@@ -1,0 +1,83 @@
+---
+title: 'Deploy a Vite React SPA on AWS'
+description: 'Learn how to deploy a Vite-based React single-page application (SPA) on AWS quickly and efficiently, using S3 and CloudFront.'
+---
+
+import { Tabs, TabItem, LinkButton } from '@astrojs/starlight/components';
+
+You can deploy a [Vite](https://vitejs.dev/) site with React.js on AWS with Thunder. Your site is served from S3 over CloudFront.
+
+<LinkButton href="https://stackblitz.com/~/github.com/cloudbitsio/vite-react" target="_blank" variant="secondary" icon="external">
+  View code in StackBlitz
+</LinkButton>
+
+## Build Settings
+
+Use the following commands in the build step settings:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh title="Install command"
+npm install
+```
+```sh title="Build command"
+npm run build
+```
+```sh title="Output directory"
+public
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh title="Install command"
+npx pnpm install
+```
+```sh title="Build command"
+npx pnpm run build
+```
+```sh title="Output directory"
+public
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh title="Install command"
+npx bun install
+```
+```sh title="Build command"
+npx bun run build
+```
+```sh title="Output directory"
+public
+```
+  </TabItem>
+</Tabs>
+
+That’s it! Your app will be live on your CloudFront URL as soon as the build finishes.
+
+## Environment Variables
+
+Environment variables in Vite are available at build time and can be used both in your config files and templates. For more information, refer to the official [Vite documentation on environment variables](https://vite.dev/guide/env-and-mode.html#env-variables).
+
+You can define them in an .env file at the root of your project:
+
+
+```sh title=".env"
+VITE_BASE_URL=https://thunder.so
+```
+
+Use it in your templates:
+
+```jsx title="App.jsx"
+const url = import.meta.env.VITE_BASE_URL;
+
+function App() {
+  return (
+    <div className="App">
+      <div>
+        <a href={url} target="_blank">Thunder</a>
+      </div>
+    </div>
+  )
+}
+
+export default App
+```

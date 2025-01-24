@@ -32,13 +32,20 @@ export const sidebar: Sidebar = {
     { text: 'How it works', link: 'docs/concepts' }
   ],
   'Frameworks': [
-    { text: 'Create React App', link: 'docs/frameworks/react' },
-    { text: 'Next.js Static', link: 'docs/frameworks/next-static' },
-    { text: 'Vue.js', link: 'docs/frameworks/vue' },
-    { text: 'Svelte', link: 'docs/frameworks/svelte' },
     { text: 'Astro', link: 'docs/frameworks/astro' },
+
+    { text: 'React.js', link: 'docs/frameworks/vite-react' },
+    { text: 'Vue.js', link: 'docs/frameworks/vite-vue' },
+    { text: 'Svelte.js', link: 'docs/frameworks/vite-svelte' },
+    { text: 'Preact.js', link: 'docs/frameworks/vite-preact' },
+    // { text: 'Lit.js', link: 'docs/frameworks/vite-lit' },
+    // { text: 'Qwik.js', link: 'docs/frameworks/vite-qwik' },
+
+    // { text: 'Create React App', link: 'docs/frameworks/react' },
+    { text: 'Next.js Static', link: 'docs/frameworks/next-static' },
+    // { text: 'Svelte', link: 'docs/frameworks/svelte' },
     { text: 'Gatsby', link: 'docs/frameworks/gatsby' },
-    { text: 'Vite', link: 'docs/frameworks/vite' },
+    // { text: 'Vite', link: 'docs/frameworks/vite' },
     { text: 'Vitepress', link: 'docs/frameworks/vitepress' },
   ],
   // 'Stacks': [

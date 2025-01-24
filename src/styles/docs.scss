@@ -542,3 +542,16 @@
   content: '';
   color: currentColor;
 }
+
+.sl-link-button {
+  padding: 0.5rem 1rem !important;
+  border-radius: 0.25rem !important;
+}
+
+.sl-link-button p {
+  margin: 0 !important;
+}
+
+.sl-link-button.primary {
+  color: var(--button-primary-hover-text) !important;
+}
