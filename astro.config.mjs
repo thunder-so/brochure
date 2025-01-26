@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
@@ -8,6 +8,20 @@ import astroExpressiveCode from 'astro-expressive-code';
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
+  env: {
+    schema: {
+      SUPABASE_URL: envField.string({
+        context: "client",
+        access: "public",
+        optional: false
+      }),
+      SUPABASE_KEY: envField.string({
+        context: "client",
+        access: "public",
+        optional: false
+      }),
+    }
+  },
   integrations: [tailwind(), sitemap(), astroExpressiveCode({
     // You can set configuration options here
     themes: ['material-theme-ocean', 'github-dark-default'],

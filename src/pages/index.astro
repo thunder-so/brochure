@@ -10,14 +10,16 @@ import Frameworks from '../components/Frameworks.astro';
 		  <div class="focus">
 			<slot name="home-hero-info">
 			  <h1 class="name">
-				<span  class="text">The Platform for Web Artisans</span>
+          <span  class="text">A better platform for<br />web developers on AWS</span>
 			  </h1>
-			  <p class="tagline">Thunder is the deployment platform for web developers on AWS.</p>
+			  <p class="tagline">Developers deserve better than Amplify. That's why we made Thunder, the easier and faster alternative. From configs to deployments, we've got you covered.</p>
 			</slot>
 	
 			<div class="actions">
-				<Button size="md" variant="primary">Sign Up with Github</Button>
-				<Button size="md" variant="outline">View Demo</Button>
+				<Button size="md" variant="primary" data-auth-button>Sign Up with Github</Button>
+				<Button size="md" variant="outline">
+          <a href="docs/">Documentation</a>
+        </Button>
 			</div>
 		  </div>	
 		</div>
@@ -95,7 +97,7 @@ import Frameworks from '../components/Frameworks.astro';
           <h2><span class="text-4xl text-highlight block mb-2">Deploy SPA apps on AWS in Minutes</span></h2>
           <div class="actions mt-6">
             <div class="action">
-              <Button size="md" variant="primary">Get Started Free</Button>
+              <Button size="md" variant="primary" data-auth-button>Get Started Free</Button>
             </div>
           </div>
         </section>
@@ -162,14 +164,14 @@ span.text {
 
 @media (min-width: 640px) {
   .tagline {
-    font-size: 20px;
+    font-size: 18px;
     line-height: 32px;
   }
 }
 
 @media (min-width: 960px) {
   .tagline {
-    font-size: 20px;
+    font-size: 18px;
     line-height: 32px;
   }
 }

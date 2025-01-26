@@ -2,11 +2,13 @@
 title: 'Deploy VitePress on AWS'
 description: 'Learn how to deploy a VitePress site on AWS with S3 and CloudFront.'
 ---
-import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Tabs, TabItem, LinkButton } from '@astrojs/starlight/components';
 
-You can deploy a [VitePress](https://vitepress.dev/) site on AWS in a few minutes with Thunder. Your site is served over a lightning-fast global CDN, comes with fully managed TLS certificates, and supports custom domains out of the box.
+You can deploy a [VitePress](https://vitepress.dev/) site on AWS in a few minutes with Thunder. The server pre-rendered pages produced by the build step will be stored in an S3 bucket and served using CloudFront CDN.
 
-The server pre-rendered pages produced by the build step will be stored in an S3 bucket and served using CloudFront CDN.
+<LinkButton href="https://stackblitz.com/~/github.com/cloudbitsio/vitepress" target="_blank" variant="secondary" icon="external">
+  View code in StackBlitz
+</LinkButton>
 
 ## Build Settings
 

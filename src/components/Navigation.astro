@@ -20,7 +20,11 @@ const menuitems = [
     path: "/pricing",
   },
 ];
+
+let isAuthenticated = false;
+
 ---
+
 <header id="header" class:list={[additionalClass, "navigation"]}>
 <div class="mx-auto px-5 py-3">
   <Astronav>
@@ -50,14 +54,66 @@ const menuitems = [
             }
           </ul>
           <div class="flex my-2 lg:my-0 items-center gap-2">
-            <Button size="sm" variant="secondary">Log In</Button>
-            <Button size="sm" variant="primary">Sign Up</Button>
+            <Button size="sm" variant="secondary" data-auth-button>Log In</Button>
+            <Button size="sm" variant="primary" data-auth-button>Sign Up</Button>
           </div>
+
+          <!-- <div 
+            x-data="{ isAuthenticated: false }" 
+            x-init="isAuthenticated = document.cookie.includes('active-organization-id')" 
+            class="flex my-2 lg:my-0 items-center gap-2">
+              <template x-if="!isAuthenticated">
+                <div>
+                  <Button size="sm" variant="secondary" data-auth-button>Log In</Button>
+                  <Button size="sm" variant="primary" data-auth-button>Sign Up</Button>
+                </div>
+              </template>
+              <template x-if="isAuthenticated">
+                <a href="https://console.thunder.so">
+                  <Button size="sm" variant="primary">Go to console</Button>
+                </a>
+              </template>
+          </div> -->
         </MenuItems>
     </div>
   </Astronav>
 </div>
 </header>
+
+<script>
+import { supabase } from "../lib/supabase";
+
+async function signInWithGithub() {
+  // console.log("clicked");
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'github',
+  })
+}
+
+const buttons = document.querySelectorAll('[data-auth-button]');
+
+buttons.forEach(button => {
+  button.addEventListener('click', signInWithGithub);
+});
+</script>
+
+<!-- <script>
+  if (typeof window !== 'undefined') {
+    let isAuthenticated = false;
+
+    // Check if the cookie exists
+    const cookieName = 'active-organization-id';
+    const cookies = document.cookie.split('; ').reduce((acc, cookieStr) => {
+      const [name, value] = cookieStr.split('=');
+      acc[name] = value;
+      return acc;
+    }, {});
+
+    isAuthenticated = cookies.hasOwnProperty(cookieName);
+    console.log(isAuthenticated)
+  }
+</script> -->
+
 
 <script>
   if (typeof window !== 'undefined') {

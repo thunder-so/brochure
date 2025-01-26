@@ -1,0 +1,84 @@
+---
+title: 'Deploy a Next.js SPA on AWS'
+description: 'Learn how to deploy a Next.js static site on AWS quickly and efficiently, leveraging a global CDN, managed TLS, and custom domain support for enhanced performance and scalability.'
+---
+
+import { Tabs, TabItem, LinkButton } from '@astrojs/starlight/components';
+
+You can deploy a [Next.js SPA](https://nextjs.org/) site on AWS with Thunder. The server pre-rendered pages produced by the build step will be stored in an S3 bucket and served using CloudFront CDN.
+
+<LinkButton href="https://stackblitz.com/~/github.com/cloudbitsio/nextjs-spa" target="_blank" variant="secondary" icon="external">
+  View code in StackBlitz
+</LinkButton>
+
+## Configure
+
+In `next.config.mjs` file, uncomment the line that sets `output: "export"`. Learn more about Next.js [static exports](https://nextjs.org/docs/advanced-features/static-html-export).
+
+```ts title="next.config.mjs"
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: "export", // for SPA mode
+  reactStrictMode: true,
+  swcMinify: true,
+
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  images: {
+    unoptimized: true,
+  },
+  experimental: {
+    webpackBuildWorker: true,
+    parallelServerBuildTraces: true,
+    parallelServerCompiles: true,
+  },
+}
+
+export default nextConfig
+```
+
+## Build Settings
+
+Use the following commands in the build step settings:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh title="Install command"
+npm install --legacy-peer-deps
+```
+```sh title="Build command"
+npm run build
+```
+```sh title="Output directory"
+out
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh title="Install command"
+npx pnpm install
+```
+```sh title="Build command"
+npx pnpm run build
+```
+```sh title="Output directory"
+out
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh title="Install command"
+npx bun install
+```
+```sh title="Build command"
+npx bun run build
+```
+```sh title="Output directory"
+out
+```
+  </TabItem>
+</Tabs>
+
+That’s it! Your app will be live on your CloudFront URL as soon as the build finishes.

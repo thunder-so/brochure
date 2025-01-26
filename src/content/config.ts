@@ -42,9 +42,9 @@ export const sidebar: Sidebar = {
     // { text: 'Qwik.js', link: 'docs/frameworks/vite-qwik' },
 
     // { text: 'Create React App', link: 'docs/frameworks/react' },
-    { text: 'Next.js Static', link: 'docs/frameworks/next-static' },
+    { text: 'Next.js', link: 'docs/frameworks/nextjs-spa' },
     // { text: 'Svelte', link: 'docs/frameworks/svelte' },
-    { text: 'Gatsby', link: 'docs/frameworks/gatsby' },
+    // { text: 'Gatsby', link: 'docs/frameworks/gatsby' },
     // { text: 'Vite', link: 'docs/frameworks/vite' },
     { text: 'Vitepress', link: 'docs/frameworks/vitepress' },
   ],
