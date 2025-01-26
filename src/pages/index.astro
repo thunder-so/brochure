@@ -17,9 +17,12 @@ import Frameworks from '../components/Frameworks.astro';
 	
 			<div class="actions">
 				<Button size="md" variant="primary" data-auth-button>Sign Up with Github</Button>
-				<Button size="md" variant="outline">
-          <a href="docs/">Documentation</a>
-        </Button>
+				
+        <a href="docs/">
+          <Button size="md" variant="outline">
+            Documentation
+          </Button>
+        </a>
 			</div>
 		  </div>	
 		</div>
@@ -52,44 +55,6 @@ import Frameworks from '../components/Frameworks.astro';
     </div>
   </section>
   
-  <!-- <section class="segment">
-  <div class="container">
-    <div class="focus">
-      <section class="intro text-center mb-10">
-        <h2>
-          <span class="text-4xl font-light block mb-2">Deploy your next project on AWS</span>
-          <span class="text-2xl font-light">without the pain of configuration</span>
-        </h2>
-        <p>We built Thunder so you can focus on building and shipping your application without ever juggling infrastructure-as-code. Let us handle the underlying complexity.</p>
-      </section>
-    </div>
-    <section class="features grid grid-cols-2 grid-rows-1 gap-4">
-      <article class="feature">
-        <h3>Get setup in minutes</h3>
-        <p>Connect your AWS account using your credentials seamlessly. No training required.</p>
-      </article>
-      <article class="feature">
-        <h3>Automagic build and deploy</h3>
-        <p>Pick a project or pick a template to deploy instantly. Seamless CI/CD between your Github code and your AWS account.</p>
-      </article>
-    </section>
-    <section class="features grid grid-cols-3 grid-rows-1 gap-4 mt-4">
-      <article class="feature">
-        <h3>Zero-config installation</h3>
-        <p>Thunder will install all dependent infrastructure on your account, such as S3 bucket, CloudFront distribution, Lambdas, neccessary IAM roles, CodeBuild project, ECR, CodePipeline.</p>
-      </article>
-      <article class="feature">
-        <h3>Choice of Serverless Compute</h3>
-        <p>Lambda or Fargate - Host full-stack applications with all modern features of server-side rendering using a compute platform appropriate for your app.</p>
-      </article>
-      <article class="feature">
-        <h3>Own everything</h3>
-        <p>You own the code. You own the infrastructure. Unlike other platforms, we do not inject scripts or track your product in any way. Your sites will keep working if you disconnect Thunder.</p>
-      </article>
-    </section>
-  </div>
-  </section> -->
-  
   <section class="segment">
     <div class="container">
       <div class="focus">
@@ -101,6 +66,10 @@ import Frameworks from '../components/Frameworks.astro';
             </div>
           </div>
         </section>
+      </div>
+
+      <div class="max-w-[1152px] mx-auto">
+        <img src="/screens/thunder-console-app.png" alt="Thunder Console demo" class="mx-auto w-full h-auto">
       </div>
     </div>
   </section>
@@ -132,6 +101,7 @@ import Frameworks from '../components/Frameworks.astro';
   font-weight: 700;
   white-space: pre-wrap;
   text-align: center;
+  margin-bottom: 2rem;
 }
 
 span.text {
@@ -140,16 +110,29 @@ span.text {
 
 @media (min-width: 640px) {
   .name {
-    font-size: 28px;
-    line-height: 42px;
+    font-size: 36px;
+    line-height: 48px;
   }
 }
 
 @media (min-width: 960px) {
   .name {
-    font-size: 32px;
-    line-height: 48px;
+    font-size: 42px;
+    line-height: 58px;
   }
+}
+
+.name::after {
+  content: "";
+  display: block;
+  width: 445px; /* Match your SVG width */
+  height: 34px;  /* Match your SVG height */
+  background-image: url('/images/line.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-top: 10px; /* Adjust spacing as needed */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .tagline {
