@@ -1,11 +1,11 @@
 ---
-title: 'Deploy a Next.js SPA on AWS'
-description: 'Learn how to deploy a Next.js static site on AWS quickly and efficiently, leveraging a global CDN, managed TLS, and custom domain support for enhanced performance and scalability.'
+title: 'Deploy Next.js Static Site on S3 and CloudFront'
+description: 'Learn how to deploy a Next.js static site on AWS quickly and securely.'
 ---
 
 import { Tabs, TabItem, LinkButton } from '@astrojs/starlight/components';
 
-You can deploy a [Next.js SPA](https://nextjs.org/) site on AWS with Thunder. The server pre-rendered pages produced by the build step will be stored in an S3 bucket and served using CloudFront CDN.
+You can deploy a static [Next.js SPA](https://nextjs.org/) site on AWS with Thunder. The server pre-rendered pages produced by the build step will be stored in an S3 bucket and served using CloudFront CDN.
 
 <LinkButton href="https://stackblitz.com/~/github.com/cloudbitsio/nextjs-spa" target="_blank" variant="secondary" icon="external">
   View code in StackBlitz
@@ -63,17 +63,6 @@ npx pnpm install
 ```
 ```sh title="Build command"
 npx pnpm run build
-```
-```sh title="Output directory"
-out
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh title="Install command"
-npx bun install
-```
-```sh title="Build command"
-npx bun run build
 ```
 ```sh title="Output directory"
 out

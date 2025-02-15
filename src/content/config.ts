@@ -58,7 +58,8 @@ export const sidebar: Sidebar = {
     { text: 'Build configuration', link: 'docs/build-config' },
     { text: 'Environment variables', link: 'docs/environment-variables' },
     { text: 'Custom domains', link: 'docs/domains' },
-    { text: 'Redirects and rewrites', link: 'docs/redirects-rewrites' }
+    { text: 'Redirects and rewrites', link: 'docs/redirects-rewrites' },
+    { text: 'Response Headers', link: 'docs/response-headers' }
   ],
   // 'Architecture': [
   //   { text: 'Modern Three Tier Pattern', link: 'docs/three-tier-pattern' },
