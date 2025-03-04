@@ -1,41 +1,39 @@
 ---
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
 import { SEO } from "astro-seo";
 import Snippets from "../components/Snippets.astro";
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 import "../styles/main.scss";
 
-interface Props {
-	title: string;
-}
-const { title } = Astro.props;
+// type Props = CollectionEntry<'blog'>['data'];
 
-const makeTitle = title
-  ? title + " | " + "Thunder"
-  : "Thunder - Deploy Apps on AWS like a Pro";
+const { title } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 
 const resolvedImageWithDomain = new URL(
   "./opengraph.jpg", Astro.site
 ).toString();
+
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8" />
-		<title>{makeTitle}</title>
+		<meta charset="UTF-8" />		
+		<title>{title}</title>
 
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/images/thunder.svg" />
 
 		<SEO
-			title={makeTitle}
+			title={title}
 			description=""
 			canonical={canonicalURL}
 			twitter={{
-				title: makeTitle,
+				title: title,
 				site: "@_thunderso",
 				card: "summary_large_image",
 			}}
@@ -43,24 +41,28 @@ const resolvedImageWithDomain = new URL(
 				basic: {
 					url: canonicalURL,
 					type: "website",
-					title: makeTitle,
+					title: title,
 					image: resolvedImageWithDomain,
 				},
 				image: {
-					alt: makeTitle,
+					alt: title,
 				},
 			}}
 		/>
 	</head>
 	<body>
 		<Snippets />
-		
+
 		<div style="width: 600px; top: -100px;" class="absolute right-[400px] z-10 h-[150px] w-[400px] rotate-[0deg] transform rounded-full bg-gradient-to-tl from-[var(--bg)] via-[var(--bg-shade)] to-[var(--bg-alt)] blur-[150px]"></div>
 
 		<div class="fixed dotted-background h-full top-0 left-0 right-0 z-[-999]"><div class="absolute left-0 right-0 bottom-0 h-[300px]"></div></div>
 
 		<Navigation />
-		<slot />
+		
+		<main class="blog">
+			<slot />
+		</main>
+
 		<Footer />
 
 		<style is:global>

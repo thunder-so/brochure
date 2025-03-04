@@ -1,0 +1,133 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
+import { SEO } from "astro-seo";
+import Snippets from "../components/Snippets.astro";
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import "../styles/main.scss";
+import "../styles/docs.scss";
+
+type Props = CollectionEntry<'blog'>['data'];
+
+const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+
+const resolvedImageWithDomain = new URL(
+  "./opengraph.jpg", Astro.site
+).toString();
+
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />		
+		<title>{title}</title>
+
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/images/thunder.svg" />
+
+		<SEO
+			title={title}
+			description=""
+			canonical={canonicalURL}
+			twitter={{
+				title: title,
+				site: "@_thunderso",
+				card: "summary_large_image",
+			}}
+			openGraph={{
+				basic: {
+					url: canonicalURL,
+					type: "website",
+					title: title,
+					image: resolvedImageWithDomain,
+				},
+				image: {
+					alt: title,
+				},
+			}}
+		/>
+
+		<style>
+			.hero-image {
+				width: 100%;
+			}
+			.hero-image img {
+				display: block;
+				margin: 0 auto;
+				border-radius: 12px;
+				box-shadow: var(--box-shadow);
+			}
+			.prose {
+				width: 720px;
+				max-width: calc(100% - 2em);
+				margin: auto;
+				padding: 1em;
+				color: rgb(var(--gray-dark));
+			}
+			.title {
+				margin-bottom: 1em;
+				padding: 1em 0;
+				text-align: center;
+				line-height: 1;
+			}
+			.title h1 {
+				margin: 0 0 0.5em 0;
+			}
+			.date {
+				margin-bottom: 0.5em;
+				color: rgb(var(--gray));
+			}
+			.last-updated-on {
+				font-style: italic;
+			}
+		</style>
+
+	</head>
+	<body>
+		<Snippets />
+
+		<Navigation />
+		
+		<main class="blog">
+			<article class="docs">
+				{heroImage && 
+					<div class="hero-image">
+						<img width={1020} height={510} src={heroImage} alt="" />
+					</div>
+				}
+				
+				<div class="prose">
+					<div class="title">
+						<div class="date">
+							<FormattedDate date={pubDate} />
+							{
+								updatedDate && (
+									<div class="last-updated-on">
+										Last updated on <FormattedDate date={updatedDate} />
+									</div>
+								)
+							}
+						</div>
+						<h1 class="text-3xl font-light block mb-2">{title}</h1>
+						<hr />
+					</div>
+					<slot />
+				</div>
+			</article>
+		</main>
+
+		<Footer />
+
+		<style is:global>
+			/* Improve Page speed */
+			/* https://css-tricks.com/almanac/properties/c/content-visibility/ */
+			img {
+			  content-visibility: auto;
+			}
+		</style>
+	</body>
+</html>

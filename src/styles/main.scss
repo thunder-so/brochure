@@ -68,7 +68,7 @@
 
   --sidebar-bg-color: var(--bg);   
 
-  --layout-top-height: 40px;
+  --layout-top-height: 64px;
 
   --card: 224 71% 4%;
   --card-foreground: 213 31% 91%;
@@ -78,6 +78,15 @@ html {
   background-color: var(--bg);
   font-family: var(--font-family-base);
   color: var(--text-default);
+}
+
+.dotted-background {
+	background-position: 0 0,14px 14px;
+	background-size: 16px 16px;
+	width: 100%;
+	background-image: radial-gradient(#181818 5%,#0000001f 15%);
+	background-color: var(--bg);
+	position: fixed !important;
 }
 
 a:link,
@@ -97,6 +106,7 @@ a:focus {
  */
 h1, h2, h3 {
   font-family: var(--font-family-heading);
+  color: var(--text-highlight);
 }
 
 h1 {
@@ -133,16 +143,15 @@ h2 {
   margin: 0 auto;
 }
 
-.focus h2 {
-  color: var(--text-highlight);
-}
-
 section.segment {
   @apply mt-32 mb-32;
 }
 
-main.body {
+main.layout {
   margin-top: var(--layout-top-height);
+}
+main.blog {
+  margin-top: 8rem;
 }
 
 .frameworks {
@@ -161,7 +170,6 @@ main.body {
   line-height: 2.5rem;
   font-weight: 400;
   margin-bottom: 0.75rem;
-  color: var(--text-highlight);
 }
 
 /**
