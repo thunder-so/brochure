@@ -14,7 +14,7 @@ const posts = (await getCollection('blog')).sort(
 			<h2>
 				<span class="text-3xl font-light block mb-2">Blog</span>
 			</h2>
-			<p class="mb-2">We post technical stuff.</p>
+			<p class="mb-2">We post technical articles and product updates.</p>
 		</section>
 
 		<section class="posts">
@@ -23,13 +23,13 @@ const posts = (await getCollection('blog')).sort(
 					<article>
 						{post.data.heroImage && (
 							<div class="mb-4 mt-[-2rem] ml-[-2rem] mr-[-2rem]">
-								<a href={`/blog/${post.id}/`}>
+								<a href={`/blog/${post.slug}/`}>
 									<img width={720} height={360} src={post.data.heroImage} alt="" />
 								</a>
 							</div>
 						)}
 
-						<a href={`/blog/${post.id}/`}>
+						<a href={`/blog/${post.slug}/`}>
 							<h2 class="text-3xl font-light block mb-2">{post.data.title}</h2>
 						</a>
 
