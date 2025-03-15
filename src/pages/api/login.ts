@@ -18,11 +18,11 @@ export const GET: APIRoute = async ({ cookies, redirect }) => {
         cookies: {
             get: (key) => cookies.get(key)?.value,
             set: (key, value, options) => {
-            cookies.set(key, value, {
-                ...options,
-                domain: '.thunder.so', // Parent domain to share across subdomains
-                path: '/'
-            })
+                cookies.set(key, value, {
+                    ...options,
+                    domain: '.thunder.so', // Parent domain to share across subdomains
+                    path: '/'
+                })
             },
             remove: (key, options) => {
                 cookies.delete(key, {

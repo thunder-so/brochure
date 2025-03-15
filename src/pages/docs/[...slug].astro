@@ -18,6 +18,8 @@ const { Content, headings } = await post.render();
 // console.log("post", post.data);
 // console.log("Content", Content);
 // console.log("headings", headings);
+
+export const prerender = true;
 ---
 
 <DocsLayout headings={headings} {...post.data}>
