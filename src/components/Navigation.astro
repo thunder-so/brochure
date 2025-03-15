@@ -87,6 +87,10 @@ async function signInWithGithub() {
   // console.log("clicked");
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'github',
+    options: {
+        scopes: '',
+        redirectTo: `https://console.thunder.so/confirm`
+    }
   })
 }
 
