@@ -81,17 +81,19 @@ let isAuthenticated = false;
 </header>
 
 <script>
-import { supabase } from "../lib/supabase";
+// import { supabase } from "../lib/supabase";
 
 async function signInWithGithub() {
   // console.log("clicked");
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'github',
-    options: {
-        scopes: '',
-        redirectTo: `https://console.thunder.so/confirm`
-    }
-  })
+  // const { data, error } = await supabase.auth.signInWithOAuth({
+  //   provider: 'github',
+  //   options: {
+  //       scopes: '',
+  //       redirectTo: `https://sandbox.thunder.so/confirm`
+  //   }
+  // })
+
+  window.location.href = '/api/login';
 }
 
 const buttons = document.querySelectorAll('[data-auth-button]');

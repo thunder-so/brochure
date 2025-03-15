@@ -4,34 +4,36 @@ import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
 import astroExpressiveCode from 'astro-expressive-code';
+import awsAmplify from 'astro-aws-amplify';
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'static',
+  site: 'https://thunder.so',
+  output: 'server',
+  adapter: awsAmplify(),
   env: {
     schema: {
       SUPABASE_URL: envField.string({
-        context: "client",
+        context: "server",
         access: "public",
         optional: false
       }),
       SUPABASE_KEY: envField.string({
-        context: "client",
-        access: "public",
+        context: "server",
+        access: "secret",
         optional: false
       }),
     }
   },
-  integrations: [tailwind(), sitemap(), astroExpressiveCode({
-    // You can set configuration options here
-    themes: ['material-theme-ocean', 'github-dark-default'],
-    styleOverrides: {
-      // You can also override styles
-      borderRadius: '0rem',
-      // frames: {
-      //   shadowColor: '#124',
-      // },
-    },
-  }), mdx()],
-  site: 'https://thunder.so'
+  integrations: [
+    tailwind(), 
+    sitemap(), 
+    astroExpressiveCode({
+      themes: ['material-theme-ocean', 'github-dark-default'],
+      styleOverrides: {
+        borderRadius: '0rem'
+      },
+    }), 
+    mdx()
+  ],
 });
