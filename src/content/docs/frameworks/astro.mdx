@@ -1,6 +1,6 @@
 ---
-title: 'Deploy Astro on AWS'
-description: 'Learn how to deploy an Astro static single page application (SPA) on AWS with S3 and CloudFront, leveraging server pre-rendered static pages served from global CDN for optimal performance.'
+title: 'Deploy Astro on AWS S3 and CloudFront'
+description: 'Deploy an Astro static single page application (SPA) on AWS with S3 and CloudFront. Domains and SSL with Route53 and ACM. CI/CD from Github using CodePipeline and CodeBuild.'
 ---
 
 import { Tabs, TabItem, LinkButton } from '@astrojs/starlight/components';
@@ -12,7 +12,7 @@ Deploy your static [Astro](https://astro.build/) SPA to AWS with S3 and CloudFro
 </LinkButton>
 
 ## Configure
-Update your astro.config.mjs to generate static files:
+Update your `astro.config.mjs` to generate static files:
 
 ```ts title="astro.config.mjs"
 import { defineConfig } from 'astro/config';

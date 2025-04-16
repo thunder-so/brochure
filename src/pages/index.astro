@@ -12,9 +12,10 @@ export const prerender = true;
 		  <div class="focus">
 			<slot name="home-hero-info">
 			  <h1 class="name">
-          <span  class="text">AWS platform for<br />modern web developers</span>
+          <span  class="text">The deployment platform<br />for modern web developers</span>
 			  </h1>
-			  <p class="tagline">Developers deserve better than AWS Amplify. That's why we made Thunder, the easier and faster alternative. From configs to deployments, we've got you covered.</p>
+			  <!-- <p class="tagline">Developers deserve better than AWS Amplify. That's why we made Thunder, the easier and faster alternative. From configs to deployments, we've got you covered.</p> -->
+			  <p class="tagline">Deploy modern web frameworks on AWS like a pro. <br />Thunder is the open source front-end cloud.</p>
 			</slot>
 	
 			<div class="actions">
@@ -72,6 +73,217 @@ export const prerender = true;
 
       <div class="max-w-[1152px] mx-auto">
         <img src="/screens/thunder-console-app.png" alt="Thunder Console demo" class="mx-auto w-full h-auto">
+      </div>
+    </div>
+  </section>
+
+  <section class="segment pricing mt-6" id="pricing">
+    <div class="container">
+        <div class="focus">
+          <section class="intro text-center mb-10">
+            <h2>
+                <span class="text-3xl font-light block mb-2">Plans and Pricing</span>
+            </h2>
+            <p class="mb-2">Our pricing is organization-based. Your AWS usage costs remain your responsibility.</p>
+          </section>
+        </div>
+    </div>
+  
+    <div class="container">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr>
+            <th class="p-3"></th>
+            <th class="p-3 text-center w-1/4">
+              <div class="text-xl font-semibold text-highlight">Free</div>
+              <div class="font-normal text-muted-foreground mt-2">Made for product creators</div>
+            </th>
+            <th class="p-3 text-center w-1/4">
+              <div class="text-xl font-semibold text-highlight">Pro</div>
+              <div class="font-normal text-muted-foreground mt-2">Made for full-stack developers</div>
+            </th>
+            <th class="p-3 text-center w-1/4">
+              <div class="text-xl font-semibold text-highlight">Lifetime</div>
+              <div class="font-normal text-muted-foreground mt-2">Available during beta program</div>
+            </th>
+          </tr>
+          <tr>
+            <th class="p-3"></th>
+            <th class="p-3 text-center">
+            </th>
+            <th class="p-3 text-center">
+              <div class="font-normal text-xl text-highlight">
+                <span class="">$</span><span class="">10</span>
+                <span class="">/month</span>
+              </div>
+              <div class="font-normal text-muted-foreground mt-1">
+                <span class="">Billed monthly</span>
+              </div>
+            </th>
+            <th class="p-3 text-center">
+              <div class="font-normal text-xl text-highlight">
+                <span class="">$</span><span class="">99</span>
+                <span class=""></span>
+              </div>
+              <div class="font-normal text-muted-foreground mt-1">
+                <span class="">One-time payment</span>
+              </div>
+            </th>
+          </tr>
+          <!-- <tr>
+            <th class="p-3"></th>
+            <th class="p-3 text-center">
+              <div class="actions">
+                <Button size="sm" variant="primary" data-auth-button>Sign Up with Github</Button>
+              </div>
+            </th>
+            <th class="p-3 text-center">
+              <div class="actions">
+                  <Button size="sm" variant="outline" disabled>Coming soon</Button>
+              </div>
+            </th>
+            <th class="p-3 text-center">
+              <div class="actions">
+                <Button size="sm" variant="primary" data-auth-button>Sign Up and Pay</Button>
+              </div>
+            </th>
+          </tr> -->
+          <!-- <tr>
+            <td class="p-3">
+              <h3>Unlimited Applications</h3>
+              <p class="text-sm text-muted-foreground mt-1">No limits on Apps, Environments and Services</p>
+            </td>
+            <td class="p-3 text-center">
+              <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+            </td>
+            <td class="p-3 text-center">
+              <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+            </td>
+            <td class="p-3 text-center">
+              <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+            </td>
+          </tr> -->
+          <tr>
+            <td class="p-3">
+              <h3>Single Page Applications (SPA)</h3>
+              <p class="text-sm text-muted-foreground mt-1">Hosted on S3 and CloudFront</p>
+            </td>
+            <td class="p-3 text-center">
+              <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+            </td>
+            <td class="p-3 text-center">
+              <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+            </td>
+            <td class="p-3 text-center">
+              <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+            </td>
+          </tr>
+          <tr>
+            <td class="p-3">
+              <h3>Static Site Generators (SSG)</h3>
+              <p class="text-sm text-muted-foreground mt-1">Server pre-rendered pages using CodeBuild</p>
+            </td>
+            <td class="p-3 text-center">
+              <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+            </td>
+            <td class="p-3 text-center">
+              <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+            </td>
+            <td class="p-3 text-center">
+              <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+            </td>
+          </tr>
+          <tr>
+            <td class="p-3">
+              <h3>Git Push to Deploy</h3>
+              <p class="text-sm text-muted-foreground mt-1">Automatic build and deploy with CodePipeline</p>
+            </td>
+            <td class="p-3 text-center">
+              <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+            </td>
+            <td class="p-3 text-center">
+              <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+            </td>
+            <td class="p-3 text-center">
+              <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+            </td>
+          </tr>
+          <tr>
+            <td class="p-3">
+              <h3>Server Side Rendering (SSR)</h3>
+              <p class="text-sm text-muted-foreground mt-1">Fast responses via Lambda</p>
+            </td>
+            <td class="p-3 text-center">
+              <!-- <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" /> -->
+            </td>
+            <td class="p-3 text-center">
+              <!-- <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" /> -->
+              <span class="text-xs text-muted-foreground ml-2">Coming Soon</span>
+            </td>
+            <td class="p-3 text-center">
+              <!-- <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" /> -->
+              <span class="text-xs text-muted-foreground ml-2">Coming Soon</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="p-3">
+              <h3>Multiple AWS Accounts</h3>
+              <p class="text-sm text-muted-foreground mt-1">Deploy environments in different accounts</p>
+            </td>
+            <td class="p-3 text-center">
+              <!-- <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" /> -->
+            </td>
+            <td class="p-3 text-center">
+              <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+            </td>
+            <td class="p-3 text-center">
+              <img height="16px" width="16px" src="/images/tick.svg" alt="Tick" class="inline-block" />
+            </td>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </section>
+
+  <section class="segment">
+    <div class="container">
+      <div class="focus">
+        <section class="intro text-center mb-10">
+          <h2><span class="text-4xl text-highlight block mb-2">The open source front-end cloud</span></h2>
+          <div class="actions mt-6">
+            <div class="action">
+              <Button size="md" variant="primary" data-auth-button>Sign up with Github</Button>
+
+              <p><small>Free tier. No credit card required.</small></p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+  
+  <section class="segment">
+    <div class="container">
+      <div class="focus">
+        <section class="intro text-center mb-10">
+          <h2>
+              <span class="text-4xl font-light block mb-2">Frequently Asked Questions</span>
+          </h2>
+        </section>
+        <div class="faq-content">
+          <div class="faq">
+            <h3>I am using Vercel / Netlify / DigitalOcean Apps, why should I switch?</h3>
+            <p>Full control and visibility over your infrastructure. Applications hosted on the AWS serverless costs a fraction of what you are paying. Small companies can make great use of the free tier and AWS Activate credits.</p>
+          </div>
+          <div class="faq">
+            <h3>What if I want a refund?</h3>
+            <p>Money back, no questions asked. Contact support for assistance. Please refrain from filing chargeback disputes; We are happy to refund if you want to cancel.</p>
+          </div>
+          <div class="faq">
+            <h3>How do I cancel my account?</h3>
+            <p>You can disconnect your AWS account from Thunder and retain all your projects and data. No vendor lock (other than AWS).</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -201,4 +413,23 @@ article.hallmark img {
   max-width: 540px;
 }
 
+section.pricing h3 {
+  color: var(--text-highlight);
+}
+
+.faq-content {
+  text-align: left;
+}
+.faq {
+  margin-bottom: 2rem;
+}
+.faq h3 {
+  font-size: 18px;
+  line-height: 1.5;
+  margin-bottom: 0.25rem;
+  color: var(--text-highlight);
+}
+.faq p {
+  margin-bottom: 1rem;
+}
 </style>

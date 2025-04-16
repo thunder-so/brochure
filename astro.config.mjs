@@ -4,7 +4,7 @@ import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
 import astroExpressiveCode from 'astro-expressive-code';
-// import awsAmplify from 'astro-aws-amplify';
+// import awsAmplify from 'astro-amplify';
 import vercelServerless from '@astrojs/vercel';
 
 // https://astro.build/config
@@ -38,4 +38,16 @@ export default defineConfig({
     }), 
     mdx()
   ],
+  redirects: {
+    "/pricing": "/",
+    // "/docs/frameworks/astro": "/docs/deploy/astro",
+    // "/docs/start/astro": "/docs/deploy/astro",
+    "/docs/frameworks/nextjs-spa": "/docs/frameworks/nextjs-static",
+    // "/docs/start/nextjs-static": "/docs/frameworks/nextjs-static",
+    // "/docs/frameworks/vite-preact": "/docs/deploy/vite-preact",
+    // "/docs/frameworks/vite-react": "/docs/deploy/vite-react",
+    // "/docs/frameworks/vite-svelte": "/docs/deploy/vite-svelte",
+    // "/docs/frameworks/vite-vue": "/docs/deploy/vite-vue",
+    // "/docs/frameworks/vitepress": "/docs/deploy/vitepress",
+  }
 });

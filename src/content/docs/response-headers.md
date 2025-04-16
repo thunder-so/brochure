@@ -15,7 +15,7 @@ Thunder provides factory defaults for your single page application:
 | `referrer-policy`            | `strict-origin-when-cross-origin`       |
 | `x-content-type-options`     | `nosniff`                               |
 | `strict-transport-security`  | `max-age=31536000; includeSubDomains`   |
-| `Content-Security-Policy`    | `default-src 'self'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:`               |
+| `Content-Security-Policy`    | `default-src 'self'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; `<br/>`style-src 'self' 'unsafe-inline'; font-src 'self' data:`               |
 | `X-XSS-Protection`           | `1; mode=block`                         |
 
 | CORS Header                                 | Default Values                        |

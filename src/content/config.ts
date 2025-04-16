@@ -43,13 +43,17 @@ export const collections = { docs, legal, blog }
 export type Sidebar = Record<string, { text: string; link: string }[]>;
 
 export const sidebar: Sidebar = {
-  '': [
+  'Introduction': [
     { text: 'Getting Started', link: 'docs' },
-    { text: 'How it works', link: 'docs/concepts' }
+    { text: 'How it works', link: 'docs/concepts' },
+    { text: 'Add an AWS account', link: 'docs/aws' },
+    { text: 'Connect with Github', link: 'docs/github' },
+    { text: 'Import a repository', link: 'docs/import-repository' },
   ],
   'Frameworks': [
     { text: 'Astro', link: 'docs/frameworks/astro' },
-
+    { text: 'Next.js', link: 'docs/frameworks/nextjs-static' },
+    { text: 'Gatsby', link: 'docs/frameworks/gatsby' },
     { text: 'React.js', link: 'docs/frameworks/vite-react' },
     { text: 'Vue.js', link: 'docs/frameworks/vite-vue' },
     { text: 'Svelte.js', link: 'docs/frameworks/vite-svelte' },
@@ -57,10 +61,6 @@ export const sidebar: Sidebar = {
     // { text: 'Lit.js', link: 'docs/frameworks/vite-lit' },
     // { text: 'Qwik.js', link: 'docs/frameworks/vite-qwik' },
 
-    // { text: 'Create React App', link: 'docs/frameworks/react' },
-    { text: 'Next.js', link: 'docs/frameworks/nextjs-spa' },
-    // { text: 'Svelte', link: 'docs/frameworks/svelte' },
-    // { text: 'Gatsby', link: 'docs/frameworks/gatsby' },
     // { text: 'Vite', link: 'docs/frameworks/vite' },
     { text: 'Vitepress', link: 'docs/frameworks/vitepress' },
   ],
@@ -68,9 +68,6 @@ export const sidebar: Sidebar = {
   //   { text: 'Single Page Applications (SPA)', link: 'docs/single-page-application' },
   // ],
   'How To': [
-    { text: 'Add an AWS account', link: 'docs/aws' },
-    { text: 'Connect with Github', link: 'docs/github' },
-    { text: 'Import a repository', link: 'docs/import-repository' },
     { text: 'Build configuration', link: 'docs/build-config' },
     { text: 'Environment variables', link: 'docs/environment-variables' },
     { text: 'Custom domains', link: 'docs/domains' },

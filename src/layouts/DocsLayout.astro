@@ -16,7 +16,7 @@ interface Props {
 const { title, headings, ...data } = Astro.props
 
 const makeTitle = title
-  ? title + " | " + "Thunder"
+  ? title 
   : "Thunder - Deploy Apps on AWS like a Pro";
 
 const currentPage = Astro.url.pathname;
