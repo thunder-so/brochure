@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro'
-import { createServerClient, parseCookieHeader } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr'
 import { SUPABASE_URL, SUPABASE_KEY } from "astro:env/server"
 
 export const GET: APIRoute = async ({ cookies, redirect }) => {

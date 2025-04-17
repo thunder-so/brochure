@@ -36,14 +36,14 @@ export const GET: APIRoute = async () => {
   try {
     // Get all blog posts sorted by date (newest first)
     const posts = await getCollection('docs');
-    const sortedPosts = posts.sort((a, b) => 
-      new Date(b.data.pubDatetime).valueOf() - new Date(a.data.pubDatetime).valueOf()
-    );
+    // const sortedPosts = posts.sort((a, b) => 
+    //   new Date(b.data.pubDatetime).valueOf() - new Date(a.data.pubDatetime).valueOf()
+    // );
 
     // Generate the content
     let llmsContent = '';
 
-    for (const post of sortedPosts) {
+    for (const post of posts) {
       // Add post metadata in the format similar to the example
       llmsContent += `--- title: ${post.data.title} description: ${post.data.description} ---\n\n`;
       

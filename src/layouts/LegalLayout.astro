@@ -12,7 +12,7 @@ interface Props {
 	headings: MarkdownHeading[];
 }
 
-const { title, headings, ...data } = Astro.props
+const { title, headings } = Astro.props
 
 const makeTitle = title
   ? title + " | " + "Thunder"
