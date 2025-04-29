@@ -1,0 +1,41 @@
+---
+title: 'Deploy a Vite Project on AWS S3 and CloudFront'
+description: 'Learn how to create a new Vite project and deploy it effectively on AWS with S3 and CloudFront.'
+---
+
+import { Tabs, TabItem, LinkButton } from '@astrojs/starlight/components';
+
+Vite is a build tool that aims to provide a faster and leaner development experience for modern web projects. In this guide, we will cover how to create a new Vite project and prepare it for deployment on AWS.
+
+## Creating a New Vite Project
+
+To create a new Vite project, you can use npm, pnpm, or bun. Here are the commands you need:
+
+```sh title="Create Vite project"
+npm create vite@latest my-vite-project
+cd my-vite-project
+npm install
+```
+
+## Build Settings for Deployment
+
+Use the following build settings:
+
+Your app will be ready for deployment on your CloudFront URL as soon as the build completes.
+
+## Environment Variables
+You can configure environment variables in Vite at build time by adding them in an .env file at your project's root:
+
+```sh title=".env"
+VITE_API_URL=https://api.example.com
+```
+
+Use it in your application:
+
+```js title="src/main.js"
+const apiUrl = import.meta.env.VITE_API_URL;
+
+console.log(`API URL: ${apiUrl}`);
+```
+
+With these instructions, you are well-equipped to create a Vite project and deploy it on AWS efficiently.

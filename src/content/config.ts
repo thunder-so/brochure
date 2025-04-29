@@ -53,7 +53,7 @@ export const sidebar: Sidebar = {
   'Frameworks': [
     { text: 'Astro', link: 'docs/frameworks/astro' },
     { text: 'Next.js', link: 'docs/frameworks/nextjs-static' },
-    { text: 'Gatsby', link: 'docs/frameworks/gatsby' },
+    // { text: 'Gatsby', link: 'docs/frameworks/gatsby' },
     { text: 'React.js', link: 'docs/frameworks/vite-react' },
     { text: 'Vue.js', link: 'docs/frameworks/vite-vue' },
     { text: 'Svelte.js', link: 'docs/frameworks/vite-svelte' },
