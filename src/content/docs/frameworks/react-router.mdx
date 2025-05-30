@@ -1,28 +1,28 @@
 ---
-title: 'Deploy Astro on AWS S3 and CloudFront'
-description: 'Deploy an Astro static single page application (SPA) on AWS with S3 and CloudFront. Domains and SSL with Route53 and ACM. CI/CD from Github using CodePipeline and CodeBuild.'
+title: 'Deploy React Router SPA on AWS S3 and CloudFront'
+description: 'Deploy a React Router v7 single-page application (SPA) on your AWS account using S3 and CloudFront.'
 ---
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
 
-Deploy your [Astro](https://astro.build/) site to AWS with S3 and CloudFront for fast, reliable performance. This guide walks you through configuration and setup to get your site live with Thunder.
+You can deploy a [React Router v7](https://reactrouter.com/) single-page application (SPA) with [Vite](https://vitejs.dev/) on your AWS account.
 
-There are two ways to deploy your Astro static output on AWS:
+There are two ways to deploy your React Router SPA on AWS:
 
-1. Using the [AWS Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/) with the [CDK-SPA](https://github.com/thunder-so/cdk-spa) package. Note that CDK-SPA does not support SSR.
+1. Using the [AWS Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/) with the [CDK-SPA](https://www.npmjs.com/package/@thunderso/cdk-spa) package.
 
 2. Using the [Thunder console](https://console.thunder.so) to deploy your app with a few clicks.
 
 The build artifacts (HTML, CSS and JavaScript) will be stored in an S3 bucket and served using CloudFront CDN.
 
-<LinkButton href="https://stackblitz.com/~/github.com/cloudbitsio/astro" target="_blank" variant="secondary" icon="external">
+<LinkButton href="https://stackblitz.com/~/github.com/cloudbitsio/react-router" target="_blank" variant="secondary" icon="external">
   View code in StackBlitz
 </LinkButton>
 
 ## Deploy using AWS CDK
 ---
 
-[CDK-SPA](https://github.com/thunder-so/cdk-spa) is a package that simplifies the deployment of static sites to AWS using the AWS Cloud Development Kit (CDK). It provides a straightforward way to deploy your Astro app to AWS S3 and CloudFront.
+[CDK-SPA](https://www.npmjs.com/package/@thunderso/cdk-spa) is a package that simplifies the deployment of single-page applications (SPAs) to AWS using the AWS Cloud Development Kit (CDK). It provides a straightforward way to deploy your React Router app to AWS S3 and CloudFront.
 
 <Aside type="note" title="Prerequisites">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed. You can install it globally using npm:
@@ -37,42 +37,37 @@ npm install -g aws-cdk
 
 ### 1. Create a project
 
-You can create a new Astro project using the following commands:
+You can create a new Vite project with React using the following command:
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm create astro@latest my-astro-app
-cd my-astro-app
+npm create vite@latest my-react-router-app -- --template react-ts
+cd my-react-router-app
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm create astro my-astro-app
-cd my-astro-app
+pnpm create vite my-react-router-app --template react-ts
+cd my-react-router-app
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
-bun create astro my-astro-app
-cd my-astro-app
+bun create vite my-react-router-app --template react-ts
+cd my-react-router-app
+bun pm trust --all
 ```
   </TabItem>
 </Tabs>
 
-### 2. Configure Astro
+Then install React Router v7:
 
-Update your `astro.config.mjs` to generate static files:
-
-```ts title="astro.config.mjs"
-import { defineConfig } from 'astro/config';
- 
-export default defineConfig({
-  output: 'static',
-});
+```sh
+npm install react-router-dom@7
 ```
 
-### 3. Initialize your project
+### 2. Initialize your project
 
 Install the necessary dependencies and initialize your project:
 
@@ -120,24 +115,24 @@ new SPAStack(
 );
 ```
 
-### 4. Deploy
+### 3. Deploy
 
 Before you deploy, run your build script to generate artifacts in the `dist` directory.
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm run astro check && npm run astro build
+npm run build
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm run astro check && pnpm run astro build
+pnpm run build
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
-bun run astro check && bun run astro build
+bun run build
 ```
   </TabItem>
 </Tabs>
@@ -162,7 +157,7 @@ bunx cdk deploy --all --app="bunx tsx stack/index.ts"
   </TabItem>
 </Tabs>
 
-When the deployment is complete, you will see the CloudFront URL in the output. You can access your Astro app at that URL.
+When the deployment is complete, you will see the CloudFront URL in the output. You can access your React Router app at that URL.
 
 For complete documentation on how to use CDK-SPA, refer to the [CDK-SPA documentation](https://github.com/thunderso/cdk-spa).
 
@@ -170,12 +165,12 @@ For complete documentation on how to use CDK-SPA, refer to the [CDK-SPA document
 ## Deploy using Thunder console
 ---
 
-You can also deploy your Astro app on AWS using the [Thunder console](https://console.thunder.so).
+You can also deploy your React Router app on AWS using the [Thunder console](https://console.thunder.so).
 
 <Aside type="note" title="Prerequisites">
 - An [AWS account](/docs/aws) added to your organization.
 - A [GitHub account](/docs/github) connected to your organization.
-- [Import GitHub repository](/docs/import-repository) with your Astro app code.
+- [Import GitHub repository](/docs/import-repository) with your React Router app code.
 </Aside>
 
 
@@ -189,7 +184,7 @@ Use the following commands in the build step settings:
 npm install
 ```
 ```sh title="Build command"
-npm run astro check && npm run astro build
+npm run build
 ```
 ```sh title="Output directory"
 dist
@@ -200,7 +195,7 @@ dist
 npx pnpm install
 ```
 ```sh title="Build command"
-npx pnpm run astro check && npx pnpm run astro build
+npx pnpm run build
 ```
 ```sh title="Output directory"
 dist
@@ -211,7 +206,7 @@ dist
 npx bun install
 ```
 ```sh title="Build command"
-npx bun run astro check && npx bun run astro build
+npx bun run build
 ```
 ```sh title="Output directory"
 dist
@@ -219,53 +214,28 @@ dist
   </TabItem>
 </Tabs>
 
-That’s it! Your app will be live on your CloudFront URL as soon as the stack is installed.
+### Environment Variables
 
-## Environment Variables
+Environment variables in Vite are available at build time and can be used both in your config files and templates. For more information, refer to the official [Vite documentation on environment variables](https://vite.dev/guide/env-and-mode.html#env-variables).
 
-Astro allows you to define and use environment variables during the build step in a type-safe manner as a string, number, enum, or boolean using the envField helper. 
+1. Define your environment variables in the Thunder console under the [Environment Variables](/docs/environment-variables) section of your project settings.
 
-Define your environment variables in the Thunder console under the [Environment Variables](/docs/environment-variables) section of your project settings.
+2. In your code, you can define them in an `.env` file at the root of your project:
 
-*Context*: Since you're building an SPA, set the context to <code>client</code>, as these variables will be used in the browser.
-
-*Access*: Use <code>public</code> access for these variables. Never store secret keys or sensitive information in public variables, as they will be exposed in the browser and accessible to anyone.
-
-Additional Properties: You can specify properties like *optional* or *default* in the object, but always ensure sensitive information is not included.
-
-```ts title="astro.config.mjs"
-import { defineConfig, envField } from 'astro/config';
-
-export default defineConfig({
-	env: {
-		schema: {
-			CLIENT_API_URL: envField.string({ 
-        context: "client",
-        access: "public", 
-        default: "my-api-url"
-      }),
-      CLIENT_SECRET: envField.string({ 
-        context: "client", 
-        access: "public", 
-        optional: false 
-      }),
-		}
-	}
-
-  /** */
-});
+```sh title=".env"
+VITE_API_URL=https://api.example.com
 ```
 
-To access these in your Astro components:
+Use it in your application:
 
-```ts title="index.astro"
----
-import { CLIENT_API_URL, CLIENT_SECRET } from "astro:env/client";
+```tsx title="src/App.tsx"
+const apiUrl = import.meta.env.VITE_API_URL;
 
-const data = await fetch(`${CLIENT_API_URL}/api`, {
-  headers: {
-    Authorization: `Bearer ${CLIENT_SECRET}`
-  }
-})
----
+export function App() {
+  return (
+    <div>
+      <p>API URL: {apiUrl}</p>
+    </div>
+  );
+}
 ```

@@ -55,6 +55,7 @@ export const sidebar: Sidebar = {
     { text: 'Next.js', link: 'docs/frameworks/nextjs-static' },
     // { text: 'Gatsby', link: 'docs/frameworks/gatsby' },
     { text: 'React.js', link: 'docs/frameworks/vite-react' },
+    { text: 'React Router', link: 'docs/frameworks/react-router' },
     { text: 'Vue.js', link: 'docs/frameworks/vite-vue' },
     { text: 'Svelte.js', link: 'docs/frameworks/vite-svelte' },
     { text: 'Preact.js', link: 'docs/frameworks/vite-preact' },
