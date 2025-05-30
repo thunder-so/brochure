@@ -5,8 +5,8 @@ import mdx from '@astrojs/mdx';
 import astroExpressiveCode from 'astro-expressive-code';
 // import awsAmplify from 'astro-aws-amplify';
 // import node from "@astrojs/node";
-// import vercelServerless from '@astrojs/vercel';
-import astroAws from "@astro-aws/adapter"
+import vercelServerless from '@astrojs/vercel';
+// import astroAws from "@astro-aws/adapter"
 
 import tailwindcss from "@tailwindcss/vite";
 
@@ -18,10 +18,10 @@ export default defineConfig({
   // adapter: node({
   //   mode: "standalone"
   // }),
-  // adapter: vercelServerless(),
-  adapter: astroAws({
-    mode: "ssr",
-  }),
+  adapter: vercelServerless(),
+  // adapter: astroAws({
+  //   mode: "ssr",
+  // }),
 
   env: {
     schema: {
