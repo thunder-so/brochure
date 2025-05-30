@@ -1,17 +1,176 @@
 ---
-title: 'Deploy a Vite Preact SPA on AWS'
-description: 'Learn how to deploy a Vite-based Preact single-page application (SPA) on AWS quickly and efficiently, using S3 and CloudFront.'
+title: 'Deploy Preact + Vite on AWS S3 and CloudFront'
+description: 'Deploy a Vite-based Preact single-page application (SPA) on your AWS account.'
 ---
 
-import { Tabs, TabItem, LinkButton } from '@astrojs/starlight/components';
+import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
 
-You can deploy a [Vite](https://vitejs.dev/) site with [Preact.js](https://preactjs.com/) on AWS with Thunder. The server pre-rendered pages produced by the build step will be stored in an S3 bucket and served using CloudFront CDN.
+You can deploy a [Preact](https://preactjs.com/) single-page application (SPA) with [Vite](https://vitejs.dev/) on your AWS account.
+
+There are two ways to deploy your Preact SPA on AWS:
+
+1. Using the [AWS Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/) with the [CDK-SPA](https://github.com/thunder-so/cdk-spa) package.
+
+2. Using the [Thunder console](https://console.thunder.so) to deploy your app with a few clicks.
+
+The build artifacts (HTML, CSS and JavaScript) will be stored in an S3 bucket and served using CloudFront CDN.
 
 <LinkButton href="https://stackblitz.com/~/github.com/cloudbitsio/vite-preact" target="_blank" variant="secondary" icon="external">
   View code in StackBlitz
 </LinkButton>
 
-## Build Settings
+## Deploy using AWS CDK
+---
+
+[CDK-SPA](https://github.com/thunder-so/cdk-spa) is a package that simplifies the deployment of single-page applications (SPAs) to AWS using the AWS Cloud Development Kit (CDK). It provides a straightforward way to deploy your Preact app to AWS S3 and CloudFront.
+
+<Aside type="note" title="Prerequisites">
+- [AWS CDK](https://aws.amazon.com/cdk/) installed. You can install it globally using npm:
+
+```sh
+npm install -g aws-cdk
+```
+- Node.js version 20 or higher installed on your machine.
+
+- [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured on your machine and your preferred region bootstrapped with CDK.
+</Aside>
+
+### 1. Create a project
+
+You can create a new Vite project with Preact using the following command:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm create vite@latest my-preact-app -- --template preact
+cd my-preact-app
+npm install
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm create vite my-preact-app --template preact
+cd my-preact-app
+pnpm install
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun create vite my-preact-app --template preact
+cd my-preact-app
+bun install
+```
+  </TabItem>
+</Tabs>
+
+### 2. Initialize your project
+
+Install the necessary dependencies and initialize your project:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm i tsx aws-cdk-lib @thunderso/cdk-spa --save-dev
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add -D tsx aws-cdk-lib @thunderso/cdk-spa
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun add -d tsx aws-cdk-lib @thunderso/cdk-spa
+```
+  </TabItem>
+</Tabs>
+
+Create a `stack/index.ts` file. Edit it to match your project:
+
+```ts title="stack/index.ts"
+import { App } from "aws-cdk-lib";
+import { SPAStack, type SPAProps } from "@thunderso/cdk-spa";
+
+const myApp: SPAProps = {
+  env: {
+    account: 'your-account-id',
+    region: 'us-east-1'
+  },
+  application: 'your-application-id',
+  service: 'your-service-id',
+  environment: 'production',
+
+  rootDir: '', // e.g. 'frontend/' for monorepos
+  outputDir: 'dist/',
+};
+
+new SPAStack(
+  new App(), 
+  `${myApp.application}-${myApp.service}-${myApp.environment}-stack`, 
+  myApp
+);
+```
+
+### 3. Deploy
+
+Before you deploy, run your build script to generate artifacts in the `dist` directory.
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm run build
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm run build
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+```
+  </TabItem>
+</Tabs>
+
+By running the following script, the CDK stack will be deployed to AWS.
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npx cdk deploy --all --app="npx tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bunx cdk deploy --all --app="bunx tsx stack/index.ts"
+```
+  </TabItem>
+</Tabs>
+
+When the deployment is complete, you will see the CloudFront URL in the output. You can access your Preact app at that URL.
+
+For complete documentation on how to use CDK-SPA, refer to the [CDK-SPA documentation](https://github.com/thunderso/cdk-spa).
+
+
+## Deploy using Thunder console
+---
+
+You can also deploy your Preact app on AWS using the [Thunder console](https://console.thunder.so).
+
+<Aside type="note" title="Prerequisites">
+- An [AWS account](/docs/aws) added to your organization.
+- A [GitHub account](/docs/github) connected to your organization.
+- [Import GitHub repository](/docs/import-repository) with your Preact app code.
+</Aside>
+
+
+### Build Settings
 
 Use the following commands in the build step settings:
 
@@ -24,7 +183,7 @@ npm install
 npm run build
 ```
 ```sh title="Output directory"
-public
+dist
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
@@ -35,7 +194,7 @@ npx pnpm install
 npx pnpm run build
 ```
 ```sh title="Output directory"
-public
+dist
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
@@ -46,19 +205,18 @@ npx bun install
 npx bun run build
 ```
 ```sh title="Output directory"
-public
+dist
 ```
   </TabItem>
 </Tabs>
 
-That’s it! Your app will be live on your CloudFront URL as soon as the build finishes.
-
-## Environment Variables
+### Environment Variables
 
 Environment variables in Vite are available at build time and can be used both in your config files and templates. For more information, refer to the official [Vite documentation on environment variables](https://vite.dev/guide/env-and-mode.html#env-variables).
 
-You can define them in an .env file at the root of your project:
+1. Define your environment variables in the Thunder console under the [Environment Variables](/docs/environment-variables) section of your project settings.
 
+2. In your code, you can define them in an `.env` file at the root of your project:
 
 ```sh title=".env"
 VITE_BASE_URL=https://thunder.so

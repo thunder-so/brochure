@@ -1,12 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@reference "tailwindcss";
 
 /**
  * BASE
  */
 :root {
-  // Defaults  
+  /* // Defaults   */
   --text-default: #c7cacd;
   --text-highlight: #FFF;
   --sl-color-text-accent: var(--text-highlight);
@@ -16,36 +15,36 @@
   --default-3: var(--gray-3);
   --default-soft: var(--gray-soft);
   --code-bg: #65758529;
-  // --code-color: #2B82F6;
+  /* // --code-color: #2B82F6; */
   --code-color: #fea79f;
 
-  // Fonts
+  /* // Fonts */
   --font-family-heading: Lexend, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
   --font-family-base: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   --font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', monospace;
 
-  // Backgrounds
+  /* // Backgrounds */
   --bg: #030711;
   --bg-alt: #0F1629;
   --bg-shade: #3F4454;
   --bg-elv: #0F1629;
   --bg-soft: #0F1629;
 
-  // Borders
+  /* // Borders */
   --border: #1A2233;
   --sl-color-gray-5: var(--border);
   --sl-outline-offset-inside: #FFF;
-  // --border: 216 34% 17%;
+  /* // --border: 216 34% 17%; */
   --divider: #252D3D;
   --gutter: #000000;
 
-  // Brand
+  /* // Brand */
   --brand-1: #3B82F6;
   --brand-2: #FF9900;
   --brand-3: #fffc00;
   --brand: var(--brand-3);
 
-  // Buttons
+  /* // Buttons */
   --button-primary-bg: var(--brand);
   --button-primary-text: #121518;
   --button-primary-hover-bg: #cccc00;
@@ -61,7 +60,7 @@
   --button-outline-hover-border: #808080;
   --button-outline-hover-text: #FFF;
 
-  // Components
+  /* // Components */
   --home-hero-name-color: var(--brand);
 
   --nav-bg-color: var(--bg-alt);
@@ -130,7 +129,7 @@ h2 {
 }
 
 @media (min-width: 1536px){
-  // .container{max-width: 1280px;}
+  /* // .container{max-width: 1280px;} */
   .container {
     @apply max-w-screen-xl;
   }
@@ -177,7 +176,7 @@ main.blog {
   */
 starlight-tabs {
   margin: 2rem 0;
-  // background-color: #0F111A;
+  /* // background-color: #0F111A; */
 }
 
 starlight-tabs .tab {
@@ -206,6 +205,6 @@ starlight-tabs a[role="tab"][aria-selected="true"] {
   background-color: #0F1629 !important;
 }
 
-// starlight-tabs div[role="tabpanel"] {
+/* // starlight-tabs div[role="tabpanel"] {
 //   padding: 0 1rem !important;
-// }
+// } */

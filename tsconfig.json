@@ -5,6 +5,8 @@
     "**/*"
   ],
   "exclude": [
-    "dist"
+    "dist",
+    "cdk.out",
+    ".amplify-hosting"
   ]
 }

@@ -1,18 +1,28 @@
 // @ts-check
 import { defineConfig, envField } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
 import astroExpressiveCode from 'astro-expressive-code';
-// import awsAmplify from 'astro-amplify';
-import vercelServerless from '@astrojs/vercel';
+// import awsAmplify from 'astro-aws-amplify';
+// import node from "@astrojs/node";
+// import vercelServerless from '@astrojs/vercel';
+import astroAws from "@astro-aws/adapter"
+
+import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://thunder.so',
+  trailingSlash: 'never',
   output: 'server',
-  // adapter: awsAmplify(),
-  adapter: vercelServerless(),
+  // adapter: node({
+  //   mode: "standalone"
+  // }),
+  // adapter: vercelServerless(),
+  adapter: astroAws({
+    mode: "ssr",
+  }),
+
   env: {
     schema: {
       SUPABASE_URL: envField.string({
@@ -27,8 +37,8 @@ export default defineConfig({
       }),
     }
   },
+
   integrations: [
-    tailwind(), 
     sitemap(), 
     astroExpressiveCode({
       themes: ['material-theme-ocean', 'github-dark-default'],
@@ -38,16 +48,13 @@ export default defineConfig({
     }), 
     mdx()
   ],
+
   redirects: {
     "/pricing": "/",
-    // "/docs/frameworks/astro": "/docs/deploy/astro",
-    // "/docs/start/astro": "/docs/deploy/astro",
     "/docs/frameworks/nextjs-spa": "/docs/frameworks/nextjs-static",
-    // "/docs/start/nextjs-static": "/docs/frameworks/nextjs-static",
-    // "/docs/frameworks/vite-preact": "/docs/deploy/vite-preact",
-    // "/docs/frameworks/vite-react": "/docs/deploy/vite-react",
-    // "/docs/frameworks/vite-svelte": "/docs/deploy/vite-svelte",
-    // "/docs/frameworks/vite-vue": "/docs/deploy/vite-vue",
-    // "/docs/frameworks/vitepress": "/docs/deploy/vitepress",
+  },
+
+  vite: {
+    plugins: [tailwindcss()]
   }
 });

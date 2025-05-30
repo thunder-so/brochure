@@ -61,7 +61,7 @@ export const sidebar: Sidebar = {
     // { text: 'Lit.js', link: 'docs/frameworks/vite-lit' },
     // { text: 'Qwik.js', link: 'docs/frameworks/vite-qwik' },
 
-    // { text: 'Vite', link: 'docs/frameworks/vite' },
+    { text: 'Vite', link: 'docs/frameworks/vite' },
     { text: 'Vitepress', link: 'docs/frameworks/vitepress' },
   ],
   // 'Stacks': [

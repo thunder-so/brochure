@@ -3,6 +3,9 @@ dist/
 .amplify-hosting/
 .vercel/
 
+# CDK
+cdk.out
+
 # generated types
 .astro/
 
