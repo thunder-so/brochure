@@ -5,7 +5,15 @@ description: 'Learn how to deploy a Next.js static site (output export) on AWS q
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
 
-You can deploy a static [Next.js SPA](https://nextjs.org/) site on AWS with Thunder. The server pre-rendered pages produced by the build step will be stored in an S3 bucket and served using CloudFront CDN.
+You can deploy a static [Next.js SPA](https://nextjs.org/) site on your AWS account.
+
+There are two ways to deploy your Next.js static output on AWS:
+
+1. Using the [AWS Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/) with the [CDK-SPA](https://github.com/thunder-so/cdk-spa) package. Note that CDK-SPA does not support SSR.
+
+2. Using the [Thunder console](https://console.thunder.so) to deploy your app with a few clicks.
+
+The build artifacts (HTML, CSS and JavaScript) will be stored in an S3 bucket and served using CloudFront CDN.
 
 <LinkButton href="https://stackblitz.com/~/github.com/cloudbitsio/nextjs-spa" target="_blank" variant="secondary" icon="external">
   View code in StackBlitz
@@ -50,7 +58,7 @@ pnpm install
 ```sh
 bun create next-app my-nextjs-app
 cd my-nextjs-app
-bun install
+bun pm trust --all
 ```
   </TabItem>
 </Tabs>
@@ -103,19 +111,30 @@ new SPAStack(
 );
 ```
 
-### 3. Configure
+### 3. Configure Next.js
 
 In `next.config.mjs` file, uncomment the line that sets `output: "export"`. Learn more about Next.js [static exports](https://nextjs.org/docs/advanced-features/static-html-export).
 
 ```ts title="next.config.mjs"
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  output: "export", // for SPA mode
-}
+import type { NextConfig } from "next";
 
-export default nextConfig
+const nextConfig: NextConfig = {
+  output: "export", // for SPA mode
+};
+
+export default nextConfig;
 ```
 
+In your `tsconfig.json`, ensure the `stack` directory is excluded in the `exclude` array:
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    // ... other options
+  },
+  "exclude": ["node_modules", "stack"]
+}
+```
 
 ### 4. Deploy
 
@@ -124,17 +143,17 @@ Before you deploy, run your build script to generate artifacts in the `out` dire
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm run build && npx next export
+npm run build
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm run build && pnpm exec next export
+pnpm run build
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
-bun run build && bunx next export
+bun run build
 ```
   </TabItem>
 </Tabs>
@@ -186,7 +205,7 @@ Use the following commands in the build step settings:
 npm install --legacy-peer-deps
 ```
 ```sh title="Build command"
-npm run build && npx next export
+npm run build
 ```
 ```sh title="Output directory"
 out
@@ -197,7 +216,7 @@ out
 npx pnpm install
 ```
 ```sh title="Build command"
-npx pnpm run build && pnpm exec next export
+npx pnpm run build
 ```
 ```sh title="Output directory"
 out
@@ -208,7 +227,7 @@ out
 npx bun install
 ```
 ```sh title="Build command"
-npx bun run build && bunx next export
+npx bun run build
 ```
 ```sh title="Output directory"
 out

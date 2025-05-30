@@ -5,6 +5,7 @@
     "**/*"
   ],
   "exclude": [
+    "stack",
     "dist",
     "cdk.out",
     ".amplify-hosting"
