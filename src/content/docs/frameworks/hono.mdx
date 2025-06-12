@@ -1,0 +1,288 @@
+---
+title: 'Deploy Hono on AWS'
+description: 'Deploy a Hono application on AWS Lambda and API Gateway using AWS CDK.'
+---
+
+import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
+
+Deploy your [Hono](https://hono.dev/) app on AWS with Lambda and API Gateway using the [AWS CDK](https://aws.amazon.com/cdk/).
+
+There are a few ways to deploy your Hono app on AWS:
+
+1. Standard Lambda and API Gateway.
+2. Node.js runtime container image on Lambda.
+3. Bun runtime container image on Lambda.
+4. One-click installation on your AWS account using [Thunder console](https://console.thunder.so).
+
+<LinkButton href="https://stackblitz.com/~/github.com/cloudbitsio/hono" target="_blank" variant="secondary" icon="external">
+  View code in StackBlitz
+</LinkButton>
+
+## Deploy Hono on AWS Lambda + API Gateway
+---
+
+[CDK Functions](https://github.com/thunder-so/cdk-functions) is a package that simplifies the deployment of Lambdas using the AWS Cloud Development Kit (CDK). It provides a straightforward way to deploy your Hono app to AWS Lambda and API Gateway.
+
+<Aside type="note" title="Prerequisites">
+- [AWS CDK](https://aws.amazon.com/cdk/) installed. You can install it globally using npm:
+
+```sh
+npm install -g aws-cdk
+```
+- Node.js version 20 or higher, or Bun installed on your machine.
+- [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured on your machine and your preferred region bootstrapped with CDK.
+</Aside>
+
+### 1. Create a project
+You can create a new Hono project using the following commands:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm create hono@latest my-hono-app  
+cd my-hono-app
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm create hono my-hono-app
+cd my-hono-app
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun create hono my-hono-app
+cd my-hono-app
+```
+  </TabItem>
+</Tabs>
+
+### 2. Initialize your project
+
+Install the necessary dependencies and initialize your project:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm i tsx aws-cdk-lib @thunderso/cdk-functions --save-dev
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add -D tsx aws-cdk-lib @thunderso/cdk-functions
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun add -d tsx aws-cdk-lib @thunderso/cdk-functions
+```
+  </TabItem>
+</Tabs>
+
+### 3. Create a CDK stack
+
+Create a `stack/index.ts` file. Edit it to match your project:
+
+```ts
+// stack/index.ts
+import { App } from "aws-cdk-lib";
+import { Runtime, Architecture } from 'aws-cdk-lib/aws-lambda';
+import { FunctionStack, type FunctionProps } from '@thunder-so/cdk-functions';
+
+const fnStack: FunctionProps = {
+    env: {
+        account: '4477996600XX',
+        region: 'us-east-1',
+    },
+    application: 'hono',
+    service: 'api',
+    environment: 'dev',
+
+    functionProps: {
+        codeDir: 'dist',
+        handler: 'index.handler',
+    },
+};
+
+new FunctionStack(new App(), 
+    `${fnStack.application}-${fnStack.service}-${fnStack.environment}-stack`, 
+    fnStack
+);
+```
+
+### 4. Deploy
+
+Before you deploy, run your build script to generate artifacts in the `dist` directory.
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm run build
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm run build
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+```
+  </TabItem>
+</Tabs>
+
+By running the following script, the CDK stack will be deployed to AWS.
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npx cdk deploy --all --app="npx tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+npx cdk deploy --all --app="bunx tsx stack/index.ts"
+```
+  </TabItem>
+</Tabs>
+
+When the deployment is complete, you will see the API Gateway URL in the output. You can access your Hono app at that URL.
+
+For complete documentation, refer to the [CDK Functions documentation](https://github.com/thunderso/cdk-functions).
+
+## Node.js runtime container image on Lambda
+---
+
+You can also deploy your Hono app on AWS Lambda using a Node.js container image. This method allows you to package your application and its dependencies into a Docker image, which can then be deployed to AWS Lambda.
+
+### 1. Create a Dockerfile
+
+Create a `Dockerfile.node` in the root directory to build your Hono app as a container image:
+
+```dockerfile
+FROM public.ecr.aws/lambda/nodejs:22 AS base
+WORKDIR ${LAMBDA_TASK_ROOT}
+
+# Copy dist files
+COPY . .
+
+# Set the Lambda handler
+CMD [ "index.handler" ]
+```
+
+### 2. Create/modify your CDK stack
+
+Create a `stack/node.ts` file to define your CDK stack:
+
+```ts
+// stack/node.ts
+const fnStack: FunctionProps = {
+    // ... other props
+    
+    functionProps: {
+        codeDir: 'dist',
+        dockerFile: 'Dockerfile.node',
+    },
+};
+```
+
+By running the following script, the CDK stack will be deployed to AWS.
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npx cdk deploy --all --app="npx tsx stack/node.ts"
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm exec cdk deploy --all --app="pnpm exec tsx stack/node.ts"
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+npx cdk deploy --all --app="bunx tsx stack/node.ts"
+```
+  </TabItem>
+</Tabs>
+
+## Bun runtime container image on Lambda
+---
+
+You can also deploy your Hono app on AWS Lambda with custom Bun runtime.
+
+### 1. Create a lambda handler
+
+Create a `lambda-bun.js` file in the root directory to handle the Lambda function:
+
+```js
+// lambda-bun.js
+const { handler } = require('./index.js');
+
+exports.fetch = handler;
+```
+
+### 2. Create a Dockerfile
+
+Create a `Dockerfile.bun` in the root directory to build your Hono app as a container image:
+
+```dockerfile
+# Builder image
+FROM oven/bun:latest AS bun
+WORKDIR /tmp
+
+## Install the bun dependencies
+RUN apt-get update && apt-get install -y curl
+RUN curl -fsSL https://raw.githubusercontent.com/oven-sh/bun/main/packages/bun-lambda/runtime.ts -o /tmp/runtime.ts
+RUN bun install aws4fetch
+RUN bun build --compile runtime.ts --outfile bootstrap
+
+# Runtime image
+FROM public.ecr.aws/lambda/provided:al2023
+WORKDIR ${LAMBDA_TASK_ROOT}
+
+## Copy bun + bootstrap from the builder image
+COPY --from=bun /usr/local/bin/bun /opt/bun
+COPY --from=bun /tmp/bootstrap ${LAMBDA_RUNTIME_DIR}
+
+## Copy dist files
+COPY . .
+
+# Set our handler method
+CMD [ "lambda-bun.fetch" ]
+```
+
+### 3. Create/modify your CDK stack
+
+Create a `stack/bun.ts` file to define your CDK stack:
+
+```ts
+// stack/bun.ts
+const fnStack: FunctionProps = {
+    // ... other props
+
+    functionProps: {
+        codeDir: 'dist',
+        include: [
+            'lambda-bun.js' // Include the Lambda handler file
+        ],
+        dockerFile: 'Dockerfile.bun',
+    },
+};
+```
+
+Deploy your Hono app using the following command:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+npx cdk deploy --all --app="bunx tsx stack/bun.ts"
+```
+  </TabItem>
+</Tabs>
