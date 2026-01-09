@@ -1,0 +1,65 @@
+---
+import { cn } from "@/lib/utils";
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+  class?: string;
+}
+
+const { headings, class: className } = Astro.props;
+
+// Filter headings to only include h1-h3 (matching the logic in DocsTableOfContents.tsx)
+// Astro's MarkdownHeading already has a 'depth' property.
+const tocHeadings = headings.filter(h => h.depth <= 3);
+---
+
+<nav class={cn("w-56 shrink-0 hidden xl:block order-last", className)}>
+  <div class="sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto">
+    <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">
+      On This Page
+    </p>
+    <ul class="space-y-2 text-sm">
+      {tocHeadings.map((heading) => (
+        <li
+          style={{ paddingLeft: `${(heading.depth - 1) * 12}px` }}
+        >
+          <a
+            href={`#${heading.slug}`}
+            class="block py-1 transition-colors text-muted-foreground hover:text-foreground data-[active=true]:text-primary data-[active=true]:font-medium"
+            data-heading-link={heading.slug}
+          >
+            {heading.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          // Remove active class from all links
+          document.querySelectorAll('[data-heading-link]').forEach((link) => {
+            link.setAttribute('data-active', 'false');
+          });
+          // Add active class to current link
+          const activeLink = document.querySelector(`[data-heading-link="${id}"]`);
+          if (activeLink) {
+            activeLink.setAttribute('data-active', 'true');
+          }
+        }
+      });
+    },
+    { rootMargin: "-100px 0px -66% 0px" }
+  );
+
+  // Observe all headings that have an ID
+  document.querySelectorAll('h1[id], h2[id], h3[id]').forEach((section) => {
+    observer.observe(section);
+  });
+</script>

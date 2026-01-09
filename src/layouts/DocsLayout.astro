@@ -3,8 +3,9 @@ import type { MarkdownHeading } from 'astro'
 import { SEO } from "astro-seo";
 import Snippets from "../components/Snippets.astro";
 import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
 import Sidebar from '../components/docs/Sidebar.astro';
-import Markdown from '../components/docs/Markdown.astro';
+import TableOfContents from '../components/docs/TableOfContents.astro';
 import "../styles/main.css";
 import "../styles/docs.css";
 
@@ -16,11 +17,10 @@ interface Props {
 const { title, headings } = Astro.props
 
 const makeTitle = title
-  ? title 
+  ? title + " | Thunder"
   : "Thunder - Deploy Apps on AWS like a Pro";
 
 const currentPage = Astro.url.pathname;
-// const currentFile = `src/content/docs${currentPage.replace(/\/$/, '')}.mdx`
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 
@@ -38,6 +38,11 @@ const resolvedImageWithDomain = new URL(
 
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/images/thunder.svg" />
+        
+        {/* Preconnect to fonts */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
 		<SEO
 			title={makeTitle}
@@ -62,21 +67,39 @@ const resolvedImageWithDomain = new URL(
 		/>
 
 	</head>
-	<body>
+	<body class="bg-background text-foreground antialiased dark">
 		<Snippets />
 
 		<Header />
 		
-		<main class="layout">
-			<aside id="grid-sidebar" title="Site Navigation">
-			  <Sidebar currentPage={currentPage} />
-			</aside>
-			<div id="grid-main">
-			  <Markdown title={title} headings={headings}>
-				<slot />
-			  </Markdown>
-			</div>
+		<main class="pt-24 min-h-screen bg-background">
+            <div class="mx-auto px-4 pb-12 w-full">
+                <div class="flex gap-8 items-start">
+                    {/* Sidebar */}
+                    <div class="w-64 flex-shrink-0 sticky top-24">
+                        <Sidebar currentPage={currentPage} />
+                    </div>
+
+                    {/* Main content */}
+                    <article class="flex-1 min-w-0 max-w-4xl mx-auto docs-content">
+                        {/* Breadcrumb could go here if needed */}
+                        
+                        <h1 class="text-3xl font-bold text-foreground mb-8">{title}</h1>
+                        
+                        <div class="docs prose prose-invert max-w-none">
+                            <slot />
+                        </div>
+                    </article>
+
+                    {/* Table of Contents */}
+                    <div class="w-64 flex-shrink-0 sticky top-24">
+                        <TableOfContents headings={headings} />
+                    </div>
+                </div>
+            </div>
 		</main>
+
+        <Footer />
 
 		<style is:global>
 			/* Improve Page speed */
@@ -87,24 +110,3 @@ const resolvedImageWithDomain = new URL(
 		</style>
 	</body>
 </html>
-
-<style>
-#grid-sidebar {
-  visibility: visible;
-  width: 18.5rem;
-  background-color: var(--bg);
-  border-inline-end: 1px solid var(--border);
-  position: fixed;
-  z-index: auto;
-  inset-inline-start: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  top: 65px;
-  bottom: 0;
-}
-
-#grid-main {
-  margin-inline-start: 18.5rem;
-  padding: 20px;
-} 
-</style>
