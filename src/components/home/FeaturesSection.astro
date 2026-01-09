@@ -47,17 +47,20 @@ const features = [
     </div>
 
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {features.map((feature) => (
-        <div
-          class="group relative rounded-2xl border border-border bg-card p-8 hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_30px_hsl(var(--thunder-yellow)/0.1)]"
-        >
-          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-6 group-hover:bg-primary/20 transition-colors">
-            <feature.icon class="h-6 w-6" />
+      {features.map((feature) => {
+        const Icon = feature.icon;
+        return (
+          <div
+            class="group relative rounded-2xl border border-border bg-card p-8 hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_30px_hsl(var(--thunder-yellow)/0.1)]"
+          >
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-6 group-hover:bg-primary/20 transition-colors">
+              <Icon class="h-6 w-6" />
+            </div>
+            <h3 class="text-xl font-semibold text-foreground mb-3">{feature.title}</h3>
+            <p class="text-muted-foreground">{feature.description}</p>
           </div>
-          <h3 class="text-xl font-semibold text-foreground mb-3">{feature.title}</h3>
-          <p class="text-muted-foreground">{feature.description}</p>
-        </div>
-      ))}
+        );
+      })}
     </div>
   </div>
 </section>

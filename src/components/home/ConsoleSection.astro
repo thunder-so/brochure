@@ -132,17 +132,20 @@ const consoleFeatures = [
 
     {/* Feature grid */}
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-      {consoleFeatures.map((feature) => (
-        <div
-          class="group rounded-2xl border border-border bg-background p-6 hover:border-primary/50 transition-all duration-300"
-        >
-          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-4 group-hover:bg-primary/20 transition-colors">
-            <feature.icon class="h-6 w-6" />
+      {consoleFeatures.map((feature) => {
+        const Icon = feature.icon;
+        return (
+          <div
+            class="group rounded-2xl border border-border bg-background p-6 hover:border-primary/50 transition-all duration-300"
+          >
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-4 group-hover:bg-primary/20 transition-colors">
+              <Icon class="h-6 w-6" />
+            </div>
+            <h3 class="text-lg font-semibold text-foreground mb-2">{feature.title}</h3>
+            <p class="text-sm text-muted-foreground">{feature.description}</p>
           </div>
-          <h3 class="text-lg font-semibold text-foreground mb-2">{feature.title}</h3>
-          <p class="text-sm text-muted-foreground">{feature.description}</p>
-        </div>
-      ))}
+        );
+      })}
     </div>
 
     <div class="text-center">

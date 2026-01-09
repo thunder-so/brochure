@@ -1,0 +1,148 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import { Check, ArrowRight } from "lucide-astro";
+
+const tiers = [
+  {
+    name: "Free",
+    price: "$0",
+    description: "Perfect for getting started",
+    features: [
+      "1 workspace",
+      "3 deployments",
+      "Community support",
+      "Basic monitoring",
+    ],
+    cta: "Get Started",
+    variant: "outline",
+    popular: false,
+  },
+  {
+    name: "Pro",
+    price: "$29",
+    period: "/seat/month",
+    description: "For growing teams",
+    features: [
+      "Unlimited workspaces",
+      "Unlimited deployments",
+      "Priority support",
+      "Advanced monitoring",
+      "Custom domains",
+      "Team collaboration",
+    ],
+    cta: "Start Free Trial",
+    variant: "hero",
+    popular: true,
+  },
+  {
+    name: "Enterprise",
+    price: "Custom",
+    description: "For large organizations",
+    features: [
+      "Everything in Pro",
+      "SSO / SAML",
+      "Dedicated support",
+      "SLA guarantee",
+      "Custom integrations",
+      "On-premise option",
+    ],
+    cta: "Contact Sales",
+    variant: "outline",
+    popular: false,
+  },
+];
+---
+
+<BaseLayout title="Pricing">
+  <main class="pt-24">
+    <section class="py-24">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <h1 class="text-4xl sm:text-5xl font-bold text-foreground mb-4">
+            Simple, transparent pricing
+          </h1>
+          <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Pay for the platform, not your AWS usage. Your infrastructure costs stay in your account.
+          </p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {tiers.map((tier) => (
+            <div
+              class={`relative rounded-2xl border p-8 ${
+                tier.popular
+                  ? "border-primary bg-card shadow-[0_0_40px_hsl(var(--thunder-yellow)/0.1)]"
+                  : "border-border bg-background"
+              }`}
+            >
+              {tier.popular && (
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1 text-sm font-medium text-primary-foreground">
+                  Most Popular
+                </div>
+              )}
+              <div class="mb-6">
+                <h3 class="text-xl font-semibold text-foreground mb-2">{tier.name}</h3>
+                <div class="flex items-baseline gap-1">
+                  <span class="text-4xl font-bold text-foreground">{tier.price}</span>
+                  {tier.period && (
+                    <span class="text-muted-foreground">{tier.period}</span>
+                  )}
+                </div>
+                <p class="text-muted-foreground mt-2">{tier.description}</p>
+              </div>
+              <ul class="space-y-4 mb-8">
+                {tier.features.map((feature) => (
+                  <li class="flex items-center gap-3">
+                    <Check class="h-5 w-5 text-primary flex-shrink-0" />
+                    <span class="text-foreground">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button variant={tier.variant as any} class="w-full" size="lg" href="/signup">
+                {tier.cta}
+                <ArrowRight class="h-4 w-4 ml-2" />
+              </Button>
+            </div>
+          ))}
+        </div>
+
+        {/* FAQ Preview */}
+        <div class="mt-24 text-center">
+          <h2 class="text-2xl font-bold text-foreground mb-4">
+            Frequently asked questions
+          </h2>
+          <p class="text-muted-foreground mb-8">
+            Have questions? We've got answers.
+          </p>
+          <div class="max-w-2xl mx-auto text-left space-y-6">
+            <div class="border-b border-border pb-6">
+              <h3 class="text-lg font-medium text-foreground mb-2">
+                What about AWS costs?
+              </h3>
+              <p class="text-muted-foreground">
+                Thunder pricing is separate from your AWS usage. You pay AWS directly for the infrastructure resources you use (S3, CloudFront, Lambda, etc.). We just charge for the platform.
+              </p>
+            </div>
+            <div class="border-b border-border pb-6">
+              <h3 class="text-lg font-medium text-foreground mb-2">
+                Can I self-host Thunder?
+              </h3>
+              <p class="text-muted-foreground">
+                Yes! Thunder is open-source. You can self-host the entire platform on your own infrastructure. Check our GitHub for setup instructions.
+              </p>
+            </div>
+            <div class="pb-6">
+              <h3 class="text-lg font-medium text-foreground mb-2">
+                Is there a free tier?
+              </h3>
+              <p class="text-muted-foreground">
+                Absolutely. Our free tier includes 1 workspace and 3 deployments, perfect for side projects and experimentation.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

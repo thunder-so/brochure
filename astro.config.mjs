@@ -50,7 +50,6 @@ export default defineConfig({
   ],
 
   redirects: {
-    "/pricing": "/",
     "/docs/frameworks/nextjs-spa": "/docs/frameworks/nextjs-static",
   },
 

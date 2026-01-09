@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '../../components/Button.astro';
+import { ArrowRight, Box, Cloud, Cpu, Globe, Lock, Server, Terminal, Zap } from 'lucide-astro';
+
+const features = [
+  {
+    icon: Zap,
+    title: "Lightning Fast Deployments",
+    description: "Push to deploy in seconds. Automatic builds and zero-downtime deployments.",
+  },
+  {
+    icon: Lock,
+    title: "Your AWS, Your Control",
+    description: "Resources deploy to your AWS account. You own your infrastructure and data.",
+  },
+  {
+    icon: Globe,
+    title: "Global Edge Network",
+    description: "Leverage CloudFront's 400+ edge locations for sub-50ms response times.",
+  },
+  {
+    icon: Terminal,
+    title: "CLI & Console",
+    description: "Deploy from the command line or use our beautiful web console.",
+  },
+  {
+    icon: Cpu,
+    title: "Framework Detection",
+    description: "Automatic detection and configuration for Next.js, Nuxt, Astro, and more.",
+  },
+  {
+    icon: Cloud,
+    title: "Serverless & Containers",
+    description: "Choose between Lambda functions or Fargate containers based on your needs.",
+  },
+];
+---
+
+<BaseLayout title="Product">
+  <main class="pt-24">
+    <!-- Hero -->
+    <section class="py-24 relative overflow-hidden">
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,hsl(var(--thunder-yellow)/0.05)_0%,transparent_50%)]" />
+      <div class="container relative mx-auto px-4">
+        <div class="max-w-4xl">
+          <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-6">
+            The platform that puts
+            <br />
+            <span class="text-primary">you in control</span>
+          </h1>
+          <p class="text-xl text-muted-foreground mb-10 max-w-2xl">
+            Thunder is an open-source platform-as-a-service that deploys your applications 
+            directly to your AWS account. No vendor lock-in, full transparency.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <Button variant="hero" size="lg" href="/signup">
+              Get Started
+              <ArrowRight class="h-4 w-4 ml-2" />
+            </Button>
+            <Button variant="outline" size="lg" href="/docs">
+              Read the Docs
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section class="py-24 bg-card/50">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+            Built for modern development
+          </h2>
+          <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Everything you need to ship production applications, without sacrificing control.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((feature) => {
+            const Icon = feature.icon;
+            return (
+              <div class="p-6">
+                <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-4">
+                  <Icon class="h-6 w-6" />
+                </div>
+                <h3 class="text-xl font-semibold text-foreground mb-2">{feature.title}</h3>
+                <p class="text-muted-foreground">{feature.description}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+
+    <!-- Stacks Overview -->
+    <section class="py-24">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+            Three stacks, infinite possibilities
+          </h2>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div class="rounded-2xl border border-border bg-card p-8">
+            <Box class="h-10 w-10 text-blue-400 mb-4" />
+            <h3 class="text-2xl font-bold text-foreground mb-2">SPA Stack</h3>
+            <p class="text-sm font-mono text-muted-foreground mb-4">S3 + CloudFront</p>
+            <p class="text-muted-foreground">
+              Static sites and single-page applications with global CDN distribution.
+            </p>
+          </div>
+          <div class="rounded-2xl border border-border bg-card p-8">
+            <Cloud class="h-10 w-10 text-emerald-400 mb-4" />
+            <h3 class="text-2xl font-bold text-foreground mb-2">Functions Stack</h3>
+            <p class="text-sm font-mono text-muted-foreground mb-4">Lambda + API Gateway</p>
+            <p class="text-muted-foreground">
+              Serverless functions with automatic scaling. Perfect for APIs and SSR.
+            </p>
+          </div>
+          <div class="rounded-2xl border border-border bg-card p-8">
+            <Server class="h-10 w-10 text-purple-400 mb-4" />
+            <h3 class="text-2xl font-bold text-foreground mb-2">Web Service Stack</h3>
+            <p class="text-sm font-mono text-muted-foreground mb-4">Fargate + ALB</p>
+            <p class="text-muted-foreground">
+              Containerized applications with full runtime control and custom configurations.
+            </p>
+          </div>
+        </div>
+
+        <div class="text-center mt-12">
+          <Button variant="outline" size="lg" href="/product/stacks">
+            Learn more about stacks
+            <ArrowRight class="h-4 w-4 ml-2" />
+          </Button>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

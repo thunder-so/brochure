@@ -42,18 +42,21 @@ const stacks = [
     </div>
 
     <div class="grid lg:grid-cols-3 gap-8 mb-12">
-      {stacks.map((stack) => (
-        <div
-          class="relative rounded-2xl border border-border bg-background p-8 hover:border-primary/30 transition-all duration-300"
-        >
-          <div class={`inline-flex items-center justify-center w-14 h-14 rounded-2xl ${stack.bgColor} ${stack.color} mb-6`}>
-            <stack.icon class="h-7 w-7" />
+      {stacks.map((stack) => {
+        const Icon = stack.icon;
+        return (
+          <div
+            class="relative rounded-2xl border border-border bg-background p-8 hover:border-primary/30 transition-all duration-300"
+          >
+            <div class={`inline-flex items-center justify-center w-14 h-14 rounded-2xl ${stack.bgColor} ${stack.color} mb-6`}>
+              <Icon class="h-7 w-7" />
+            </div>
+            <h3 class="text-2xl font-bold text-foreground mb-2">{stack.name}</h3>
+            <p class="text-sm font-mono text-muted-foreground mb-4">{stack.services}</p>
+            <p class="text-muted-foreground">{stack.description}</p>
           </div>
-          <h3 class="text-2xl font-bold text-foreground mb-2">{stack.name}</h3>
-          <p class="text-sm font-mono text-muted-foreground mb-4">{stack.services}</p>
-          <p class="text-muted-foreground">{stack.description}</p>
-        </div>
-      ))}
+        );
+      })}
     </div>
 
     <div class="text-center">
