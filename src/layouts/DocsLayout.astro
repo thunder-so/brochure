@@ -2,7 +2,7 @@
 import type { MarkdownHeading } from 'astro'
 import { SEO } from "astro-seo";
 import Snippets from "../components/Snippets.astro";
-import Navigation from '../components/Navigation.astro';
+import Header from '../components/layout/Header.astro';
 import Sidebar from '../components/docs/Sidebar.astro';
 import Markdown from '../components/docs/Markdown.astro';
 import "../styles/main.css";
@@ -65,7 +65,7 @@ const resolvedImageWithDomain = new URL(
 	<body>
 		<Snippets />
 
-		<Navigation class="documentation" />
+		<Header />
 		
 		<main class="layout">
 			<aside id="grid-sidebar" title="Site Navigation">

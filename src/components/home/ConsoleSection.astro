@@ -1,0 +1,155 @@
+---
+import { 
+  ArrowRight, 
+  LayoutDashboard, 
+  Users, 
+  Rocket, 
+  Terminal, 
+  Activity, 
+  Bell 
+} from "lucide-astro";
+import Button from "../Button.astro";
+
+const consoleFeatures = [
+  {
+    icon: LayoutDashboard,
+    title: "Dashboard",
+    description: "Unified view of all your projects, deployments, and resources.",
+  },
+  {
+    icon: Users,
+    title: "Teams & Workspaces",
+    description: "Organize projects by team with role-based access control.",
+  },
+  {
+    icon: Rocket,
+    title: "One-Click Deploy",
+    description: "Push to deploy with automatic builds and rollbacks.",
+  },
+  {
+    icon: Terminal,
+    title: "Live Logs",
+    description: "Real-time log streaming from Lambda, Fargate, and CloudFront.",
+  },
+  {
+    icon: Activity,
+    title: "Monitoring",
+    description: "Built-in metrics, traces, and performance insights.",
+  },
+  {
+    icon: Bell,
+    title: "Alerts",
+    description: "Get notified of deployment failures and performance issues.",
+  },
+];
+---
+
+<section class="py-24 bg-card/50 relative overflow-hidden">
+  {/* Background glow effect */}
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-primary/5 rounded-full blur-3xl" />
+  </div>
+
+  <div class="container mx-auto px-4 relative">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+        Thunder Console
+      </h2>
+      <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+        A beautiful, powerful UI for managing your AWS infrastructure without the complexity.
+      </p>
+    </div>
+
+    {/* Console Preview */}
+    <div class="relative max-w-5xl mx-auto mb-16">
+      <div class="rounded-2xl border border-border bg-background/80 backdrop-blur-sm overflow-hidden shadow-2xl shadow-primary/5">
+        {/* Window chrome */}
+        <div class="flex items-center gap-2 px-4 py-3 border-b border-border bg-card">
+          <div class="flex gap-1.5">
+            <div class="w-3 h-3 rounded-full bg-red-500/80" />
+            <div class="w-3 h-3 rounded-full bg-yellow-500/80" />
+            <div class="w-3 h-3 rounded-full bg-green-500/80" />
+          </div>
+          <div class="flex-1 flex justify-center">
+            <div class="px-4 py-1 rounded-md bg-muted/50 text-xs text-muted-foreground font-mono">
+              console.thunder.so
+            </div>
+          </div>
+        </div>
+        
+        {/* Console content mockup */}
+        <div class="p-6 min-h-[300px] bg-gradient-to-b from-background to-card">
+          <div class="flex gap-6">
+            {/* Sidebar */}
+            <div class="w-48 space-y-2 hidden md:block">
+              {["Dashboard", "Projects", "Deployments", "Logs", "Settings"].map((item, i) => (
+                <div
+                  class={`px-3 py-2 rounded-lg text-sm ${
+                    i === 0 ? "bg-primary/10 text-primary" : "text-muted-foreground"
+                  }`}
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+            
+            {/* Main content */}
+            <div class="flex-1 space-y-4">
+              <div class="flex items-center justify-between">
+                <div class="h-8 w-32 bg-muted/30 rounded animate-pulse" />
+                <div class="h-8 w-24 bg-primary/20 rounded animate-pulse" />
+              </div>
+              
+              {/* Stats */}
+              <div class="grid grid-cols-3 gap-4">
+                {[1, 2, 3].map((i) => (
+                  <div class="p-4 rounded-xl bg-muted/20 border border-border">
+                    <div class="h-4 w-16 bg-muted/40 rounded mb-2" />
+                    <div class="h-6 w-12 bg-primary/30 rounded" />
+                  </div>
+                ))}
+              </div>
+              
+              {/* Deployments list */}
+              <div class="space-y-2">
+                {[1, 2, 3].map((i) => (
+                  <div
+                    class="flex items-center justify-between p-3 rounded-lg bg-muted/10 border border-border/50"
+                  >
+                    <div class="flex items-center gap-3">
+                      <div class={`w-2 h-2 rounded-full ${i === 1 ? "bg-green-500 animate-pulse" : "bg-muted"}`} />
+                      <div class="h-4 w-32 bg-muted/30 rounded" />
+                    </div>
+                    <div class="h-4 w-20 bg-muted/20 rounded" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Feature grid */}
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+      {consoleFeatures.map((feature) => (
+        <div
+          class="group rounded-2xl border border-border bg-background p-6 hover:border-primary/50 transition-all duration-300"
+        >
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-4 group-hover:bg-primary/20 transition-colors">
+            <feature.icon class="h-6 w-6" />
+          </div>
+          <h3 class="text-lg font-semibold text-foreground mb-2">{feature.title}</h3>
+          <p class="text-sm text-muted-foreground">{feature.description}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="text-center">
+      <Button variant="outline" size="lg" href="/product/console">
+        Explore the Console
+        <ArrowRight class="h-4 w-4 ml-2" />
+      </Button>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,63 @@
+---
+import { Cloud, Cpu, Globe, Lock, Rocket, Terminal } from "lucide-astro";
+
+const features = [
+  {
+    icon: Cloud,
+    title: "Deploy to Your AWS",
+    description: "Use your own AWS account. Your infrastructure, your data, your control.",
+  },
+  {
+    icon: Lock,
+    title: "Zero Vendor Lock-in",
+    description: "Standard AWS services. Export anytime. Your code runs on CloudFront, Lambda, and Fargate.",
+  },
+  {
+    icon: Rocket,
+    title: "Multiple Stacks",
+    description: "SPA (S3 + CloudFront), Functions (Lambda + API Gateway), Web Services (Fargate + ALB).",
+  },
+  {
+    icon: Terminal,
+    title: "Framework Support",
+    description: "Next.js, Nuxt, Astro, Hono, and more. Automatic detection and configuration.",
+  },
+  {
+    icon: Cpu,
+    title: "Thunder Console",
+    description: "Beautiful UI for managing workspaces, deployments, logs, and monitoring.",
+  },
+  {
+    icon: Globe,
+    title: "Global CDN",
+    description: "Deploy to edge locations worldwide via CloudFront for lightning-fast performance.",
+  },
+];
+---
+
+<section class="py-24 relative">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+        Everything you need to deploy
+      </h2>
+      <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+        A complete platform for deploying modern applications to AWS, without the complexity.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {features.map((feature) => (
+        <div
+          class="group relative rounded-2xl border border-border bg-card p-8 hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_30px_hsl(var(--thunder-yellow)/0.1)]"
+        >
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-6 group-hover:bg-primary/20 transition-colors">
+            <feature.icon class="h-6 w-6" />
+          </div>
+          <h3 class="text-xl font-semibold text-foreground mb-3">{feature.title}</h3>
+          <p class="text-muted-foreground">{feature.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,147 @@
+---
+import { ChevronDown, Menu, X } from "lucide-astro";
+import Button from "../Button.astro";
+
+const productLinks = [
+  { name: "Overview", href: "/product", description: "See what Thunder can do" },
+  { name: "Stacks", href: "/product/stacks", description: "SPA, Functions, Web Services" },
+  { name: "Frameworks", href: "/product/frameworks", description: "Next.js, Nuxt, Astro & more" },
+  { name: "Console", href: "/product/console", description: "Manage your deployments" },
+  { name: "How It Works", href: "/product/how-it-works", description: "Under the hood" },
+  { name: "Security", href: "/product/security", description: "Security & compliance" },
+];
+
+const resourceLinks = [
+  { name: "Changelog", href: "/changelog" },
+  { name: "Guides", href: "/guides" },
+  { name: "Community", href: "/community" },
+  { name: "Support", href: "/support" },
+];
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
+  <div class="container mx-auto px-4">
+    <nav class="flex h-16 items-center justify-between">
+      {/* Logo */}
+      <a href="/" class="flex items-center gap-2">
+        <img src="/images/thunder.svg" alt="Thunder" class="h-8 w-8 rounded-lg" />
+        <span class="text-xl font-bold text-foreground">Thunder</span>
+      </a>
+
+      {/* Desktop Navigation */}
+      <div class="hidden lg:flex items-center gap-1">
+        {/* Product Dropdown */}
+        <div class="relative group">
+          <button
+            class="flex items-center gap-1 px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Product
+            <ChevronDown class="h-4 w-4" />
+          </button>
+          <div class="absolute top-full left-0 mt-1 w-72 rounded-xl border border-border bg-popover p-2 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+            {productLinks.map((link) => (
+              <a
+                href={link.href}
+                class="block rounded-lg px-4 py-3 hover:bg-secondary transition-colors"
+              >
+                <div class="font-medium text-foreground">{link.name}</div>
+                <div class="text-sm text-muted-foreground">{link.description}</div>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <a href="/pricing" class="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          Pricing
+        </a>
+        <a href="/docs" class="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          Docs
+        </a>
+        <a href="/blog" class="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          Blog
+        </a>
+
+        {/* Resources Dropdown */}
+        <div class="relative group">
+          <button
+            class="flex items-center gap-1 px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Resources
+            <ChevronDown class="h-4 w-4" />
+          </button>
+          <div class="absolute top-full left-0 mt-1 w-48 rounded-xl border border-border bg-popover p-2 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+            {resourceLinks.map((link) => (
+              <a
+                href={link.href}
+                class="block rounded-lg px-4 py-2.5 text-sm text-foreground hover:bg-secondary transition-colors"
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop CTAs */}
+      <div class="hidden lg:flex items-center gap-3">
+        <Button variant="ghost" href="/login">Log in</Button>
+        <Button variant="hero" href="/signup">Sign Up</Button>
+      </div>
+
+      {/* Mobile Menu Button */}
+      <button
+        id="mobile-menu-toggle"
+        class="lg:hidden p-2 text-foreground"
+        aria-label="Toggle Menu"
+      >
+        <Menu class="h-6 w-6 block" id="menu-icon" />
+        <X class="h-6 w-6 hidden" id="close-icon" />
+      </button>
+    </nav>
+  </div>
+
+  {/* Mobile Menu */}
+  <div id="mobile-menu" class="hidden lg:hidden border-t border-border bg-background">
+    <div class="container mx-auto px-4 py-6 space-y-4">
+      <div class="space-y-2">
+        <div class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Product</div>
+        {productLinks.map((link) => (
+          <a
+            href={link.href}
+            class="block py-2 text-foreground hover:text-primary transition-colors"
+          >
+            {link.name}
+          </a>
+        ))}
+      </div>
+      <div class="h-px bg-border" />
+      <a href="/pricing" class="block py-2 text-foreground">
+        Pricing
+      </a>
+      <a href="/docs" class="block py-2 text-foreground">
+        Docs
+      </a>
+      <a href="/blog" class="block py-2 text-foreground">
+        Blog
+      </a>
+      <div class="h-px bg-border" />
+      <div class="flex gap-3 pt-2">
+        <Button variant="outline" class="flex-1" href="/login">Log in</Button>
+        <Button variant="hero" class="flex-1" href="/signup">Sign Up</Button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('mobile-menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const menuIcon = document.getElementById('menu-icon');
+  const closeIcon = document.getElementById('close-icon');
+
+  toggle?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+    menuIcon?.classList.toggle('hidden');
+    closeIcon?.classList.toggle('hidden');
+  });
+</script>

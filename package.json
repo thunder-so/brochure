@@ -18,14 +18,17 @@
     "@astrojs/vercel": "^8.1.4",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.8",
+    "@tailwindcss/vite": "4.1.8",
     "astro": "^5.8.0",
     "astro-aws-amplify": "^0.1.0",
     "astro-expressive-code": "^0.41.2",
     "astro-navbar": "^2.3.9",
     "astro-seo": "^0.8.4",
+    "clsx": "^2.1.1",
+    "lucide-astro": "^0.556.0",
     "sass": "^1.89.0",
+    "tailwind-merge": "^3.4.0",
     "tailwindcss": "4.1.8",
-    "@tailwindcss/vite": "4.1.8",
     "typescript": "^5.8.3"
   },
   "devDependencies": {

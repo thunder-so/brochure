@@ -1,43 +1,58 @@
 ---
+import { cn } from "@/lib/utils";
+
 interface Props {
-  size?: "sm" | "md" | "lg";
-  block?: boolean;
-  variant?: "outline" | "primary" | "secondary";
+  variant?: "default" | "destructive" | "outline" | "primary" | "secondary" | "ghost" | "link" | "hero" | "hero-outline" | "nav";
+  size?: "default" | "sm" | "md" | "lg" | "xl" | "icon";
   class?: string;
-  [x: string]: any;
+  block?: boolean;
+  asChild?: boolean;
+  href?: string;
+  [key: string]: any;
 }
 
-const {
-  size = "md",
-  variant = "primary",
-  block,
+const { 
+  variant = "default", 
+  size = "default", 
   class: className,
+  block,
   href,
-  ...rest
+  ...props 
 } = Astro.props;
 
-const sizes = {
-  sm: "px-5 py-3 rounded text-sm leading-none font-normal font-[var(--font-family-heading)]",
-  md: "px-6 py-3.5 rounded text-md leading-none font-semibold font-[var(--font-family-heading)]",
-  lg: "px-6 py-3 font-[var(--font-family-heading)]",
-};
-
 const variants = {
-  outline: "border border-1 text-[var(--button-outline-text)] border-[var(--button-outline-border)] hover:border-[var(--button-outline-hover-border)] hover:text-[var(--button-outline-hover-text)]",
-  primary: "bg-[var(--button-primary-bg)] text-[var(--button-primary-text)] hover:bg-[var(--button-primary-hover-bg)] hover:text-[var(--button-primary-hover-text)]",
-  secondary: "bg-[var(--button-secondary-bg)] text-[var(--button-secondary-text)] hover:bg-[var(--button-secondary-hover-bg)] hover:text-[var(--button-secondary-hover-text)]"
+  default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-xl",
+  primary: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-xl", // Mapped for backward compatibility
+  destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+  outline: "border border-border bg-transparent hover:bg-secondary hover:border-primary/50 text-foreground",
+  secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+  ghost: "hover:bg-secondary hover:text-foreground text-muted-foreground",
+  link: "text-primary underline-offset-4 hover:underline",
+  hero: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_20px_hsl(var(--thunder-yellow)/0.3)] hover:shadow-[0_0_30px_hsl(var(--thunder-yellow)/0.5)] font-semibold",
+  "hero-outline": "border-2 border-primary/50 bg-transparent text-foreground hover:bg-primary/10 hover:border-primary font-semibold",
+  nav: "text-muted-foreground hover:text-foreground bg-transparent font-normal",
 };
 
+const sizes = {
+  default: "h-10 px-4 py-2",
+  sm: "h-9 rounded-md px-3",
+  md: "h-10 px-4 py-2", // Mapped for backward compatibility
+  lg: "h-12 rounded-lg px-8 text-base",
+  xl: "h-14 rounded-lg px-10 text-lg",
+  icon: "h-10 w-10",
+};
+
+const classes = cn(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  variants[variant],
+  sizes[size],
+  block && "w-full",
+  className
+);
+
+const Tag = href ? "a" : "button";
 ---
 
-<button
-  {...rest}
-  class:list={[
-    "rounded text-center transition",
-    block && "w-full",
-    sizes[size],
-    variants[variant],
-    className,
-  ]}
-  ><slot />
-</button>
+<Tag href={href} class={classes} {...props}>
+  <slot />
+</Tag>

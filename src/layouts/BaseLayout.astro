@@ -1,8 +1,8 @@
 ---
 import { SEO } from "astro-seo";
 import Snippets from "../components/Snippets.astro";
-import Navigation from '../components/Navigation.astro';
-import Footer from '../components/Footer.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
 import "../styles/main.css";
 
 interface Props {
@@ -22,13 +22,18 @@ const resolvedImageWithDomain = new URL(
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
 	<head>
 		<meta charset="UTF-8" />
 		<title>{makeTitle}</title>
 
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/images/thunder.svg" />
+        
+        {/* Preconnect to fonts */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
 		<SEO
 			title={makeTitle}
@@ -52,20 +57,17 @@ const resolvedImageWithDomain = new URL(
 			}}
 		/>
 	</head>
-	<body>
+	<body class="bg-background text-foreground antialiased">
 		<Snippets />
 		
-		<div style="width: 600px; top: -100px;" class="absolute right-[400px] z-10 h-[150px] w-[400px] rotate-[0deg] transform rounded-full bg-gradient-to-tl from-[var(--bg)] via-[var(--bg-shade)] to-[var(--bg-alt)] blur-[150px]"></div>
+		<div class="fixed dotted-background h-full top-0 left-0 right-0 z-[-999]"></div>
 
-		<div class="fixed dotted-background h-full top-0 left-0 right-0 z-[-999]"><div class="absolute left-0 right-0 bottom-0 h-[300px]"></div></div>
-
-		<Navigation />
+		<Header />
 		<slot />
 		<Footer />
 
 		<style is:global>
 			/* Improve Page speed */
-			/* https://css-tricks.com/almanac/properties/c/content-visibility/ */
 			img {
 			  content-visibility: auto;
 			}

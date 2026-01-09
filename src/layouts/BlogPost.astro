@@ -3,8 +3,8 @@ import type { CollectionEntry } from 'astro:content';
 import FormattedDate from '../components/FormattedDate.astro';
 import { SEO } from "astro-seo";
 import Snippets from "../components/Snippets.astro";
-import Navigation from '../components/Navigation.astro';
-import Footer from '../components/Footer.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
 import "../styles/main.css";
 import "../styles/docs.css";
 
@@ -91,7 +91,7 @@ const resolvedImageWithDomain = new URL(
 	<body>
 		<Snippets />
 
-		<Navigation />
+		<Header />
 		
 		<main class="blog">
 			<article class="docs">

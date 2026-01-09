@@ -1,0 +1,75 @@
+---
+import { ArrowRight } from "lucide-astro";
+import Button from "../Button.astro";
+
+const frameworks = [
+  {
+    name: "Next.js",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
+    description: "Full-stack React framework",
+  },
+  {
+    name: "Nuxt",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nuxtjs/nuxtjs-original.svg",
+    description: "Vue.js framework",
+  },
+  {
+    name: "Astro",
+    logo: "https://astro.build/assets/press/astro-icon-light-gradient.svg",
+    description: "Content-focused framework",
+  },
+  {
+    name: "TanStack Start",
+    logo: "https://tanstack.com/_build/assets/logo-color-600w-Bx4vtR8J.png",
+    description: "Full-stack React framework",
+  },
+  {
+    name: "Vite",
+    logo: "https://vitejs.dev/logo.svg",
+    description: "Next-gen frontend tooling",
+  },
+  {
+    name: "React Router",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+    description: "React routing & framework",
+  },
+];
+---
+
+<section class="py-24 relative">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+        Deploy any framework
+      </h2>
+      <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+        Automatic detection and optimized configurations for your favorite frameworks.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-12">
+      {frameworks.map((framework) => (
+        <div
+          class="group relative rounded-2xl border border-border bg-card p-6 hover:border-primary/50 transition-all duration-300 flex flex-col items-center text-center"
+        >
+          <div class="w-12 h-12 mb-4 relative flex items-center justify-center">
+            <img
+              src={framework.logo}
+              alt={framework.name}
+              class="w-10 h-10 object-contain filter brightness-0 invert opacity-70 group-hover:opacity-100 transition-opacity"
+            />
+          </div>
+          <h3 class="font-semibold text-foreground mb-1">{framework.name}</h3>
+          <p class="text-xs text-muted-foreground">{framework.description}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="text-center">
+      <Button variant="outline" size="lg" href="/product/frameworks">
+        View all frameworks
+        <ArrowRight class="h-4 w-4 ml-2" />
+      </Button>
+    </div>
+  </div>
+</section>

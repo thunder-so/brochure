@@ -1,0 +1,34 @@
+---
+import { ArrowRight, Zap } from "lucide-astro";
+import Button from "../Button.astro";
+---
+
+<section class="py-24 relative overflow-hidden">
+  {/* Background glow */}
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,hsl(var(--thunder-yellow)/0.08)_0%,transparent_50%)]" />
+  
+  <div class="container relative mx-auto px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 text-primary mb-8">
+        <Zap class="h-8 w-8" />
+      </div>
+      
+      <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-6">
+        Ready to deploy?
+      </h2>
+      <p class="text-lg text-muted-foreground max-w-xl mx-auto mb-10">
+        Start deploying to your AWS account in minutes. Free tier available. No credit card required.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <Button variant="hero" size="xl" href="/signup">
+          Get Started Free
+          <ArrowRight class="h-5 w-5 ml-2" />
+        </Button>
+        <Button variant="ghost" size="lg" href="/docs">
+          Read the docs
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>
