@@ -1,15 +1,7 @@
 ---
 import { ChevronDown, Menu, X } from "lucide-astro";
 import Button from "../Button.astro";
-
-const productLinks = [
-  { name: "Overview", href: "/product", description: "See what Thunder can do" },
-  { name: "Stacks", href: "/product/stacks", description: "SPA, Functions, Web Services" },
-  { name: "Frameworks", href: "/product/frameworks", description: "Next.js, Nuxt, Astro & more" },
-  { name: "Console", href: "/product/console", description: "Manage your deployments" },
-  { name: "How It Works", href: "/product/how-it-works", description: "Under the hood" },
-  { name: "Security", href: "/product/security", description: "Security & compliance" },
-];
+import ProductMegamenu from "./ProductMegamenu.astro";
 
 const resourceLinks = [
   { name: "Changelog", href: "/changelog" },
@@ -38,17 +30,7 @@ const resourceLinks = [
             Product
             <ChevronDown class="h-4 w-4" />
           </button>
-          <div class="absolute top-full left-0 mt-1 w-72 rounded-xl border border-border bg-popover p-2 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-            {productLinks.map((link) => (
-              <a
-                href={link.href}
-                class="block rounded-lg px-4 py-3 hover:bg-secondary transition-colors"
-              >
-                <div class="font-medium text-foreground">{link.name}</div>
-                <div class="text-sm text-muted-foreground">{link.description}</div>
-              </a>
-            ))}
-          </div>
+          <ProductMegamenu />
         </div>
 
         <a href="/pricing" class="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
@@ -102,26 +84,20 @@ const resourceLinks = [
 
   {/* Mobile Menu */}
   <div id="mobile-menu" class="hidden lg:hidden border-t border-border bg-background">
-    <div class="container mx-auto px-4 py-6 space-y-4">
+    <div class="container mx-auto px-4 py-6 space-y-6">
+      {/* Product Section */}
       <div class="space-y-2">
         <div class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Product</div>
-        {productLinks.map((link) => (
-          <a
-            href={link.href}
-            class="block py-2 text-foreground hover:text-primary transition-colors"
-          >
-            {link.name}
-          </a>
-        ))}
+        <ProductMegamenu isMobile={true} />
       </div>
       <div class="h-px bg-border" />
-      <a href="/pricing" class="block py-2 text-foreground">
+      <a href="/pricing" class="block py-2 text-foreground hover:text-primary transition-colors">
         Pricing
       </a>
-      <a href="/docs" class="block py-2 text-foreground">
+      <a href="/docs" class="block py-2 text-foreground hover:text-primary transition-colors">
         Docs
       </a>
-      <a href="/blog" class="block py-2 text-foreground">
+      <a href="/blog" class="block py-2 text-foreground hover:text-primary transition-colors">
         Blog
       </a>
       <div class="h-px bg-border" />

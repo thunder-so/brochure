@@ -2,6 +2,7 @@
 import { defineConfig, envField } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
+import icon from "astro-icon";
 import astroExpressiveCode from 'astro-expressive-code';
 // import awsAmplify from 'astro-aws-amplify';
 // import node from "@astrojs/node";
@@ -46,7 +47,12 @@ export default defineConfig({
         borderRadius: '0rem'
       },
     }), 
-    mdx()
+    mdx(),
+    icon({
+      include: {
+        tabler: ["file", "lambda", "server"]
+      }
+    })
   ],
 
   redirects: {
