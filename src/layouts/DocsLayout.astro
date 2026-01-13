@@ -7,6 +7,7 @@ import Footer from '../components/layout/Footer.astro';
 import Sidebar from '../components/docs/Sidebar.astro';
 import TableOfContents from '../components/docs/TableOfContents.astro';
 import Breadcrumb from '../components/docs/Breadcrumb.astro';
+import PageActions from '../components/docs/PageActions.astro';
 import "../styles/main.css";
 import "../styles/docs.css";
 
@@ -82,11 +83,15 @@ const resolvedImageWithDomain = new URL(
                     </div>
 
                     {/* Main content */}
-                    <article class="flex-1 min-w-0 max-w-4xl mx-auto docs-content">
-                        <Breadcrumb currentPage={currentPage} />
-                        
-                        <h1 class="text-3xl font-bold text-foreground mb-8">{title}</h1>
-                        
+                    <article class="flex-1 min-w-0 max-w-4xl mx-auto docs-content">                    
+                        <div class="flex items-center justify-between mb-8">
+	                        <Breadcrumb currentPage={currentPage} />
+
+							<PageActions currentPage={currentPage} />
+                        </div>
+
+						<h1 class="text-3xl font-bold text-foreground">{title}</h1>
+
                         <div class="docs prose prose-invert max-w-none">
                             <slot />
                         </div>

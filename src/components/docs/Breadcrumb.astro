@@ -31,7 +31,7 @@ function generateBreadcrumb(path: string) {
 const breadcrumbItems = generateBreadcrumb(currentPage);
 ---
 
-<nav class="flex items-center space-x-2 text-sm text-muted-foreground mb-6">
+<nav class="flex items-center space-x-2 text-sm text-muted-foreground">
   {breadcrumbItems.map((item, index) => (
     <div class="flex items-center">
       {index > 0 && <span class="mx-2">/</span>}
