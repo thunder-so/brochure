@@ -50,7 +50,16 @@ export default defineConfig({
     mdx(),
     icon({
       include: {
-        tabler: ["file", "lambda", "server", "brand-aws", "brand-github", "settings", "cloud-bolt"]
+        tabler: [
+          "file", 
+          "lambda", 
+          "server", 
+          "brand-aws", 
+          "brand-github", 
+          "settings", 
+          "cloud-bolt", 
+          "arrow-narrow-right"
+        ]
       }
     })
   ],
