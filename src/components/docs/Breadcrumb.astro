@@ -1,0 +1,49 @@
+---
+import { sidebar } from '../../content/config';
+
+interface Props {
+  currentPage: string;
+}
+
+const { currentPage } = Astro.props;
+
+// Generate breadcrumb items based on sidebar structure
+function generateBreadcrumb(path: string) {
+  const breadcrumb = [{ text: 'Docs', link: '/docs' }];
+  
+  // Find the current page in sidebar structure
+  for (const [section, items] of Object.entries(sidebar)) {
+    const item = items.find(item => `/${item.link}` === path);
+    if (item) {
+      // Add section if it's not the main docs page
+      if (path !== '/docs') {
+        breadcrumb.push({ text: section, link: '' });
+      }
+      // Add current page
+      breadcrumb.push({ text: item.text, link: item.link });
+      break;
+    }
+  }
+  
+  return breadcrumb;
+}
+
+const breadcrumbItems = generateBreadcrumb(currentPage);
+---
+
+<nav class="flex items-center space-x-2 text-sm text-muted-foreground mb-6">
+  {breadcrumbItems.map((item, index) => (
+    <div class="flex items-center">
+      {index > 0 && <span class="mx-2">/</span>}
+      {item.link && index < breadcrumbItems.length - 1 ? (
+        <a href={`/${item.link}`} class="hover:text-foreground transition-colors">
+          {item.text}
+        </a>
+      ) : (
+        <span class={index === breadcrumbItems.length - 1 ? 'text-foreground font-medium' : ''}>
+          {item.text}
+        </span>
+      )}
+    </div>
+  ))}
+</nav>

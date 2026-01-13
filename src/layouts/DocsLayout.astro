@@ -6,6 +6,7 @@ import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Sidebar from '../components/docs/Sidebar.astro';
 import TableOfContents from '../components/docs/TableOfContents.astro';
+import Breadcrumb from '../components/docs/Breadcrumb.astro';
 import "../styles/main.css";
 import "../styles/docs.css";
 
@@ -82,7 +83,7 @@ const resolvedImageWithDomain = new URL(
 
                     {/* Main content */}
                     <article class="flex-1 min-w-0 max-w-4xl mx-auto docs-content">
-                        {/* Breadcrumb could go here if needed */}
+                        <Breadcrumb currentPage={currentPage} />
                         
                         <h1 class="text-3xl font-bold text-foreground mb-8">{title}</h1>
                         
