@@ -58,7 +58,20 @@ export default defineConfig({
           "brand-github", 
           "settings", 
           "cloud-bolt", 
-          "arrow-narrow-right"
+          "arrow-narrow-right",
+          "users"
+        ],
+        logos: [
+          "aws-s3",
+          "aws-codepipeline",
+          "aws-codebuild",
+          "aws-cloudfront",
+          "aws-route53",
+          "aws-eventbridge",
+          "aws-api-gateway",
+          "aws-lambda",
+          "aws-fargate"
+          
         ]
       }
     })

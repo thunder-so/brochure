@@ -51,7 +51,8 @@ const sections = Object.entries(sidebar).map(([title, items]) => ({
                                                 : "text-muted-foreground hover:text-foreground hover:bg-muted"
                                         )}
                                     >
-                                        {item.text}
+                                        <div class="">{item.text}</div>
+                                        {item.description && <div class="text-xs pt-1 font-mono text-muted-foreground">{item.description}</div>}
                                     </a>
                                 </div>
                             </li>

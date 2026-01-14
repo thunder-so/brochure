@@ -40,7 +40,7 @@ const blog = defineCollection({
 
 export const collections = { docs, legal, blog }
 
-export type Sidebar = Record<string, { text: string; link: string }[]>;
+export type Sidebar = Record<string, { text: string; link: string, description?: string }[]>;
 
 export const sidebar: Sidebar = {
   'Introduction': [
@@ -51,9 +51,25 @@ export const sidebar: Sidebar = {
     { text: 'Import a repository', link: 'docs/import-repository' },
   ],
   'Patterns': [
-    { text: 'Single Page Applications (SPA)', link: 'docs/patterns/s3-cloudfront' },
-    { text: 'Lambda Function', link: 'docs/patterns/lambda-apigateway' },
-    { text: 'Container Service', link: 'docs/patterns/fargate-alb' }
+    { 
+      text: 'Overview', 
+      link: 'docs/patterns' 
+    },
+    { 
+      text: 'Single Page Applications', 
+      link: 'docs/patterns/s3-cloudfront',
+      description: "S3 + CloudFront" 
+    },
+    { 
+      text: 'Serverless Function', 
+      link: 'docs/patterns/lambda-apigateway',
+      description: "Lambda + API Gateway" 
+    },
+    { 
+      text: 'Container Service', 
+      link: 'docs/patterns/fargate-alb',
+      description: "Fargate + ALB" 
+    }
   ],
   'Frameworks': [
     { text: 'Overview', link: 'docs/frameworks' },
