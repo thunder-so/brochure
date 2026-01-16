@@ -5,6 +5,21 @@ description: Deploy containerized applications using Fargate and ALB
 
 import { Icon } from 'astro-icon/components';
 
+Deploy containerized web services on AWS Fargate with Application Load Balancer for scalable, managed container hosting.
+
+Thunder provides the [@thunderso/cdk-webservice](https://github.com/thunder-so/cdk-webservice) package for deploying Docker containers to ECS Fargate with automatic VPC creation, load balancing, and support for Nixpacks to build containers without writing Dockerfiles.
+
+## Supported Frameworks
+
+- [Next.js](https://nextjs.org/)
+- [Nuxt](https://nuxt.com/)
+- [TanStack Stack](https://tanstack.com/start/latest)
+- [SvelteKit](https://kit.svelte.dev/)
+- [Astro](https://astro.build/)
+- [NestJS](https://nestjs.com/)
+- [Fastify](https://www.fastify.io/)
+- Any containerized web application
+
 ## Container Service Architecture
 
 The container service architecture provides scalable, managed container hosting with load balancing and high availability.
@@ -139,6 +154,8 @@ The container deployment pipeline builds Docker images and deploys them to manag
 
 ## Quick Start
 
+Deploy your containerized application to AWS Fargate with automatic infrastructure provisioning. This guide covers installation, configuration, and deployment.
+
 ### Installation
 
 ```bash
@@ -182,6 +199,8 @@ bunx cdk deploy --all --app="bunx tsx stack/index.ts"
 
 ## Custom Domain Setup
 
+Connect your service to a custom domain using Route 53 and ACM certificates. The certificate must be issued in the same region as your Fargate service.
+
 ```ts
 const svcProps: WebServiceProps = {
   // ... other props
@@ -194,6 +213,8 @@ const svcProps: WebServiceProps = {
 ## Service Configuration
 
 ### Container Settings
+
+Configure CPU, memory, desired task count, and container port. Supports ARM64 architecture for better price-performance with Graviton processors.
 
 ```ts
 import { CpuArchitecture } from 'aws-cdk-lib/aws-ecs';
@@ -212,6 +233,8 @@ const svcProps: WebServiceProps = {
 ```
 
 ### Environment Variables
+
+Manage configuration with plain environment variables and secure secrets from AWS Secrets Manager. The library automatically grants ECS tasks permissions to read specified secrets.
 
 ```ts
 const svcProps: WebServiceProps = {
@@ -233,7 +256,7 @@ const svcProps: WebServiceProps = {
 
 ## Nixpacks Integration
 
-Automatically build containers without writing Dockerfiles:
+Use [Nixpacks](https://nixpacks.com/) to automatically generate Dockerfiles and build containers without manual configuration. Nixpacks detects your framework and creates optimized builds for Node.js, Python, Go, Rust, and more.
 
 ```ts
 const svcProps: WebServiceProps = {
@@ -252,50 +275,26 @@ const svcProps: WebServiceProps = {
 
 ## Docker Example
 
+Manually define your container build process with a custom Dockerfile. 
+
 ```dockerfile
 # Dockerfile
-FROM public.ecr.aws/docker/library/node:22-alpine AS builder
+FROM public.ecr.aws/docker/library/alpine AS builder
 
+ENV NODE_ENV=production
+
+# Install Bun
+RUN curl -fsSL https://bun.sh/install | bash
+
+# Update PATH for bun
+ENV PATH="/root/.bun/bin:$PATH"
+
+# Copy code, install and build
 WORKDIR /app
 COPY . .
-
-# Install bun
-RUN corepack enable && corepack prepare pnpm@latest --activate
 RUN bun install
 RUN bun run build
 
-FROM public.ecr.aws/docker/library/node:22-alpine AS runner
-
-WORKDIR /app
-ENV NODE_ENV=production
-
-RUN corepack enable && corepack prepare pnpm@latest --activate
-COPY --from=builder /app/ ./
-
 EXPOSE 3000
 CMD ["bun", "start"]
-```
-
-## GitHub Actions Deployment
-
-```yaml
-# .github/workflows/deploy.yml
-name: Deploy WebService to AWS
-
-on:
-  push:
-    branches: [main]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: oven-sh/setup-bun@v1
-      - run: bun install
-      - run: bun run build
-      - run: bunx cdk deploy --require-approval never --all --app="bunx tsx stack/index.ts"
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 ```

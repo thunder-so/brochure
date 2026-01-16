@@ -1,8 +1,22 @@
 ---
-title: Single Page Applications (SPA)
-description: Deploy SPAs using S3 and CloudFront
+title: Single Page Application (SPA)
+description: Deploy SPAs using AWS S3 and CloudFront
 ---
 import { Icon } from 'astro-icon/components';
+
+Deploy any client-side Single Page Application (SPA) and static site generator (SSG) on AWS S3 and CloudFront.
+
+Thunder provides a secure and battle-tested pattern for deploying any SPA/SSG on AWS infrastructure using [AWS CDK](https://aws.amazon.com/cdk/). This pattern leverages the [@thunderso/cdk-spa](https://github.com/thunder-so/cdk-spa) package, which implements best practices for static site hosting with CloudFront distribution, S3 origin, and Lambda@Edge functions for advanced routing capabilities.
+
+## Supported Frameworks
+
+- [Astro (SSG mode)](https://astro.build/)
+- [Next.js (static output export)](https://nextjs.org/)
+- [Vite](https://vite.dev/) 
+  - [React](https://vite.new/react), [Vue](https://vite.new/vue), [Svelte](https://vite.new/svelte), [Preact](https://vite.new/preact), [Qwik](https://vite.new/qwik), [Lit](https://vite.new/lit), [Solid](https://vite.new/solid) 
+- [Gatsby (static)](https://www.gatsbyjs.com/)
+- [React Router (client-side and static prerendering)](https://reactrouter.com/start/framework/rendering)
+- Any static site generator (SSG) framework
 
 ## Hosting Architecture
 
@@ -116,16 +130,18 @@ The pipeline architecture automates the build and deployment process, ensuring c
 
 ## Quick Start
 
+Get your static site deployed to AWS in minutes with the CDK-SPA package. This guide walks through installation, configuration, and deployment of a basic static site.
+
 ### Installation
 
 ```bash
-bun add -D tsx aws-cdk-lib @thunderso/cdk-spa
+bun add -D @thunderso/cdk-spa
 ```
 
 ### Basic Setup
 
 ```bash
-bunx cdk-spa-init
+mkdir stack && touch stack/index.ts
 ```
 
 ### Configuration
@@ -142,6 +158,7 @@ const stackProps: SPAProps = {
   application: 'my-app',
   service: 'frontend',
   environment: 'production',
+  rootDir: '', // supports monorepos, e.g. frontend/
   outputDir: 'dist/',
 };
 
@@ -160,6 +177,8 @@ bunx cdk deploy --all --app="bunx tsx stack/index.ts"
 
 ## Custom Domain Setup
 
+Connect your own domain to your static site using Route 53 and ACM certificates. Learn more about [domain configuration](/docs/console/domains).
+
 ```ts
 const stackProps: SPAProps = {
   // ... other props
@@ -172,6 +191,10 @@ const stackProps: SPAProps = {
 ## Advanced Features
 
 ### URL Redirects and Rewrites
+
+Configure URL redirects and rewrites using Lambda@Edge functions that run at CloudFront edge locations. Redirects return HTTP 301/302 responses to the client, while rewrites transparently serve different content without changing the URL. Perfect for handling SPA routing, legacy URL migrations, and A/B testing.
+
+Learn more about [redirects and rewrites configuration](/docs/console/redirects-rewrites).
 
 ```ts
 const stackProps: SPAProps = {
@@ -188,6 +211,10 @@ const stackProps: SPAProps = {
 
 ### Custom Headers
 
+Add custom HTTP response headers using Lambda@Edge to control caching behavior. Headers are applied at the edge for optimal performance and can be configured per path pattern.
+
+Learn more about [response headers configuration](/docs/console/response-headers).
+
 ```ts
 const stackProps: SPAProps = {
   // ... other props
@@ -202,6 +229,10 @@ const stackProps: SPAProps = {
 ```
 
 ### AWS CodePipeline Integration
+
+Automate your deployment workflow with AWS CodePipeline and CodeBuild. Configure your GitHub repository as the source, define build commands, and let AWS handle the rest. Every push to your specified branch triggers a new build and deployment.
+
+Learn more about [build configuration](/docs/console/build-config).
 
 ```ts
 const stackProps: SPAProps = {

@@ -56,7 +56,7 @@ export const sidebar: Sidebar = {
       link: 'docs/patterns' 
     },
     { 
-      text: 'Single Page Applications', 
+      text: 'Single Page Application', 
       link: 'docs/patterns/s3-cloudfront',
       description: "S3 + CloudFront" 
     },

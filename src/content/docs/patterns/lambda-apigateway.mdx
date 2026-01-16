@@ -1,8 +1,25 @@
 ---
-title: Lambda Function
-description: Deploy serverless functions using Lambda and API Gateway
+title: Serverless Functions
+description: Deploy serverless functions using AWS Lambda and API Gateway
 ---
 import { Icon } from 'astro-icon/components';
+
+Deploy serverless APIs and backend functions on AWS Lambda with modern web frameworks like Express.js, Hono, NestJS, and Fastify.
+
+Thunder provides the [@thunderso/cdk-functions](https://github.com/thunder-so/cdk-functions) package for deploying Lambda functions with API Gateway, supporting both standard zip deployments and container images for custom runtimes.
+
+## Supported Frameworks
+
+- [Hono](https://hono.dev/)
+- [NestJS](https://nestjs.com/)
+- [Fastify](https://www.fastify.io/)
+- [Koa](https://koajs.com/)
+- [AdonisJS](https://adonisjs.com/)
+- [Sails.js](https://sailsjs.com/)
+- [LoopBack](https://loopback.io/)
+- [Feathers](https://feathersjs.com/)
+- [Restify](http://restify.com/)
+- Any web application framework
 
 ## Serverless API Architecture
 
@@ -177,6 +194,8 @@ The container deployment pipeline builds custom runtime environments for advance
 
 ## Quick Start
 
+Get your serverless API deployed to AWS Lambda in minutes. This guide covers installation, basic configuration, and deployment.
+
 ### Installation
 
 ```bash
@@ -224,6 +243,8 @@ bunx cdk deploy --all --app="bunx tsx stack/index.ts"
 
 ## Custom Domain Setup
 
+Connect your API to a custom domain using Route 53 and ACM certificates. The certificate must be issued in the same region as your Lambda function.
+
 ```ts
 const fnProps: FunctionProps = {
   // ... other props
@@ -236,6 +257,8 @@ const fnProps: FunctionProps = {
 ## Advanced Configuration
 
 ### Lambda Settings
+
+Fine-tune your function's performance with runtime selection, memory allocation, timeout configuration, and ARM64 architecture support for better price-performance.
 
 ```ts
 import { Runtime, Architecture } from 'aws-cdk-lib/aws-lambda';
@@ -254,6 +277,8 @@ const fnProps: FunctionProps = {
 ```
 
 ### Environment Variables
+
+Manage configuration with plain environment variables and secure secrets from AWS Secrets Manager. The library automatically grants Lambda permissions to read specified secrets.
 
 ```ts
 const fnProps: FunctionProps = {
@@ -275,7 +300,11 @@ const fnProps: FunctionProps = {
 
 ## Container Deployments
 
+Deploy Lambda functions as container images to use custom runtimes, package large dependencies, or run alternative runtimes like Bun. Container images support up to 10GB compared to the 250MB zip limit.
+
 ### Node.js Container
+
+Use the official AWS Lambda Node.js base image for standard Node.js deployments with custom dependencies or build processes.
 
 ```dockerfile
 # Dockerfile.node
@@ -305,6 +334,8 @@ const fnProps: FunctionProps = {
 ```
 
 ### Bun Runtime Container
+
+Deploy Lambda functions using the Bun runtime for faster cold starts and improved performance. Requires a fetch-compatible handler that matches the Fetch API standard.
 
 ```dockerfile
 # Dockerfile.bun
