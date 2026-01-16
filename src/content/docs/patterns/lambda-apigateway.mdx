@@ -4,7 +4,9 @@ description: Deploy serverless functions using Lambda and API Gateway
 ---
 import { Icon } from 'astro-icon/components';
 
-## Architecture
+## Serverless API Architecture
+
+The serverless architecture provides scalable, event-driven compute for APIs without managing servers.
 
 <section class="max-w-full bg-card border border-border rounded-lg p-6 mb-6">
   <svg viewBox="0 0 720 120" class="w-full h-auto">
@@ -50,7 +52,11 @@ import { Icon } from 'astro-icon/components';
   </svg>
 </section>
 
-### Zip Mode
+**Route 53** handles DNS resolution for custom domains. **API Gateway** manages HTTP requests, authentication, and routing. **Lambda** executes serverless functions with automatic scaling and pay-per-request pricing.
+
+## Zip Deployment Pipeline
+
+The zip deployment pipeline packages and deploys lightweight Lambda functions for standard use cases.
 
 <section class="max-w-full bg-card border border-border rounded-lg p-6 mb-6">
   <svg viewBox="0 0 720 120" class="w-full h-auto">
@@ -96,7 +102,11 @@ import { Icon } from 'astro-icon/components';
   </svg>
 </section>
 
-### Container Mode
+**GitHub** triggers deployments on code changes. **CodePipeline** orchestrates the workflow while **CodeBuild** packages the function code into a zip file and deploys directly to **Lambda**.
+
+## Container Deployment Pipeline
+
+The container deployment pipeline builds custom runtime environments for advanced use cases and larger dependencies.
 
 <section class="max-w-full bg-card border border-border rounded-lg p-6 mb-6">
   <svg viewBox="0 0 720 260" class="w-full h-auto">
@@ -162,3 +172,163 @@ import { Icon } from 'astro-icon/components';
     </foreignObject>
   </svg>
 </section>
+
+**GitHub** triggers deployments. **CodeBuild** builds Docker images with custom runtimes, pushes to **ECR**, then deploys container images to **Lambda** for advanced use cases requiring custom dependencies or alternative runtimes like Bun.
+
+## Quick Start
+
+### Installation
+
+```bash
+bun add -D tsx @thunderso/cdk-functions
+```
+
+### Basic Setup
+
+```bash
+mkdir stack && touch stack/index.ts
+```
+
+### Configuration
+
+```ts
+// stack/index.ts
+import { Cdk, FunctionStack, type FunctionProps } from '@thunderso/cdk-functions';
+
+const fnProps: FunctionProps = {
+  env: {
+    account: 'your-account-id',
+    region: 'us-east-1',
+  },
+  application: 'my-api',
+  service: 'backend',
+  environment: 'production',
+  functionProps: {
+    codeDir: 'dist/',
+    handler: 'index.handler',
+  },
+};
+
+new FunctionStack(
+  new Cdk.App(), 
+  `${fnProps.application}-${fnProps.service}-${fnProps.environment}-stack`, 
+  fnProps
+);
+```
+
+### Deploy
+
+```bash
+bunx cdk deploy --all --app="bunx tsx stack/index.ts"
+```
+
+## Custom Domain Setup
+
+```ts
+const fnProps: FunctionProps = {
+  // ... other props
+  domain: 'api.example.com',
+  hostedZoneId: 'Z1D633PJN98FT9',
+  regionalCertificateArn: 'arn:aws:acm:us-east-1:123456789012:certificate/abcd1234-abcd-1234-abcd-1234abcd1234',
+};
+```
+
+## Advanced Configuration
+
+### Lambda Settings
+
+```ts
+import { Runtime, Architecture } from 'aws-cdk-lib/aws-lambda';
+
+const fnProps: FunctionProps = {
+  // ... other props
+  functionProps: {
+    runtime: Runtime.NODEJS_20_X,
+    architecture: Architecture.ARM_64,
+    memorySize: 1792,
+    timeout: 10,
+    tracing: true,
+    keepWarm: true,
+  },
+};
+```
+
+### Environment Variables
+
+```ts
+const fnProps: FunctionProps = {
+  // ... other props
+  functionProps: {
+    variables: [
+      { API_URL: 'https://api.example.com' },
+      { NODE_ENV: 'production' }
+    ],
+    secrets: [
+      { 
+        key: 'DATABASE_URL', 
+        resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:db-url-abc123' 
+      }
+    ],
+  }
+};
+```
+
+## Container Deployments
+
+### Node.js Container
+
+```dockerfile
+# Dockerfile.node
+FROM public.ecr.aws/lambda/nodejs:22 AS base
+WORKDIR ${LAMBDA_TASK_ROOT}
+
+COPY . .
+RUN bun install --production
+RUN bun run build
+
+FROM public.ecr.aws/lambda/nodejs:22
+WORKDIR ${LAMBDA_TASK_ROOT}
+
+COPY --from=base /var/task/dist/* ./
+COPY --from=base /var/task/node_modules node_modules
+
+CMD [ "index.handler" ]
+```
+
+```ts
+const fnProps: FunctionProps = {
+  // ... other props
+  functionProps: {
+    dockerFile: 'Dockerfile.node',
+  },
+};
+```
+
+### Bun Runtime Container
+
+```dockerfile
+# Dockerfile.bun
+FROM oven/bun:latest AS base
+WORKDIR /tmp
+
+COPY . .
+RUN bun install
+RUN bun run build
+
+FROM public.ecr.aws/lambda/provided:al2023
+WORKDIR ${LAMBDA_TASK_ROOT}
+
+COPY --from=base /tmp/dist/* ./
+COPY --from=base /tmp/node_modules node_modules
+
+CMD [ "lambda-bun.fetch" ]
+```
+
+```ts
+const fnProps: FunctionProps = {
+  // ... other props
+  functionProps: {
+    dockerFile: 'Dockerfile.bun',
+  },
+};
+```

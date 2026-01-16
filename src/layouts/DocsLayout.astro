@@ -83,7 +83,7 @@ const resolvedImageWithDomain = new URL(
                     </div>
 
                     {/* Main content */}
-                    <article class="flex-1 min-w-0 max-w-4xl mx-auto docs-content">                    
+                    <article class="flex-1 min-w-0 max-w-2xl mx-auto docs-content">                    
                         <div class="flex items-center justify-between mb-8">
 	                        <Breadcrumb currentPage={currentPage} />
 
@@ -92,7 +92,7 @@ const resolvedImageWithDomain = new URL(
 
 						<h1 class="text-3xl font-bold text-foreground">{title}</h1>
 
-                        <div class="docs prose prose-invert max-w-none">
+                        <div class="docs max-w-none">
                             <slot />
                         </div>
                     </article>

@@ -70,8 +70,7 @@ export default defineConfig({
           "aws-eventbridge",
           "aws-api-gateway",
           "aws-lambda",
-          "aws-fargate"
-          
+          "aws-fargate",
         ]
       }
     })

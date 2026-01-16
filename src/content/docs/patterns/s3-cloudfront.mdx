@@ -4,7 +4,9 @@ description: Deploy SPAs using S3 and CloudFront
 ---
 import { Icon } from 'astro-icon/components';
 
-## Architecture
+## Hosting Architecture
+
+The hosting architecture provides a globally distributed, secure, and performant infrastructure for serving static web applications.
 
 <section class="max-w-full bg-card border border-border rounded-lg p-6 mb-6">
   <svg viewBox="0 0 720 120" class="w-full h-auto">
@@ -49,6 +51,12 @@ import { Icon } from 'astro-icon/components';
     </foreignObject>
   </svg>
 </section>
+
+**Route 53** handles DNS resolution, directing users to the nearest CloudFront edge location. **CloudFront** serves as a global CDN, caching static assets at edge locations worldwide for low-latency delivery. **S3** stores the application files as the origin, providing durable and scalable object storage.
+
+## CI/CD Pipeline Architecture
+
+The pipeline architecture automates the build and deployment process, ensuring consistent and reliable deployments from source code to production.
 
 <section class="max-w-full bg-card border border-border rounded-lg p-6 mb-6">
   <svg viewBox="0 0 720 260" class="w-full h-auto">
@@ -103,3 +111,112 @@ import { Icon } from 'astro-icon/components';
     </foreignObject>
   </svg>
 </section>
+
+**GitHub** triggers the pipeline on code changes. **CodePipeline** orchestrates the deployment workflow, while **CodeBuild** executes the build process in a managed environment. Built assets are uploaded to **S3** and **CloudFront** cache is invalidated to serve the latest version.
+
+## Quick Start
+
+### Installation
+
+```bash
+bun add -D tsx aws-cdk-lib @thunderso/cdk-spa
+```
+
+### Basic Setup
+
+```bash
+bunx cdk-spa-init
+```
+
+### Configuration
+
+```ts
+// stack/index.ts
+import { Cdk, SPAStack, type SPAProps } from "@thunderso/cdk-spa";
+
+const stackProps: SPAProps = {
+  env: {
+    account: 'your-account-id',
+    region: 'us-east-1'
+  },
+  application: 'my-app',
+  service: 'frontend',
+  environment: 'production',
+  outputDir: 'dist/',
+};
+
+new SPAStack(
+  new Cdk.App(), 
+  `${stackProps.application}-${stackProps.service}-${stackProps.environment}-stack`, 
+  stackProps
+);
+```
+
+### Deploy
+
+```bash
+bunx cdk deploy --all --app="bunx tsx stack/index.ts"
+```
+
+## Custom Domain Setup
+
+```ts
+const stackProps: SPAProps = {
+  // ... other props
+  domain: 'app.example.com',
+  hostedZoneId: 'Z1D633PJN98FT9',
+  globalCertificateArn: 'arn:aws:acm:us-east-1:123456789012:certificate/abcd1234-abcd-1234-abcd-1234abcd1234',
+};
+```
+
+## Advanced Features
+
+### URL Redirects and Rewrites
+
+```ts
+const stackProps: SPAProps = {
+  // ... other props
+  redirects: [
+    { source: '/home', destination: '/' },
+    { source: '/blog/:slug', destination: '/posts/:slug' }
+  ],
+  rewrites: [
+    { source: '/app/*', destination: '/index.html' }
+  ],
+};
+```
+
+### Custom Headers
+
+```ts
+const stackProps: SPAProps = {
+  // ... other props
+  headers: [
+    {
+      path: '/*',
+      name: 'Cache-Control',
+      value: 'public, max-age=31536000'
+    }
+  ],
+};
+```
+
+### AWS CodePipeline Integration
+
+```ts
+const stackProps: SPAProps = {
+  // ... other props
+  githubAccessTokenArn: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:github-token-XXXXXX',
+  sourceProps: {
+    owner: 'your-username',
+    repo: 'your-repo',
+    branchOrRef: 'main',
+  },
+  buildProps: {
+    runtime: 'nodejs',
+    runtime_version: '20',
+    installcmd: 'bun install',
+    buildcmd: 'bun run build',
+  },
+};
+```

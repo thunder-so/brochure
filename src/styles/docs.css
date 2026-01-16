@@ -11,7 +11,7 @@
   position: relative;
   font-weight: 600;
   outline: none;
-  color: var(--text-highlight);
+  color: var(--foreground);
 }
 
 .docs h1 {
@@ -93,6 +93,7 @@
 .docs p,
 .docs summary {
   margin: 16px 0;
+  color: var(--color-docs-text);
 }
 
 .docs p {
@@ -115,7 +116,6 @@
 
 .docs a {
   font-weight: 500;
-  /* // color: var(--vp-c-brand-1); */
   text-decoration: underline;
   text-underline-offset: 2px;
   transition:
@@ -123,9 +123,9 @@
     opacity 0.25s;
 }
 
-/* // .docs a:hover {
-//   color: var(--vp-c-brand-2);
-// } */
+.docs a:hover {
+  color: white !important;
+}
 
 .docs strong {
   font-weight: 600;
@@ -149,8 +149,15 @@
   list-style: decimal;
 }
 
-.docs ul li + li {
-  margin-top: 8px;
+.docs ul li,
+.docs ol li {
+  padding: 5px 0;
+  color: var(--color-docs-text);
+}
+
+.docs ul li p,
+.docs ol li p {
+  margin: 0;
 }
 
 .docs ul li > ol,
@@ -567,16 +574,37 @@
  * -------------------------------------------------------------------------- */
 
 @layer starlight.components {
+  .tablist-wrapper {
+    display: block !important;
+    margin-top: 2rem;
+  }
+
   ul[role="tablist"] {
+    list-style: none !important;
     padding-left: 0 !important;
+    border-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    justify-content: flex-start;
+    gap: 0.5rem;
   }
 
   li.tab {
-    list-style: none !important;
+    padding-right: 0.5rem;
+    margin-bottom: 0 !important;
   }
 
   li.tab a {
     text-decoration: none !important;
+    border-bottom: 0 !important;
+    background-color: var(--color-muted);
+    color: var(--color-muted-foreground);
+    border-radius: var(--radius-sm);
+    padding: 0.325rem 0.825rem !important; 
+  }
+
+  li.tab a:hover {
+    background-color: var(--color-muted/80);
   }
 
   li.tab a svg {

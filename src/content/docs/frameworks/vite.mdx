@@ -1,25 +1,32 @@
 ---
-title: 'Deploy Vite TypeScript SPA on AWS S3 and CloudFront'
+title: 'Deploy Vite on AWS S3 and CloudFront'
 description: 'Deploy a Vite-based vanilla TypeScript single-page application (SPA) on your AWS account.'
 ---
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
 
-You can deploy a [Vite](https://vitejs.dev/) single-page application (SPA) using the vanilla TypeScript template on your AWS account.
+You can deploy a [Vite](https://vitejs.dev/) single-page application (SPA) on your AWS account using Thunder.
 
-There are two ways to deploy your Vite SPA on AWS:
+At the end of this guide, you will have a Vite project deployed on AWS account using S3 and CloudFront. This web application will be running on resources within your AWS account, and will have a public accessible URL.
 
-1. Using the [AWS Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/) with the [CDK-SPA](https://github.com/thunder-so/cdk-spa) package.
+## Prerequisites
 
-2. Using the [Thunder console](https://console.thunder.so) to deploy your app with a few clicks.
+You'll need the following before you begin:
+
+- A Vite project to deploy - <a href="https://vitejs.dev/guide/">Get started with Vite</a>
+- A GitHub repository (public or private) with the Vite application
+- An AWS account - <a href="https://aws.amazon.com/">Create an account</a>
+- A Thunder account - <a href="https://console.thunder.so/login">Create an account</a>
+
+There are two ways to deploy your Vite SPA using Thunder:
+
+1. Using the CLI. With the [Single Page application](/docs/patterns/s3-cloudfront) pattern.
+
+2. Using the [Console](https://console.thunder.so) to deploy your app with a few clicks.
 
 The build artifacts (HTML, CSS and JavaScript) will be stored in an S3 bucket and served using CloudFront CDN.
 
-<LinkButton href="https://stackblitz.com/~/github.com/cloudbitsio/vite-vanilla-ts" target="_blank" variant="secondary" icon="external">
-  View code in StackBlitz
-</LinkButton>
-
-## Deploy using AWS CDK
+## Deploy using CLI
 ---
 
 [CDK-SPA](https://github.com/thunder-so/cdk-spa) is a package that simplifies the deployment of single-page applications (SPAs) to AWS using the AWS Cloud Development Kit (CDK). It provides a straightforward way to deploy your Vite app to AWS S3 and CloudFront.
@@ -138,7 +145,7 @@ By running the following script, the CDK stack will be deployed to AWS.
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npx cdk deploy --all --app="npx tsx stack/index.ts"
+cdk deploy --all --app="tsx stack/index.ts"
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
@@ -148,7 +155,7 @@ pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
-npx cdk deploy --all --app="bunx tsx stack/index.ts"
+cdk deploy --all --app="bunx tsx stack/index.ts"
 ```
   </TabItem>
 </Tabs>
@@ -158,14 +165,14 @@ When the deployment is complete, you will see the CloudFront URL in the output. 
 For complete documentation on how to use CDK-SPA, refer to the [CDK-SPA documentation](https://github.com/thunderso/cdk-spa).
 
 
-## Deploy using Thunder console
+## Deploy using Thunder Console
 ---
 
 You can also deploy your Vite app on AWS using the [Thunder console](https://console.thunder.so).
 
 <Aside type="note" title="Prerequisites">
-- An [AWS account](/docs/aws) added to your organization.
-- A [GitHub account](/docs/github) connected to your organization.
+- An [AWS account](/docs/aws) added to your workspace.
+- A [GitHub account](/docs/github) connected to your workspace.
 - [Import GitHub repository](/docs/import-repository) with your Vite app code.
 </Aside>
 
@@ -188,10 +195,10 @@ dist
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh title="Install command"
-npx pnpm install
+pnpm install
 ```
 ```sh title="Build command"
-npx pnpm run build
+pnpm run build
 ```
 ```sh title="Output directory"
 dist
@@ -199,10 +206,10 @@ dist
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh title="Install command"
-npx bun install
+bun install
 ```
 ```sh title="Build command"
-npx bun run build
+bun run build
 ```
 ```sh title="Output directory"
 dist
