@@ -66,7 +66,7 @@ export const sidebar: Sidebar = {
       description: "Lambda + API Gateway" 
     },
     { 
-      text: 'Container Service', 
+      text: 'Web Service', 
       link: 'docs/patterns/fargate-alb',
       description: "Fargate + ALB" 
     }
