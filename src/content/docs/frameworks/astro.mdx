@@ -1,43 +1,32 @@
 ---
-title: 'Deploy Astro on AWS S3 and CloudFront'
-description: 'Deploy an Astro static single page application (SPA) on AWS with S3 and CloudFront. Domains and SSL with Route53 and ACM. CI/CD from Github using CodePipeline and CodeBuild.'
+title: 'Deploy Astro on AWS'
+description: 'Deploy Astro applications on AWS using static hosting with S3 and CloudFront, or full-stack SSR with ECS Fargate and Application Load Balancer.'
 ---
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
 
-Deploy your [Astro](https://astro.build/) site to AWS with S3 and CloudFront for fast, reliable performance. This guide walks you through configuration and setup to get your site live with Thunder.
+Deploy your [Astro](https://astro.build/) applications to AWS using Thunder patterns. This guide covers both static site deployment and full-stack server-side rendering options.
 
-There are two ways to deploy your Astro static output on AWS:
+There are two deployment patterns available for Astro on AWS:
 
-1. Using the [AWS Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/) with the [CDK-SPA](https://github.com/thunder-so/cdk-spa) package. Note that CDK-SPA does not support SSR.
+1. **Static Site** — Deploy static Astro sites using S3 and CloudFront with the [Single Page Application](/patterns/s3-cloudfront) pattern
+2. **Full Stack** — Deploy SSR Astro applications using ECS Fargate with the [Web Service](/docs/fargate-alb) pattern
 
-2. Using the [Thunder console](https://console.thunder.so) to deploy your app with a few clicks.
-
-The build artifacts (HTML, CSS and JavaScript) will be stored in an S3 bucket and served using CloudFront CDN.
-
-<LinkButton href="https://stackblitz.com/~/github.com/cloudbitsio/astro" target="_blank" variant="secondary" icon="external">
-  View code in StackBlitz
-</LinkButton>
-
-## Deploy Astro using AWS CDK
+## Static Site Deployment
 ---
 
-[CDK-SPA](https://github.com/thunder-so/cdk-spa) is a package that simplifies the deployment of static sites to AWS using the AWS Cloud Development Kit (CDK). It provides a straightforward way to deploy your Astro app to AWS S3 and CloudFront.
+Deploy static Astro sites to S3 and CloudFront using the [CDK-SPA](https://github.com/thunder-so/cdk-spa) library. This pattern is ideal for static sites, blogs, and client-side applications.
 
-<Aside type="note" title="Prerequisites">
-- [AWS CDK](https://aws.amazon.com/cdk/) installed. You can install it globally using npm:
+### Prerequisites
 
-```sh
-npm install -g aws-cdk
-```
-- Node.js version 20 or higher installed on your machine.
-
-- [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured on your machine and your preferred region bootstrapped with CDK.
+<Aside type="note" title="Requirements">
+- [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
+- Node.js version 20 or higher
+- [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured
+- AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
 </Aside>
 
-### 1. Create a project
-
-You can create a new Astro project using the following commands:
+### Create Project
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
@@ -60,9 +49,7 @@ cd my-astro-app
   </TabItem>
 </Tabs>
 
-### 2. Configure Astro
-
-Update your `astro.config.mjs` to generate static files:
+### Configure Astro for Static Output
 
 ```ts title="astro.config.mjs"
 import { defineConfig } from 'astro/config';
@@ -72,33 +59,28 @@ export default defineConfig({
 });
 ```
 
-### 3. Initialize your project
-
-Install the necessary dependencies and initialize your project:
+### Install Dependencies and Setup Stack
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm i tsx aws-cdk-lib @thunderso/cdk-spa --save-dev
+npm i tsx @thunderso/cdk-spa --save-dev
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm add -D tsx aws-cdk-lib @thunderso/cdk-spa
+pnpm add -D tsx @thunderso/cdk-spa
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
-bun add -d tsx aws-cdk-lib @thunderso/cdk-spa
+bun add -d tsx @thunderso/cdk-spa
 ```
   </TabItem>
 </Tabs>
 
-Create a `stack/index.ts` file. Edit it to match your project:
-
 ```ts title="stack/index.ts"
-import { App } from "aws-cdk-lib";
-import { SPAStack, type SPAProps } from "@thunderso/cdk-spa";
+import { Cdk, SPAStack, type SPAProps } from "@thunderso/cdk-spa";
 
 const myApp: SPAProps = {
   env: {
@@ -114,158 +96,230 @@ const myApp: SPAProps = {
 };
 
 new SPAStack(
-  new App(), 
+  new Cdk.App(), 
   `${myApp.application}-${myApp.service}-${myApp.environment}-stack`, 
   myApp
 );
 ```
 
-### 4. Deploy
+### Environment Variables and Secrets for Build
 
-Before you deploy, run your build script to generate artifacts in the `dist` directory.
+Configure build-time environment variables using the `buildProps` configuration:
+
+```ts title="stack/index.ts"
+const myApp: SPAProps = {
+  // ... other props
+  
+  buildProps: {
+    environment: [
+      { VITE_API_URL: 'https://api.example.com' },
+      { VITE_ANALYTICS_ID: 'UA-XXXXXX' }
+    ],
+    secrets: [
+      { key: 'API_KEY', resource: '/my-app/API_KEY' },
+    ],
+  },
+};
+```
+
+### Deploy
+
+Build and deploy your static site:
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm run astro check && npm run astro build
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm run astro check && pnpm run astro build
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun run astro check && bun run astro build
-```
-  </TabItem>
-</Tabs>
-
-By running the following script, the CDK stack will be deployed to AWS.
-
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
+npm run build
 npx cdk deploy --all --app="npx tsx stack/index.ts"
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
+pnpm run build
 pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
+bun run build
 npx cdk deploy --all --app="bunx tsx stack/index.ts"
 ```
   </TabItem>
 </Tabs>
 
-When the deployment is complete, you will see the CloudFront URL in the output. You can access your Astro app at that URL.
+After deployment, you'll receive a **CloudFront URL** to access your static site.
 
-For complete documentation on how to use CDK-SPA, refer to the [CDK-SPA documentation](https://github.com/thunderso/cdk-spa).
+For complete documentation, see the [CDK-SPA README](https://github.com/thunder-so/cdk-spa).
 
-
-## Deploy using Thunder console
+## Full Stack Deployment
 ---
 
-You can also deploy your Astro app on AWS using the [Thunder console](https://console.thunder.so).
+Deploy server-side rendered Astro applications using ECS Fargate and Application Load Balancer with the [CDK-WebService](https://github.com/thunder-so/cdk-webservice) library.
 
-<Aside type="note" title="Prerequisites">
-- An [AWS account](/docs/aws) added to your organization.
-- A [GitHub account](/docs/github) connected to your organization.
-- [Import GitHub repository](/docs/import-repository) with your Astro app code.
+### Prerequisites
+
+<Aside type="note" title="Requirements">
+- [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
+- Node.js version 20 or higher
+- [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured
+- AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
 </Aside>
 
+### Configure Astro for SSR
 
-### Build Settings
+```ts title="astro.config.mjs"
+import { defineConfig } from 'astro/config';
+import node from '@astrojs/node';
 
-Use the following commands in the build step settings:
+export default defineConfig({
+  output: 'server',
+  adapter: node({
+    mode: 'standalone'
+  }),
+});
+```
+
+### Install Dependencies and Setup Stack
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
-```sh title="Install command"
-npm install
-```
-```sh title="Build command"
-npm run astro check && npm run astro build
-```
-```sh title="Output directory"
-dist
+```sh
+npm i tsx @thunderso/cdk-webservice --save-dev
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
-```sh title="Install command"
-npx pnpm install
-```
-```sh title="Build command"
-npx pnpm run astro check && npx pnpm run astro build
-```
-```sh title="Output directory"
-dist
+```sh
+pnpm add -D tsx @thunderso/cdk-webservice
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
-```sh title="Install command"
-npx bun install
-```
-```sh title="Build command"
-npx bun run astro check && npx bun run astro build
-```
-```sh title="Output directory"
-dist
+```sh
+bun add -d tsx @thunderso/cdk-webservice
 ```
   </TabItem>
 </Tabs>
 
-That’s it! Your app will be live on your CloudFront URL as soon as the stack is installed.
+```ts title="stack/index.ts"
+import { Cdk, WebServiceStack, type WebServiceProps } from "@thunderso/cdk-webservice";
 
-## Environment Variables
+const svcProps: WebServiceProps = {
+  env: {
+    account: 'your-account-id',
+    region: 'us-west-2'
+  },
+  application: 'your-application-id',
+  service: 'your-service-id',
+  environment: 'production',
 
-Astro allows you to define and use environment variables during the build step in a type-safe manner as a string, number, enum, or boolean using the envField helper. 
+  rootDir: '', // e.g. 'app/' for monorepos
+};
 
-Define your environment variables in the Thunder console under the [Environment Variables](/docs/environment-variables) section of your project settings.
-
-*Context*: Since you're building an SPA, set the context to <code>client</code>, as these variables will be used in the browser.
-
-*Access*: Use <code>public</code> access for these variables. Never store secret keys or sensitive information in public variables, as they will be exposed in the browser and accessible to anyone.
-
-Additional Properties: You can specify properties like *optional* or *default* in the object, but always ensure sensitive information is not included.
-
-```ts title="astro.config.mjs"
-import { defineConfig, envField } from 'astro/config';
-
-export default defineConfig({
-	env: {
-		schema: {
-			CLIENT_API_URL: envField.string({ 
-        context: "client",
-        access: "public", 
-        default: "my-api-url"
-      }),
-      CLIENT_SECRET: envField.string({ 
-        context: "client", 
-        access: "public", 
-        optional: false 
-      }),
-		}
-	}
-
-  /** */
-});
+new WebServiceStack(
+  new Cdk.App(), 
+  `${svcProps.application}-${svcProps.service}-${svcProps.environment}-stack`, 
+  svcProps
+);
 ```
 
-To access these in your Astro components:
+### Build Settings Using Nixpacks
 
-```ts title="index.astro"
----
-import { CLIENT_API_URL, CLIENT_SECRET } from "astro:env/client";
+Configure automatic containerization with Nixpacks:
 
-const data = await fetch(`${CLIENT_API_URL}/api`, {
-  headers: {
-    Authorization: `Bearer ${CLIENT_SECRET}`
-  }
-})
----
+```ts title="stack/index.ts"
+const svcProps: WebServiceProps = {
+  // ... other props
+  
+  buildProps: {
+    buildSystem: 'Nixpacks',
+    installcmd: 'npm install',
+    buildcmd: 'npm run build',
+    startcmd: 'npm start',
+  },
+};
 ```
+
+### Build Settings Using Docker Container
+
+Alternatively, use a custom Dockerfile:
+
+```dockerfile title="Dockerfile"
+FROM public.ecr.aws/docker/library/alpine
+
+# Install Bun
+RUN curl -fsSL https://bun.sh/install | bash
+
+# Update PATH for bun
+ENV PATH="/root/.bun/bin:$PATH"
+
+# Copy code, install and build
+WORKDIR /app
+COPY . .
+RUN bun install
+RUN bun run build
+
+EXPOSE 4321
+CMD ["bun", "start"]
+```
+
+```ts title="stack/index.ts"
+const svcProps: WebServiceProps = {
+  // ... other props
+  
+  serviceProps: {
+    dockerFile: 'Dockerfile',
+    port: 4321,
+  },
+};
+```
+
+### Environment Variables and Secrets for SSR
+
+Configure runtime environment variables and secrets:
+
+```ts title="stack/index.ts"
+const svcProps: WebServiceProps = {
+  // ... other props
+  
+  serviceProps: {
+    variables: [
+      { NODE_ENV: 'production' },
+      { PUBLIC_API_URL: 'https://api.example.com' }
+    ],
+    secrets: [
+      { 
+        key: 'DATABASE_URL', 
+        resource: 'arn:aws:secretsmanager:us-west-2:123456789012:secret:/my-app/DATABASE_URL-abc123' 
+      },
+    ],
+  },
+};
+```
+
+### Deploy
+
+Build and deploy your containerized application:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm run build
+npx cdk deploy --all --app="npx tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm run build
+pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+npx cdk deploy --all --app="bunx tsx stack/index.ts"
+```
+  </TabItem>
+</Tabs>
+
+After deployment, you'll receive an **Application Load Balancer URL** to access your SSR application.
+
+For complete documentation, see the [CDK-WebService README](https://github.com/thunder-so/cdk-webservice).

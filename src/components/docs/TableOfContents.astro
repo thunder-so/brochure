@@ -16,13 +16,13 @@ const tocHeadings = headings.filter(h => h.depth <= 3);
 
 <nav class={cn("w-56 shrink-0 hidden xl:block order-last", className)}>
   <div class="sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto">
-    <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">
+    <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4 pl-[1em]">
       On This Page
     </p>
     <ul class="space-y-2 text-sm">
       {tocHeadings.map((heading) => (
         <li
-          style={{ paddingLeft: heading.depth > 1 ? `${(heading.depth - 1) * 12}px` : '0px' }}
+          style={{ paddingLeft: `${(heading.depth - 1) * 1}em` }}
         >
           <a
             href={`#${heading.slug}`}
