@@ -1,99 +1,106 @@
 ---
-title: 'Deploy React Router SPA on AWS S3 and CloudFront'
-description: 'Deploy a React Router v7 single-page application (SPA) on your AWS account using S3 and CloudFront.'
+title: 'Deploy React Router on AWS'
+description: 'Deploy React Router applications on AWS using CSR/static pre-rendering with S3 and CloudFront, or full-stack SSR with ECS Fargate and Application Load Balancer.'
 ---
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
 
-You can deploy a [React Router v7](https://reactrouter.com/) single-page application (SPA) with [Vite](https://vitejs.dev/) on your AWS account.
+Deploy your [React Router](https://reactrouter.com/) applications to AWS using Thunder patterns. This guide covers client-side rendering (CSR), static pre-rendering, and full-stack server-side rendering options.
 
-There are two ways to deploy your React Router SPA on AWS:
+There are two deployment patterns available for React Router on AWS:
 
-1. Using the [AWS Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/) with the [CDK-SPA](https://www.npmjs.com/package/@thunderso/cdk-spa) package.
+1. **Single Page Application (SPA)** — Deploy client-side or static pre-rendered React Router sites using S3 and CloudFront with the [Single Page Application](/patterns/s3-cloudfront) pattern
+2. **Full Stack** — Deploy SSR React Router applications using ECS Fargate with the [Web Service](/docs/fargate-alb) pattern
 
-2. Using the [Thunder console](https://console.thunder.so) to deploy your app with a few clicks.
-
-The build artifacts (HTML, CSS and JavaScript) will be stored in an S3 bucket and served using CloudFront CDN.
-
-<LinkButton href="https://stackblitz.com/~/github.com/cloudbitsio/react-router" target="_blank" variant="secondary" icon="external">
-  View code in StackBlitz
-</LinkButton>
-
-## Deploy using AWS CDK
----
-
-[CDK-SPA](https://www.npmjs.com/package/@thunderso/cdk-spa) is a package that simplifies the deployment of single-page applications (SPAs) to AWS using the AWS Cloud Development Kit (CDK). It provides a straightforward way to deploy your React Router app to AWS S3 and CloudFront.
-
-<Aside type="note" title="Prerequisites">
-- [AWS CDK](https://aws.amazon.com/cdk/) installed. You can install it globally using npm:
-
-```sh
-npm install -g aws-cdk
-```
-- Node.js version 20 or higher installed on your machine.
-
-- [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured on your machine and your preferred region bootstrapped with CDK.
+<Aside type="note" title="Requirements">
+- [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
+- Node.js version 20 or higher
+- [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured
+- AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
 </Aside>
 
-### 1. Create a project
+## Single Page Application (SPA) Deployment
+---
 
-You can create a new Vite project with React using the following command:
+Deploy React Router applications to S3 and CloudFront using the [CDK-SPA](https://github.com/thunder-so/cdk-spa) library. This pattern supports both client-side rendering (CSR) and static pre-rendering, offering flexibility for different use cases.
+
+### Create Project
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm create vite@latest my-react-router-app -- --template react-ts
 cd my-react-router-app
+npm install react-router-dom@7
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
 pnpm create vite my-react-router-app --template react-ts
 cd my-react-router-app
+pnpm add react-router-dom@7
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
 bun create vite my-react-router-app --template react-ts
 cd my-react-router-app
-bun pm trust --all
+bun add react-router-dom@7
 ```
   </TabItem>
 </Tabs>
 
-Then install React Router v7:
+### Configure React Router
 
-```sh
-npm install react-router-dom@7
+Choose one of the following configurations based on your needs:
+
+**Client-Side Rendering (CSR)** — Routes are always client-side rendered as users navigate:
+
+```ts title="react-router.config.ts"
+import type { Config } from "@react-router/dev/config";
+
+export default {
+  ssr: false,
+} satisfies Config;
 ```
 
-### 2. Initialize your project
+**Static Pre-rendering** — Generate static HTML at build time for specific routes:
 
-Install the necessary dependencies and initialize your project:
+```ts title="react-router.config.ts"
+import type { Config } from "@react-router/dev/config";
+
+export default {
+  // Return a list of URLs to prerender at build time
+  async prerender() {
+    return ["/", "/about", "/contact"];
+  },
+} satisfies Config;
+```
+
+Pre-rendering generates static HTML and client navigation data payloads for a list of URLs, offering better performance and SEO without requiring a server. Route module loaders are used to fetch data at build time. Individual routes can also use client data loading with `clientLoader` to supplement pre-rendered data.
+
+### Install Dependencies and Setup Stack
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm i tsx aws-cdk-lib @thunderso/cdk-spa --save-dev
+npm i tsx @thunderso/cdk-spa --save-dev
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm add -D tsx aws-cdk-lib @thunderso/cdk-spa
+pnpm add -D tsx @thunderso/cdk-spa
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
-bun add -d tsx aws-cdk-lib @thunderso/cdk-spa
+bun add -d tsx @thunderso/cdk-spa
 ```
   </TabItem>
 </Tabs>
 
-Create a `stack/index.ts` file. Edit it to match your project:
-
 ```ts title="stack/index.ts"
-import { App } from "aws-cdk-lib";
-import { SPAStack, type SPAProps } from "@thunderso/cdk-spa";
+import { Cdk, SPAStack, type SPAProps } from "@thunderso/cdk-spa";
 
 const myApp: SPAProps = {
   env: {
@@ -109,133 +116,245 @@ const myApp: SPAProps = {
 };
 
 new SPAStack(
-  new App(), 
+  new Cdk.App(), 
   `${myApp.application}-${myApp.service}-${myApp.environment}-stack`, 
   myApp
 );
 ```
 
-### 3. Deploy
+### Environment Variables and Secrets for Build
 
-Before you deploy, run your build script to generate artifacts in the `dist` directory.
+Configure build-time environment variables using the `buildProps` configuration:
+
+```ts title="stack/index.ts"
+const myApp: SPAProps = {
+  // ... other props
+  
+  buildProps: {
+    environment: [
+      { VITE_API_URL: 'https://api.example.com' },
+      { VITE_ANALYTICS_ID: 'UA-XXXXXX' }
+    ],
+    secrets: [
+      { key: 'API_KEY', resource: '/my-app/API_KEY' },
+    ],
+  },
+};
+```
+
+### Deploy
+
+Build and deploy your React Router SPA:
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm run build
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm run build
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun run build
-```
-  </TabItem>
-</Tabs>
-
-By running the following script, the CDK stack will be deployed to AWS.
-
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
 npx cdk deploy --all --app="npx tsx stack/index.ts"
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
+pnpm run build
 pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
+bun run build
 npx cdk deploy --all --app="bunx tsx stack/index.ts"
 ```
   </TabItem>
 </Tabs>
 
-When the deployment is complete, you will see the CloudFront URL in the output. You can access your React Router app at that URL.
+After deployment, you'll receive a **CloudFront URL** to access your application.
 
-For complete documentation on how to use CDK-SPA, refer to the [CDK-SPA documentation](https://github.com/thunderso/cdk-spa).
+For complete documentation, see the [CDK-SPA README](https://github.com/thunder-so/cdk-spa).
 
-
-## Deploy using Thunder console
+## Full Stack Deployment (SSR)
 ---
 
-You can also deploy your React Router app on AWS using the [Thunder console](https://console.thunder.so).
+Deploy server-side rendered React Router applications using ECS Fargate and Application Load Balancer with the [CDK-WebService](https://github.com/thunder-so/cdk-webservice) library.
 
-<Aside type="note" title="Prerequisites">
-- An [AWS account](/docs/aws) added to your organization.
-- A [GitHub account](/docs/github) connected to your organization.
-- [Import GitHub repository](/docs/import-repository) with your React Router app code.
-</Aside>
-
-
-### Build Settings
-
-Use the following commands in the build step settings:
+### Create Project
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
-```sh title="Install command"
-npm install
-```
-```sh title="Build command"
-npm run build
-```
-```sh title="Output directory"
-dist
+```sh
+npm create vite@latest my-react-router-app -- --template react-ts
+cd my-react-router-app
+npm install react-router-dom@7
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
-```sh title="Install command"
-npx pnpm install
-```
-```sh title="Build command"
-npx pnpm run build
-```
-```sh title="Output directory"
-dist
+```sh
+pnpm create vite my-react-router-app --template react-ts
+cd my-react-router-app
+pnpm add react-router-dom@7
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
-```sh title="Install command"
-npx bun install
-```
-```sh title="Build command"
-npx bun run build
-```
-```sh title="Output directory"
-dist
+```sh
+bun create vite my-react-router-app --template react-ts
+cd my-react-router-app
+bun add react-router-dom@7
 ```
   </TabItem>
 </Tabs>
 
-### Environment Variables
+### Configure React Router for SSR
 
-Environment variables in Vite are available at build time and can be used both in your config files and templates. For more information, refer to the official [Vite documentation on environment variables](https://vite.dev/guide/env-and-mode.html#env-variables).
+```ts title="react-router.config.ts"
+import type { Config } from "@react-router/dev/config";
 
-1. Define your environment variables in the Thunder console under the [Environment Variables](/docs/environment-variables) section of your project settings.
-
-2. In your code, you can define them in an `.env` file at the root of your project:
-
-```sh title=".env"
-VITE_API_URL=https://api.example.com
+export default {
+  ssr: true,
+} satisfies Config;
 ```
 
-Use it in your application:
+Server-side rendering requires a deployment that supports it. Individual routes can still be statically pre-rendered, and routes can also use client data loading with `clientLoader` to avoid server rendering/fetching for their portion of the UI.
 
-```tsx title="src/App.tsx"
-const apiUrl = import.meta.env.VITE_API_URL;
+### Install Dependencies and Setup Stack
 
-export function App() {
-  return (
-    <div>
-      <p>API URL: {apiUrl}</p>
-    </div>
-  );
-}
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm i tsx @thunderso/cdk-webservice --save-dev
 ```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add -D tsx @thunderso/cdk-webservice
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun add -d tsx @thunderso/cdk-webservice
+```
+  </TabItem>
+</Tabs>
+
+```ts title="stack/index.ts"
+import { Cdk, WebServiceStack, type WebServiceProps } from "@thunderso/cdk-webservice";
+
+const svcProps: WebServiceProps = {
+  env: {
+    account: 'your-account-id',
+    region: 'us-west-2'
+  },
+  application: 'your-application-id',
+  service: 'your-service-id',
+  environment: 'production',
+
+  rootDir: '', // e.g. 'app/' for monorepos
+};
+
+new WebServiceStack(
+  new Cdk.App(), 
+  `${svcProps.application}-${svcProps.service}-${svcProps.environment}-stack`, 
+  svcProps
+);
+```
+
+### Build Settings Using Nixpacks
+
+Configure automatic containerization with Nixpacks:
+
+```ts title="stack/index.ts"
+const svcProps: WebServiceProps = {
+  // ... other props
+  
+  buildProps: {
+    buildSystem: 'Nixpacks',
+    installcmd: 'npm install',
+    buildcmd: 'npm run build',
+    startcmd: 'npm start',
+  },
+};
+```
+
+### Build Settings Using Docker Container
+
+Alternatively, use a custom Dockerfile:
+
+```dockerfile title="Dockerfile"
+FROM public.ecr.aws/docker/library/alpine
+
+# Install Bun
+RUN curl -fsSL https://bun.sh/install | bash
+
+# Update PATH for bun
+ENV PATH="/root/.bun/bin:$PATH"
+
+# Copy code, install and build
+WORKDIR /app
+COPY . .
+RUN bun install
+RUN bun run build
+
+EXPOSE 3000
+CMD ["bun", "start"]
+```
+
+```ts title="stack/index.ts"
+const svcProps: WebServiceProps = {
+  // ... other props
+  
+  serviceProps: {
+    dockerFile: 'Dockerfile',
+    port: 3000,
+  },
+};
+```
+
+### Environment Variables and Secrets for SSR
+
+Configure runtime environment variables and secrets:
+
+```ts title="stack/index.ts"
+const svcProps: WebServiceProps = {
+  // ... other props
+  
+  serviceProps: {
+    variables: [
+      { NODE_ENV: 'production' },
+      { VITE_API_URL: 'https://api.example.com' }
+    ],
+    secrets: [
+      { 
+        key: 'DATABASE_URL', 
+        resource: 'arn:aws:secretsmanager:us-west-2:123456789012:secret:/my-app/DATABASE_URL-abc123' 
+      },
+    ],
+  },
+};
+```
+
+### Deploy
+
+Build and deploy your containerized application:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm run build
+npx cdk deploy --all --app="npx tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm run build
+pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+npx cdk deploy --all --app="bunx tsx stack/index.ts"
+```
+  </TabItem>
+</Tabs>
+
+After deployment, you'll receive an **Application Load Balancer URL** to access your SSR application.
+
+For complete documentation, see the [CDK-WebService README](https://github.com/thunder-so/cdk-webservice).
