@@ -1,4 +1,309 @@
 ---
-title: Nuxt
-description: Deploy Nuxt applications with Thunder
+title: 'Deploy Nuxt on AWS'
+description: 'Deploy Nuxt applications on AWS using client-side rendering with S3 and CloudFront, or full-stack SSR with ECS Fargate and Application Load Balancer.'
 ---
+
+import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
+
+Deploy your [Nuxt](https://nuxt.com/) applications to AWS using Thunder patterns. This guide covers both client-side rendering (CSR) deployment and full-stack server-side rendering options.
+
+There are two deployment patterns available for Nuxt on AWS:
+
+1. **Client-Side Rendering** — Deploy client-side Nuxt sites using S3 and CloudFront with the [Single Page Application](/patterns/s3-cloudfront) pattern
+2. **Full Stack** — Deploy SSR Nuxt applications using ECS Fargate with the [Web Service](/docs/fargate-alb) pattern
+
+<Aside type="note" title="Requirements">
+- [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
+- Node.js version 20 or higher
+- [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured
+- AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
+</Aside>
+
+## Client-Side Rendering Deployment
+---
+
+Deploy client-side Nuxt applications to S3 and CloudFront using the [CDK-SPA](https://github.com/thunder-so/cdk-spa) library. This pattern is ideal for static sites, blogs, and client-side applications.
+
+### Create Project
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npx nuxi@latest init my-nuxt-app
+cd my-nuxt-app
+npm install
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm dlx nuxi@latest init my-nuxt-app
+cd my-nuxt-app
+pnpm install
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bunx nuxi@latest init my-nuxt-app
+cd my-nuxt-app
+bun install
+```
+  </TabItem>
+</Tabs>
+
+### Configure Nuxt for Client-Side Rendering
+
+```ts title="nuxt.config.ts"
+export default defineNuxtConfig({
+  ssr: false,
+})
+```
+
+### Install Dependencies and Setup Stack
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm i tsx @thunderso/cdk-spa --save-dev
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add -D tsx @thunderso/cdk-spa
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun add -d tsx @thunderso/cdk-spa
+```
+  </TabItem>
+</Tabs>
+
+```ts title="stack/index.ts"
+import { Cdk, SPAStack, type SPAProps } from "@thunderso/cdk-spa";
+
+const myApp: SPAProps = {
+  env: {
+    account: 'your-account-id',
+    region: 'us-east-1'
+  },
+  application: 'your-application-id',
+  service: 'your-service-id',
+  environment: 'production',
+
+  rootDir: '', // e.g. 'frontend/' for monorepos
+  outputDir: '.output/public/',
+};
+
+new SPAStack(
+  new Cdk.App(), 
+  `${myApp.application}-${myApp.service}-${myApp.environment}-stack`, 
+  myApp
+);
+```
+
+### Environment Variables and Secrets for Build
+
+Configure build-time environment variables using the `buildProps` configuration:
+
+```ts title="stack/index.ts"
+const myApp: SPAProps = {
+  // ... other props
+  
+  buildProps: {
+    environment: [
+      { NUXT_PUBLIC_API_URL: 'https://api.example.com' },
+      { NUXT_PUBLIC_ANALYTICS_ID: 'UA-XXXXXX' }
+    ],
+    secrets: [
+      { key: 'API_KEY', resource: '/my-app/API_KEY' },
+    ],
+  },
+};
+```
+
+### Deploy
+
+Build and deploy your Nuxt SPA:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm run build
+npx cdk deploy --all --app="npx tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm run build
+pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+npx cdk deploy --all --app="bunx tsx stack/index.ts"
+```
+  </TabItem>
+</Tabs>
+
+After deployment, you'll receive a **CloudFront URL** to access your application.
+
+For complete documentation, see the [CDK-SPA README](https://github.com/thunder-so/cdk-spa).
+
+## Full Stack Deployment
+---
+
+Deploy server-side rendered Nuxt applications using ECS Fargate and Application Load Balancer with the [CDK-WebService](https://github.com/thunder-so/cdk-webservice) library.
+
+### Configure Nuxt for SSR
+
+```ts title="nuxt.config.ts"
+export default defineNuxtConfig({
+  ssr: true,
+})
+```
+
+### Install Dependencies and Setup Stack
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm i tsx @thunderso/cdk-webservice --save-dev
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add -D tsx @thunderso/cdk-webservice
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun add -d tsx @thunderso/cdk-webservice
+```
+  </TabItem>
+</Tabs>
+
+```ts title="stack/index.ts"
+import { Cdk, WebServiceStack, type WebServiceProps } from "@thunderso/cdk-webservice";
+
+const svcProps: WebServiceProps = {
+  env: {
+    account: 'your-account-id',
+    region: 'us-west-2'
+  },
+  application: 'your-application-id',
+  service: 'your-service-id',
+  environment: 'production',
+
+  rootDir: '', // e.g. 'app/' for monorepos
+};
+
+new WebServiceStack(
+  new Cdk.App(), 
+  `${svcProps.application}-${svcProps.service}-${svcProps.environment}-stack`, 
+  svcProps
+);
+```
+
+### Build Settings Using Nixpacks
+
+Configure automatic containerization with Nixpacks:
+
+```ts title="stack/index.ts"
+const svcProps: WebServiceProps = {
+  // ... other props
+  
+  buildProps: {
+    buildSystem: 'Nixpacks',
+    installcmd: 'bun install',
+    buildcmd: 'bun run build',
+    startcmd: 'bun start',
+  },
+};
+```
+
+### Build Settings Using Docker Container
+
+Alternatively, use a custom Dockerfile:
+
+```dockerfile title="Dockerfile"
+FROM public.ecr.aws/docker/library/alpine
+
+# Install Bun
+RUN curl -fsSL https://bun.sh/install | bash
+
+# Update PATH for bun
+ENV PATH="/root/.bun/bin:$PATH"
+
+# Copy code, install and build
+WORKDIR /app
+COPY . .
+RUN bun install
+RUN bun run build
+
+EXPOSE 3000
+CMD ["bun", "start"]
+```
+
+```ts title="stack/index.ts"
+const svcProps: WebServiceProps = {
+  // ... other props
+  
+  serviceProps: {
+    dockerFile: 'Dockerfile',
+    port: 3000,
+  },
+};
+```
+
+### Environment Variables and Secrets for SSR
+
+Configure runtime environment variables and secrets:
+
+```ts title="stack/index.ts"
+const svcProps: WebServiceProps = {
+  // ... other props
+  
+  serviceProps: {
+    variables: [
+      { NODE_ENV: 'production' },
+      { NUXT_PUBLIC_API_URL: 'https://api.example.com' }
+    ],
+    secrets: [
+      { 
+        key: 'DATABASE_URL', 
+        resource: 'arn:aws:secretsmanager:us-west-2:123456789012:secret:/my-app/DATABASE_URL-abc123' 
+      },
+    ],
+  },
+};
+```
+
+### Deploy
+
+Build and deploy your containerized application:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm run build
+npx cdk deploy --all --app="npx tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm run build
+pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+npx cdk deploy --all --app="bunx tsx stack/index.ts"
+```
+  </TabItem>
+</Tabs>
+
+After deployment, you'll receive an **Application Load Balancer URL** to access your SSR application.
+
+For complete documentation, see the [CDK-WebService README](https://github.com/thunder-so/cdk-webservice).

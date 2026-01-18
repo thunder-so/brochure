@@ -21,14 +21,14 @@
 }
 
 .docs h2 {
-  margin: 36px 0 16px;
+  margin: 64px 0 16px;
   letter-spacing: -0.02em;
   line-height: 32px;
   font-size: 24px;
 }
 
 .docs h3 {
-  margin: 32px 0 16px;
+  margin: 48px 0 16px;
   letter-spacing: -0.01em;
   line-height: 28px;
   font-size: 20px;
@@ -576,7 +576,7 @@
 @layer starlight.components {
   .tablist-wrapper {
     display: block !important;
-    margin-top: 2rem;
+    margin-top: 1rem;
   }
 
   ul[role="tablist"] {

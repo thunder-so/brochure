@@ -12,19 +12,18 @@ There are two deployment patterns available for Analog on AWS:
 1. **Static Site Generation (SSG)** — Deploy static Analog sites using S3 and CloudFront with the [Single Page Application](/patterns/s3-cloudfront) pattern
 2. **Full Stack** — Deploy SSR Analog applications using ECS Fargate with the [Web Service](/docs/fargate-alb) pattern
 
-## Static Site Generation (SSG) Deployment
----
-
-Deploy client-side Analog applications to S3 and CloudFront using the [CDK-SPA](https://github.com/thunder-so/cdk-spa) library. This pattern is ideal for static sites, blogs, and client-side applications.
-
-### Prerequisites
-
 <Aside type="note" title="Requirements">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
 - Node.js version 20 or higher
 - [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured
 - AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
 </Aside>
+
+
+## Static Site Generation (SSG) Deployment
+---
+
+Deploy client-side Analog applications to S3 and CloudFront using the [CDK-SPA](https://github.com/thunder-so/cdk-spa) library. This pattern is ideal for static sites, blogs, and client-side applications.
 
 ### Create Project
 
@@ -49,7 +48,9 @@ cd my-analog-app
   </TabItem>
 </Tabs>
 
-### Configure Analog for SPA
+### Configure Analog for SSG
+
+For details, refer to [Analog SSG](https://analogjs.org/docs/features/server/static-site-generation) documentation.
 
 ```ts title="vite.config.ts"
 import { defineConfig } from 'vite';
@@ -162,33 +163,9 @@ For complete documentation, see the [CDK-SPA README](https://github.com/thunder-
 
 Deploy server-side rendered Analog applications using ECS Fargate and Application Load Balancer with the [CDK-WebService](https://github.com/thunder-so/cdk-webservice) library.
 
-### Prerequisites
-
-<Aside type="note" title="Requirements">
-- [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
-- Node.js version 20 or higher
-- [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured
-- AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
-</Aside>
-
 ### Configure Analog for SSR
 
-```ts title="vite.config.ts"
-import { defineConfig } from 'vite';
-import analog from '@analogjs/platform';
-
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  plugins: [
-    analog({
-      ssr: true,
-      prerender: {
-        routes: [],
-      },
-    }),
-  ],
-}));
-```
+Analog enables SSR by default. Refer to [Analog SSR](https://analogjs.org/docs/features/server/server-side-rendering) documentation.
 
 ### Install Dependencies and Setup Stack
 
@@ -242,9 +219,9 @@ const svcProps: WebServiceProps = {
   
   buildProps: {
     buildSystem: 'Nixpacks',
-    installcmd: 'npm install',
-    buildcmd: 'npm run build',
-    startcmd: 'npm start',
+    installcmd: 'bun install',
+    buildcmd: 'bun run build',
+    startcmd: 'bun start',
   },
 };
 ```
