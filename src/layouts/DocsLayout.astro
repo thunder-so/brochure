@@ -74,13 +74,10 @@ const resolvedImageWithDomain = new URL(
 
 		<Header />
 		
-		<main class="pt-24 min-h-screen bg-background">
-            <div class="mx-auto px-4 pb-12 w-full">
-                <div class="flex gap-8 items-start">
+		<main class="pt-[65px] min-h-screen bg-card mx-auto w-full">
+                <div class="flex pt-8 pb-12 gap-8 items-start">
                     {/* Sidebar */}
-                    <div class="w-64 flex-shrink-0 sticky top-24">
-                        <Sidebar currentPage={currentPage} />
-                    </div>
+                    <Sidebar currentPage={currentPage} />
 
                     {/* Main content */}
                     <article class="flex-1 min-w-0 max-w-2xl mx-auto docs-content">                    
@@ -102,7 +99,6 @@ const resolvedImageWithDomain = new URL(
                         <TableOfContents headings={headings} />
                     </div>
                 </div>
-            </div>
 		</main>
 
         <Footer />

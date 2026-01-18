@@ -21,8 +21,8 @@ const sections = Object.entries(sidebar).map(([title, items]) => ({
 }));
 ---
 
-<nav class={cn("w-64 shrink-0 hidden lg:block", className)}>
-  <div class="sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto pr-4">
+<nav class={cn("w-64 shrink-0 hidden lg:block sticky top-0", className)}>
+  <div class="max-h-[calc(100vh-6rem)] overflow-y-auto px-4">
     {sections.map((section) => {
         // Check if any item in this section is active to set initial open state
         const isSectionActive = section.items.some(item => normalizePath(item.link) === currentPath);
