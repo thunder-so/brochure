@@ -1,16 +1,16 @@
 ---
-title: 'Deploy Astro on AWS'
-description: 'Deploy Astro applications on AWS using static hosting with S3 and CloudFront, or full-stack SSR with ECS Fargate and Application Load Balancer.'
+title: 'Deploy SvelteKit on AWS'
+description: 'Deploy SvelteKit applications on AWS using static site generation with S3 and CloudFront, single-page apps, or full-stack SSR with ECS Fargate and Application Load Balancer.'
 ---
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
 
-Deploy your [Astro](https://astro.build/) applications to AWS using Thunder patterns. This guide covers both static site deployment and full-stack server-side rendering options.
+Deploy your [SvelteKit](https://svelte.dev/docs/kit) applications to AWS using Thunder patterns. This guide covers static deployments and server-side rendering options.
 
-There are two deployment patterns available for Astro on AWS:
+SvelteKit offers flexible rendering modes that can be deployed using two Thunder libraries:
 
-1. **Static Site** — Deploy static Astro sites using S3 and CloudFront with the [Single Page Application](/docs/patterns/s3-cloudfront) pattern
-2. **Full Stack** — Deploy SSR Astro applications using ECS Fargate with the [Web Service](/docs/patterns/fargate-alb) pattern
+1. **Static Deployment** — Deploy Static site generation (SSG) or client-side rendered Single-page apps (SPAs) built with SvelteKit - using S3 and CloudFront with the [Single Page Application](/docs/patterns/s3-cloudfront) pattern
+2. **Server-Side Rendering (SSR)** — Deploy server-rendered SvelteKit applications using ECS Fargate with the [Web Service](/docs/patterns/fargate-alb) pattern
 
 <Aside type="note" title="Requirements">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
@@ -19,42 +19,73 @@ There are two deployment patterns available for Astro on AWS:
 - AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
 </Aside>
 
-## Static Site Deployment
+## Static (SSG/SPA) Deployment
 ---
 
-Deploy static Astro sites to S3 and CloudFront using the [CDK-SPA](https://github.com/thunder-so/cdk-spa) library. This pattern is ideal for static sites, blogs, and client-side applications.
+Deploy static or client-side rendered SvelteKit applications to S3 and CloudFront using the [CDK-SPA](https://github.com/thunder-so/cdk-spa) library. Choose the configuration that best fits your needs:
 
 ### Create Project
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm create astro@latest my-astro-app
-cd my-astro-app
+npm create svelte@latest my-sveltekit-app
+cd my-sveltekit-app
+npm install
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm create astro my-astro-app
-cd my-astro-app
+pnpm create svelte my-sveltekit-app
+cd my-sveltekit-app
+pnpm install
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
-bun create astro my-astro-app
-cd my-astro-app
+bunx create-svelte my-sveltekit-app
+cd my-sveltekit-app
+bun install
 ```
   </TabItem>
 </Tabs>
 
-### Configure Astro for Static Output
+### Configure SvelteKit for SSG/SPA
 
-```ts title="astro.config.mjs"
-import { defineConfig } from 'astro/config';
- 
-export default defineConfig({
-  output: 'static',
-});
+Use `adapter-static` to prerender your entire site at build time:
+
+```ts title="svelte.config.js"
+import adapter from '@sveltejs/adapter-static';
+
+export default {
+  kit: {
+    adapter: adapter(),
+  },
+};
+```
+
+Enable prerendering for all pages:
+
+```ts title="src/routes/+layout.ts"
+export const prerender = true;
+```
+
+Optionally, configure prerendering options:
+
+```ts title="svelte.config.js"
+import adapter from '@sveltejs/adapter-static';
+
+export default {
+  kit: {
+    adapter: adapter({
+      pages: 'build',
+      assets: 'build',
+      fallback: null,
+      compress: true,
+      strict: true
+    }),
+  },
+};
 ```
 
 ### Install Dependencies and Setup Stack
@@ -90,7 +121,7 @@ const myApp: SPAProps = {
   environment: 'production',
 
   rootDir: '', // e.g. 'frontend/' for monorepos
-  outputDir: 'dist/',
+  outputDir: 'build/',
 };
 
 new SPAStack(
@@ -122,7 +153,7 @@ const myApp: SPAProps = {
 
 ### Deploy
 
-Build and deploy your static site:
+Build and deploy your static SvelteKit site:
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
@@ -149,23 +180,56 @@ After deployment, you'll receive a **CloudFront URL** to access your static site
 
 For complete documentation, see the [CDK-SPA README](https://github.com/thunder-so/cdk-spa).
 
+
 ## Full Stack Deployment
 ---
 
-Deploy server-side rendered Astro applications using ECS Fargate and Application Load Balancer with the [CDK-WebService](https://github.com/thunder-so/cdk-webservice) library.
+Deploy server-side rendered SvelteKit applications using ECS Fargate and Application Load Balancer with the [CDK-WebService](https://github.com/thunder-so/cdk-webservice) library. This pattern is ideal for MPA and full-stack applications where you need server-side rendering, database integration, or API routes.
 
-### Configure Astro for SSR
+### Create Project
 
-```ts title="astro.config.mjs"
-import { defineConfig } from 'astro/config';
-import node from '@astrojs/node';
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm create svelte@latest my-sveltekit-app
+cd my-sveltekit-app
+npm install
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm create svelte my-sveltekit-app
+cd my-sveltekit-app
+pnpm install
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bunx create-svelte my-sveltekit-app
+cd my-sveltekit-app
+bun install
+```
+  </TabItem>
+</Tabs>
 
-export default defineConfig({
-  output: 'server',
-  adapter: node({
-    mode: 'standalone'
-  }),
-});
+### Configure SvelteKit for SSR
+
+Use `adapter-node` for Node.js server deployment:
+
+```ts title="svelte.config.js"
+import adapter from '@sveltejs/adapter-node';
+
+export default {
+  kit: {
+    adapter: adapter(),
+  },
+};
+```
+
+By default, SvelteKit uses server-side rendering (SSR) for the initial page load, which improves SEO and perceived performance. You can also optionally prerender specific pages while keeping others server-rendered:
+
+```ts title="src/routes/about/+page.ts"
+export const prerender = true; // Only for static pages
 ```
 
 ### Install Dependencies and Setup Stack
@@ -309,6 +373,6 @@ npx cdk deploy --all --app="bunx tsx stack/index.ts"
   </TabItem>
 </Tabs>
 
-After deployment, you'll receive an **Application Load Balancer URL** to access your SSR application.
+After deployment, you'll receive an **Application Load Balancer URL** to access your application.
 
 For complete documentation, see the [CDK-WebService README](https://github.com/thunder-so/cdk-webservice).

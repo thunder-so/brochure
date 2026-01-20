@@ -1,4 +1,190 @@
 ---
-title: TanStack
-description: Deploy TanStack applications with Thunder
+title: 'Deploy TanStack Start on AWS'
+description: 'Deploy TanStack Start applications on AWS with server-side rendering using ECS Fargate and Application Load Balancer.'
 ---
+
+import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
+
+Deploy your [TanStack Start](https://tanstack.com/start) applications to AWS using Thunder patterns. This guide covers server-side rendering deployments with ECS Fargate and Application Load Balancer.
+
+TanStack Start applications are deployed using the [Web Service](/docs/patterns/fargate-alb) pattern, which provides full-stack SSR capabilities with managed containerization.
+
+<Aside type="note" title="Requirements">
+- [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
+- Node.js version 20 or higher
+- [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured
+- AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
+</Aside>
+
+## SSR Deployment
+---
+
+Deploy server-side rendered TanStack Start applications using ECS Fargate and Application Load Balancer with the [CDK-WebService](https://github.com/thunder-so/cdk-webservice) library.
+
+### Create Project
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm create @tanstack/start@latest my-tanstack-app
+cd my-tanstack-app
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm create @tanstack/start my-tanstack-app
+cd my-tanstack-app
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun create @tanstack/start my-tanstack-app
+cd my-tanstack-app
+```
+  </TabItem>
+</Tabs>
+
+### Install Dependencies and Setup Stack
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm i tsx @thunderso/cdk-webservice --save-dev
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add -D tsx @thunderso/cdk-webservice
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun add -d tsx @thunderso/cdk-webservice
+```
+  </TabItem>
+</Tabs>
+
+```ts title="stack/index.ts"
+import { Cdk, WebServiceStack, type WebServiceProps } from "@thunderso/cdk-webservice";
+
+const svcProps: WebServiceProps = {
+  env: {
+    account: 'your-account-id',
+    region: 'us-west-2'
+  },
+  application: 'your-application-id',
+  service: 'your-service-id',
+  environment: 'production',
+
+  rootDir: '', // e.g. 'app/' for monorepos
+};
+
+new WebServiceStack(
+  new Cdk.App(), 
+  `${svcProps.application}-${svcProps.service}-${svcProps.environment}-stack`, 
+  svcProps
+);
+```
+
+### Build Settings Using Nixpacks
+
+Configure automatic containerization with Nixpacks:
+
+```ts title="stack/index.ts"
+const svcProps: WebServiceProps = {
+  // ... other props
+  
+  buildProps: {
+    buildSystem: 'Nixpacks',
+    installcmd: 'bun install',
+    buildcmd: 'bun run build',
+    startcmd: 'bun run start',
+  },
+};
+```
+
+### Build Settings Using Docker Container
+
+Alternatively, use a custom Dockerfile:
+
+```dockerfile title="Dockerfile"
+FROM public.ecr.aws/docker/library/alpine
+
+# Install Bun
+RUN curl -fsSL https://bun.sh/install | bash
+
+# Update PATH for bun
+ENV PATH="/root/.bun/bin:$PATH"
+
+# Copy code, install and build
+WORKDIR /app
+COPY . .
+RUN bun install
+RUN bun run build
+
+EXPOSE 3000
+CMD ["bun", "run", "start"]
+```
+
+```ts title="stack/index.ts"
+const svcProps: WebServiceProps = {
+  // ... other props
+  
+  serviceProps: {
+    dockerFile: 'Dockerfile',
+    port: 3000,
+  },
+};
+```
+
+### Environment Variables and Secrets for SSR
+
+Configure runtime environment variables and secrets:
+
+```ts title="stack/index.ts"
+const svcProps: WebServiceProps = {
+  // ... other props
+  
+  serviceProps: {
+    variables: [
+      { NODE_ENV: 'production' },
+      { PUBLIC_API_URL: 'https://api.example.com' }
+    ],
+    secrets: [
+      { 
+        key: 'DATABASE_URL', 
+        resource: 'arn:aws:secretsmanager:us-west-2:123456789012:secret:/my-app/DATABASE_URL-abc123' 
+      },
+    ],
+  },
+};
+```
+
+### Deploy
+
+Build and deploy your containerized application:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm run build
+npx cdk deploy --all --app="npx tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm run build
+pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+npx cdk deploy --all --app="bunx tsx stack/index.ts"
+```
+  </TabItem>
+</Tabs>
+
+After deployment, you'll receive an **Application Load Balancer URL** to access your SSR application.
+
+For complete documentation, see the [CDK-WebService README](https://github.com/thunder-so/cdk-webservice).

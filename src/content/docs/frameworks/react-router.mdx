@@ -9,8 +9,8 @@ Deploy your [React Router](https://reactrouter.com/) applications to AWS using T
 
 There are two deployment patterns available for React Router on AWS:
 
-1. **Single Page Application (SPA)** — Deploy client-side or static pre-rendered React Router sites using S3 and CloudFront with the [Single Page Application](/patterns/s3-cloudfront) pattern
-2. **Full Stack** — Deploy SSR React Router applications using ECS Fargate with the [Web Service](/docs/fargate-alb) pattern
+1. **Single Page Application (SPA)** — Deploy client-side or static pre-rendered React Router sites using S3 and CloudFront with the [Single Page Application](/docs/patterns/s3-cloudfront) pattern
+2. **Full Stack** — Deploy SSR React Router applications using ECS Fargate with the [Web Service](/docs/patterns/fargate-alb) pattern
 
 <Aside type="note" title="Requirements">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
@@ -266,9 +266,9 @@ const svcProps: WebServiceProps = {
   
   buildProps: {
     buildSystem: 'Nixpacks',
-    installcmd: 'npm install',
-    buildcmd: 'npm run build',
-    startcmd: 'npm start',
+    installcmd: 'bun install',
+    buildcmd: 'bun run build',
+    startcmd: 'bun start',
   },
 };
 ```
