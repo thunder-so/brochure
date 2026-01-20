@@ -1,42 +1,42 @@
 ---
-title: 'Deploy TanStack Start on AWS'
-description: 'Deploy TanStack Start applications on AWS with server-side rendering using ECS Fargate and Application Load Balancer.'
+title: 'Deploy Solid Start on AWS'
+description: 'Deploy Solid Start applications on AWS with server-side rendering using ECS Fargate and Application Load Balancer.'
 ---
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
 
-Deploy your [TanStack Start](https://tanstack.com/start) applications to AWS using Thunder patterns. This guide covers server-side rendering deployments with ECS Fargate and Application Load Balancer.
+Deploy your [Solid Start](https://start.solidjs.com) applications to AWS using Thunder patterns. This guide covers server-side rendering deployments with ECS Fargate and Application Load Balancer.
 
-TanStack Start applications are deployed using the [Web Service](/docs/patterns/fargate-alb) pattern, which provides full-stack SSR capabilities with managed containerization.
+Solid Start applications are deployed using the [Web Service](/docs/patterns/fargate-alb) pattern, which provides full-stack SSR capabilities with managed containerization.
 
 <Aside type="note" title="Requirements">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
-- Node.js version 20 or higher
+- Node.js version 18 or higher
 - [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured
 - AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
 </Aside>
 
-Deploy server-side rendered TanStack Start applications using ECS Fargate and Application Load Balancer with the [CDK-WebService](https://github.com/thunder-so/cdk-webservice) library.
+Deploy server-side rendered Solid Start applications using ECS Fargate and Application Load Balancer with the [CDK-WebService](https://github.com/thunder-so/cdk-webservice) library.
 
 ### Create Project
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm create @tanstack/start@latest my-tanstack-app
-cd my-tanstack-app
+npm create solid@latest my-solid-app
+cd my-solid-app
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm create @tanstack/start my-tanstack-app
-cd my-tanstack-app
+pnpm create solid my-solid-app
+cd my-solid-app
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
-bun create @tanstack/start my-tanstack-app
-cd my-tanstack-app
+bun create solid my-solid-app
+cd my-solid-app
 ```
   </TabItem>
 </Tabs>
@@ -93,9 +93,9 @@ const svcProps: WebServiceProps = {
   
   buildProps: {
     buildSystem: 'Nixpacks',
-    installcmd: 'bun install',
-    buildcmd: 'bun run build',
-    startcmd: 'bun run start',
+    installcmd: 'npm install',
+    buildcmd: 'npm run build',
+    startcmd: 'npm run start',
   },
 };
 ```
@@ -105,22 +105,16 @@ const svcProps: WebServiceProps = {
 Alternatively, use a custom Dockerfile:
 
 ```dockerfile title="Dockerfile"
-FROM public.ecr.aws/docker/library/alpine
+FROM public.ecr.aws/docker/library/node:20-alpine
 
-# Install Bun
-RUN curl -fsSL https://bun.sh/install | bash
-
-# Update PATH for bun
-ENV PATH="/root/.bun/bin:$PATH"
-
-# Copy code, install and build
+# Copy code and install dependencies
 WORKDIR /app
 COPY . .
-RUN bun install
-RUN bun run build
+RUN npm install
+RUN npm run build
 
 EXPOSE 3000
-CMD ["bun", "run", "start"]
+CMD ["npm", "run", "start"]
 ```
 
 ```ts title="stack/index.ts"
