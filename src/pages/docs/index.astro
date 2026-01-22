@@ -1,67 +1,20 @@
 ---
 import { type CollectionEntry, getCollection } from 'astro:content'
 import DocsLayout from '../../layouts/DocsLayout.astro'
-// import Frameworks from '../../components/Frameworks.astro';
 
-export async function getStaticPaths() {
-  const docs = await getCollection('docs')
-  return docs.map((entry) => ({
-    params: {
-      slug: entry.slug
-    },
-    props: entry
-  }))
+const docs = await getCollection('docs')
+const indexDoc = docs.find((entry) => entry.slug === 'index')
+
+if (!indexDoc) {
+  throw new Error('Index doc not found')
 }
-type Props = CollectionEntry<'docs'>
 
-// const post = Astro.props
-// const { Content, headings } = await post.render();
-// console.log("post", post)
+const { Content, headings } = await indexDoc.render()
+const { title } = indexDoc.data
 
-const headings = [
-  { depth: 1, slug: 'introduction', text: 'Introduction' },
-  { depth: 2, slug: 'installation', text: 'Installation' },
-  { depth: 2, slug: 'usage', text: 'Usage' },
-  { depth: 3, slug: 'advanced-usage', text: 'Advanced Usage' }
-];
-
-export const prerender = true;
+export const prerender = true
 ---
 
-<script is:inline>
-  // Redirect your homepage to the first page of documentation.
-  // If you have a landing page, remove this script and add it here!
-  // window.location.pathname = `docs/`
-</script>
-
-<DocsLayout title="" headings={headings}>
-  <!-- <Content /> -->
-
-  <h1>Thunder Documentation</h1>
-  <p>Deploy modern web applications on AWS with ease. Built for modern frameworks and workflows.</p>
-  
-  <h2>Prerequisites</h2>
-  <p>Before you begin, make sure you have the following:</p>
-
-  <ul>
-    <li>A Github account</li>
-    <li>An AWS account (root or IAM access)</li>
-  </ul>
-
-  <h2>Signup with Github</h2>
-  <p>Thunder uses a Github OAuth App to authenticate users. Your signup process will require you to authorize the app. On successful authorization, you will be redirected to Thunder and we will set up your account.</p>
-
-  <h2>Workspaces</h2>
-  <p>Thunder console will prompt you to create a workspace after you sign up. Your workspace is the wrapper for your applications, AWS accounts and billing.</p>
-
-  <h2>AWS Accounts</h2>
-  <p>Thunder allows connecting multiple AWS account with ease. Thunder creates an IAM role in your AWS account which grants us the permission to provision cloud infrastructure on your behalf.</p>
-  <p>Learn how to <a href="/docs/aws">Add an AWS Account</a>.</p>
-
-  <h2>Import Repositories</h2>
-  <p>When your workspace is set up with an AWS account, you are ready to <a href="/docs/import-repository">import your projects from Github</a>.</p>
-  <p><a href="/docs/github">Install the Thunder Github App</a> on your account to give Thunder access to your repositories. You can import repositories from your personal accounts and Github Organizations accounts.</p>
-
-  <!-- <Frameworks /> -->
-
+<DocsLayout title={title} headings={headings}>
+  <Content />
 </DocsLayout>

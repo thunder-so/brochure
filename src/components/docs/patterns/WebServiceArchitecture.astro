@@ -1,0 +1,60 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<section class="max-w-full bg-card border border-border rounded-lg p-6 mb-6">
+  <svg viewBox="0 0 720 130" class="w-full h-auto">
+    <line x1="120" y1="60" x2="200" y2="60" stroke="currentColor" class="text-border" />
+    <line x1="320" y1="60" x2="400" y2="60" stroke="currentColor" class="text-border" />
+    <line x1="520" y1="60" x2="600" y2="60" stroke="currentColor" class="text-border" />
+    
+    <foreignObject x="0" y="30" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-8 h-8 text-gray-600">
+          <Icon name="tabler:users" class="text-muted-foreground w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">Users</span>
+      </div>
+    </foreignObject>
+    
+    <foreignObject x="200" y="20" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-12 h-12 text-orange-500">
+          <Icon name="logos:aws-route53" class="w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">Route 53</span>
+      </div>
+    </foreignObject>
+    
+    <foreignObject x="400" y="20" width="120" height="100">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-12 h-12">
+          <svg class="w-full h-full" viewBox="0 0 80 80">
+            <defs>
+              <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="linearGradient-alb">
+                <stop stop-color="#4D27A8" offset="0%"></stop>
+                <stop stop-color="#A166FF" offset="100%"></stop>
+              </linearGradient>
+            </defs>
+            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <rect fill="url(#linearGradient-alb)" x="0" y="0" width="80" height="80"></rect>
+              <path d="M30,53 C22.832,53 17,47.168 17,40 C17,32.832 22.832,27 30,27 C37.168,27 43,32.832 43,40 C43,47.168 37.168,53 30,53 M60,59 C60,61.206 58.206,63 56,63 C53.794,63 52,61.206 52,59 C52,56.794 53.794,55 56,55 C58.206,55 60,56.794 60,59 M56,17 C58.206,17 60,18.794 60,21 C60,23.206 58.206,25 56,25 C53.794,25 52,23.206 52,21 C52,18.794 53.794,17 56,17 M59,36 C61.206,36 63,37.794 63,40 C63,42.206 61.206,44 59,44 C56.794,44 55,42.206 55,40 C55,37.794 56.794,36 59,36 M44.949,41 L53.09,41 C53.568,43.833 56.033,46 59,46 C62.309,46 65,43.309 65,40 C65,36.691 62.309,34 59,34 C56.033,34 53.568,36.167 53.09,39 L44.949,39 C44.823,37.099 44.344,35.297 43.572,33.654 L52.446,25.823 C53.442,26.559 54.669,27 56,27 C59.309,27 62,24.309 62,21 C62,17.691 59.309,15 56,15 C52.691,15 50,17.691 50,21 C50,22.256 50.389,23.421 51.051,24.386 L42.581,31.859 C39.904,27.738 35.271,25 30,25 C21.729,25 15,31.729 15,40 C15,48.271 21.729,55 30,55 C35.271,55 39.904,52.262 42.581,48.141 L51.051,55.614 C50.389,56.579 50,57.744 50,59 C50,62.309 52.691,65 56,65 C59.309,65 62,62.309 62,59 C62,55.691 59.309,53 56,53 C54.669,53 53.442,53.441 52.446,54.177 L43.572,46.346 C44.344,44.703 44.823,42.901 44.949,41" fill="#FFFFFF"></path>
+            </g>
+          </svg>
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">Application Load Balancer</span>
+      </div>
+    </foreignObject>
+    
+    <foreignObject x="600" y="20" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-12 h-12 text-orange-600">
+          <Icon name="logos:aws-fargate" class="w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">Fargate</span>
+      </div>
+    </foreignObject>
+  </svg>
+</section>
+
+<p class="text-muted-foreground"><strong>Route 53</strong> handles DNS resolution for custom domains. <strong>Application Load Balancer</strong> distributes incoming traffic across multiple container instances with health checks and SSL termination. <strong>Fargate</strong> runs containerized applications without managing servers, providing automatic scaling and high availability.</p>

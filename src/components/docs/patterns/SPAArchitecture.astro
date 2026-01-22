@@ -1,0 +1,49 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<section class="max-w-full bg-card border border-border rounded-lg p-6 mb-6">
+  <svg viewBox="0 0 720 120" class="w-full h-auto">
+    <line x1="120" y1="60" x2="200" y2="60" stroke="currentColor" class="text-border" />
+    <line x1="320" y1="60" x2="400" y2="60" stroke="currentColor" class="text-border" />
+    <line x1="520" y1="60" x2="600" y2="60" stroke="currentColor" class="text-border" />
+    
+    <foreignObject x="0" y="30" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-8 h-8 text-gray-600">
+          <Icon name="tabler:users" class="text-muted-foreground w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">Users</span>
+      </div>
+    </foreignObject>
+    
+    <foreignObject x="200" y="20" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-12 h-12 text-orange-500">
+          <Icon name="logos:aws-route53" class="w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">Route 53</span>
+      </div>
+    </foreignObject>
+    
+    <foreignObject x="400" y="20" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-12 h-12 text-purple-500">
+          <Icon name="logos:aws-cloudfront" class="w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">CloudFront</span>
+      </div>
+    </foreignObject>
+    
+    <foreignObject x="600" y="20" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-12 h-12 text-green-600">
+          <Icon name="logos:aws-s3" class="w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">S3</span>
+      </div>
+    </foreignObject>
+  </svg>
+</section>
+
+<p class="text-muted-foreground"><strong>Route 53</strong> handles DNS resolution, directing users to the nearest CloudFront edge location. <strong>CloudFront</strong> serves as a global CDN, caching static assets at edge locations worldwide for low-latency delivery. <strong>S3</strong> stores the application files as the origin, providing durable and scalable object storage.</p>

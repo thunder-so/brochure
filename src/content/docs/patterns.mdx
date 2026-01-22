@@ -2,3 +2,57 @@
 title: Patterns
 description: AWS CDK Construct Libraries that provide simple configuration to deploy modern web apps.
 ---
+import ServerlessAPIArchitecture from '@/components/docs/patterns/ServerlessAPIArchitecture.astro';
+import SPAArchitecture from '@/components/docs/patterns/SPAArchitecture.astro';
+import WebServiceArchitecture from '@/components/docs/patterns/WebServiceArchitecture.astro';
+
+Thunder provides production-ready AWS CDK construct libraries for deploying modern web applications. Choose the deployment pattern that best fits your use case.
+
+## Single Page Applications (SPA)
+
+Deploy client-side SPAs and static site generators on AWS S3 with CloudFront CDN. Supports Astro, Next.js, Vite, Gatsby, React Router, and any static site generator.
+
+<SPAArchitecture />
+
+**Use SPA for:**
+- Client-side rendered applications
+- Static site generators (Astro, Next.js static export)
+- Portfolio and documentation sites
+- Global CDN distribution
+- High-performance edge caching
+
+[Learn more →](/docs/patterns/s3-cloudfront)
+
+---
+
+## Serverless Functions
+
+Deploy serverless APIs and backend functions on AWS Lambda with modern web frameworks like Express.js, Hono, NestJS, and Fastify. Perfect for microservices, APIs, and event-driven workloads.
+
+<ServerlessAPIArchitecture />
+
+**Use Serverless Functions for:**
+- RESTful and GraphQL APIs
+- Microservices and backend services
+- Event-driven processing
+- Lightweight workloads with variable traffic
+- Pay-per-request pricing model
+
+[Learn more →](/docs/patterns/lambda-apigateway)
+
+---
+
+## Web Services
+
+Deploy containerized full-stack applications on AWS Fargate with Application Load Balancer. Supports Next.js, Nuxt, TanStack Start, SvelteKit, Astro, and any containerized application.
+
+<WebServiceArchitecture />
+
+**Use Web Services for:**
+- Full-stack applications (Next.js, Nuxt)
+- Server-rendered applications
+- Persistent server state
+- Database connections and background jobs
+- Automatic scaling and high availability
+
+[Learn more →](/docs/patterns/fargate-alb)
