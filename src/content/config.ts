@@ -45,7 +45,6 @@ export type Sidebar = Record<string, { text: string; link: string, description?:
 export const sidebar: Sidebar = {
   'Introduction': [
     { text: 'Getting Started', link: 'docs' },
-    { text: 'First project', link: 'docs/start' },
     { text: 'Add an AWS account', link: 'docs/aws' },
     { text: 'Connect with Github', link: 'docs/github' },
     { text: 'Import a repository', link: 'docs/import-repository' },
@@ -103,7 +102,6 @@ export const sidebar: Sidebar = {
   'Community and Support': [
     { text: 'FAQ', link: 'docs/faq' },
     { text: 'Changelog', link: 'docs/changelog' },
-    { text: 'Contributing to Thunder', link: 'docs/contributing' },
     { text: 'Forum/Discord', link: 'docs/community' },
     { text: 'Contact Support', link: 'docs/support' },
   ],

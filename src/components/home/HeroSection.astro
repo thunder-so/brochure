@@ -12,7 +12,7 @@ import Button from "../Button.astro";
   <div class="absolute inset-0 bg-[linear-gradient(hsl(var(--border)/0.3)_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border)/0.3)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_70%)]" />
 
   <div class="container relative mx-auto px-4 py-24">
-    <div class="max-w-4xl mx-auto text-center">
+    <div class="max-w-5xl mx-auto text-center">
       {/* Badge */}
       <div class="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-1.5 text-sm text-muted-foreground mb-8 animate-fade-in">
         <Zap class="h-4 w-4 text-primary" />
@@ -22,9 +22,8 @@ import Button from "../Button.astro";
       {/* Headline */}
       <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground mb-6 animate-fade-in-up">
         Deploy to{" "}
-        <span class="text-primary">your AWS</span>
-        <br />
-        account with lightning speed
+        <span class="text-primary">your AWS</span> account
+        with lightning speed
       </h1>
 
       {/* Subheadline */}
@@ -49,6 +48,7 @@ import Button from "../Button.astro";
       <div class="mt-16 animate-fade-in-up" style="animation-delay: 0.3s">
         <p class="text-sm text-muted-foreground mb-6">Trusted by developers building on AWS</p>
         <div class="flex flex-wrap justify-center gap-8 opacity-60">
+          <div class="text-muted-foreground font-medium">Vibe Coders</div>
           <div class="text-muted-foreground font-medium">Startups</div>
           <div class="text-muted-foreground font-medium">Agencies</div>
           <div class="text-muted-foreground font-medium">Enterprises</div>
