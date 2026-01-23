@@ -101,8 +101,6 @@ export const sidebar: Sidebar = {
   ],
   'Community and Support': [
     { text: 'FAQ', link: 'docs/faq' },
-    { text: 'Changelog', link: 'docs/changelog' },
-    { text: 'Forum/Discord', link: 'docs/community' },
     { text: 'Contact Support', link: 'docs/support' },
   ],
 }

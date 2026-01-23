@@ -2,13 +2,6 @@
 import { ChevronDown, Menu, X } from "lucide-astro";
 import Button from "../Button.astro";
 import ProductMegamenu from "./ProductMegamenu.astro";
-
-const resourceLinks = [
-  { name: "Changelog", href: "/changelog" },
-  { name: "Guides", href: "/guides" },
-  { name: "Community", href: "/community" },
-  { name: "Support", href: "/support" },
-];
 ---
 
 <header class="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
@@ -42,26 +35,9 @@ const resourceLinks = [
         <a href="/blog" class="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
           Blog
         </a>
-
-        {/* Resources Dropdown */}
-        <div class="relative group">
-          <button
-            class="flex items-center gap-1 px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Resources
-            <ChevronDown class="h-4 w-4" />
-          </button>
-          <div class="absolute top-full left-0 mt-1 w-48 rounded-xl border border-border bg-popover p-2 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-            {resourceLinks.map((link) => (
-              <a
-                href={link.href}
-                class="block rounded-lg px-4 py-2.5 text-sm text-foreground hover:bg-secondary transition-colors"
-              >
-                {link.name}
-              </a>
-            ))}
-          </div>
-        </div>
+        <a href="/docs/support" class="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          Support
+        </a>
       </div>
 
       {/* Desktop CTAs */}

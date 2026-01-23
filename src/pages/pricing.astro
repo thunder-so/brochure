@@ -5,31 +5,28 @@ import { Check, ArrowRight } from "lucide-astro";
 
 const tiers = [
   {
-    name: "Free",
+    name: "Solo",
     price: "$0",
     description: "Perfect for getting started",
     features: [
-      "1 workspace",
-      "3 deployments",
+      "1 AWS account",
+      "Unlimited apps",
       "Community support",
-      "Basic monitoring",
     ],
     cta: "Get Started",
     variant: "outline",
     popular: false,
   },
   {
-    name: "Pro",
-    price: "$29",
+    name: "Team",
+    price: "$19",
     period: "/seat/month",
     description: "For growing teams",
     features: [
-      "Unlimited workspaces",
-      "Unlimited deployments",
-      "Priority support",
-      "Advanced monitoring",
-      "Custom domains",
+      "Unlimited AWS accounts",
+      "Unlimited apps",
       "Team collaboration",
+      "Priority support",
     ],
     cta: "Start Free Trial",
     variant: "hero",
@@ -40,11 +37,8 @@ const tiers = [
     price: "Custom",
     description: "For large organizations",
     features: [
-      "Everything in Pro",
-      "SSO / SAML",
+      "Everything unlocked",
       "Dedicated support",
-      "SLA guarantee",
-      "Custom integrations",
       "On-premise option",
     ],
     cta: "Contact Sales",
@@ -137,7 +131,7 @@ const tiers = [
                 Is there a free tier?
               </h3>
               <p class="text-muted-foreground">
-                Absolutely. Our free tier includes 1 workspace and 3 deployments, perfect for side projects and experimentation.
+                Absolutely. Our free tier includes 1 AWS account integration and unlimited apps, perfect for personal projects.
               </p>
             </div>
           </div>

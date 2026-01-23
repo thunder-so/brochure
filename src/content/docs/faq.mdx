@@ -2,3 +2,189 @@
 title: FAQ
 description: Frequently asked questions about Thunder
 ---
+
+## General Questions
+
+### What is Thunder?
+
+Thunder is an open source platform-as-a-service (PaaS) for AWS that makes it easy to deploy modern web applications without managing infrastructure. It's an alternative to AWS Amplify, Heroku, Render, and Vercel that runs on your own AWS infrastructure and costs $0 to run (you only pay for AWS resources).
+
+Thunder provides production-ready AWS CDK construct libraries that handle the complexity of setting up scalable, secure, and cost-effective deployments on AWS.
+
+### How does Thunder differ from other platforms?
+
+Thunder has several key advantages:
+
+- **Infrastructure as Code** — Use TypeScript/AWS CDK for full control and visibility
+- **Cost Effective** — Only pay for AWS resources you use 
+- **Framework Agnostic** — Supports any web framework (Next.js, Astro, Express, Hono, etc.)
+- **Deployment Patterns** — Three proven patterns for different use cases (SPA, Serverless, Web Services)
+- **Open Source** — Source code is public on GitHub, community can contribute
+- **Your Infrastructure** — Deploy to your own AWS account, complete control
+
+### Do I need to know AWS to use Thunder?
+
+No, but it helps. Thunder abstracts away most AWS complexity by providing pre-configured CDK stacks. You define your deployment in a TypeScript configuration file and Thunder handles creating the necessary AWS resources.
+
+If you want to customize deployments or troubleshoot issues, basic AWS knowledge is helpful.
+
+### Is Thunder free?
+
+Thunder itself is free and open source. The Console has a free tier. You only pay for the AWS resources you use (S3, Lambda, ECS Fargate, CloudFront, etc.) on your own AWS account.
+
+---
+
+## Getting Started
+
+### Which deployment pattern should I choose?
+
+Thunder provides three deployment patterns, each optimized for different use cases:
+
+**Single Page Applications (SPA)**
+- Use for: Client-side apps, static sites, Astro, Next.js static export
+- Resources: S3 + CloudFront CDN
+- Cost: ~$1-5/month for typical traffic
+- Best for: Fast, globally distributed static content
+
+**Serverless Functions**
+- Use for: APIs, microservices, event-driven workloads
+- Resources: Lambda + API Gateway
+- Cost: ~$0-10/month for typical traffic (pay-per-request)
+- Best for: Dynamic backends, lightweight APIs, variable traffic
+
+**Web Services**
+- Use for: Full-stack apps (Next.js, Nuxt), server-rendered content
+- Resources: ECS Fargate + Application Load Balancer
+- Cost: ~$30-50/month baseline
+- Best for: Complex applications, persistent state, background jobs
+
+See [Patterns](/docs/patterns) for detailed comparison.
+
+### What frameworks does Thunder support?
+
+**Single Page Applications:**
+- Astro, Next.js (static export), Vite, Gatsby, React Router, and any static site generator
+
+**Serverless APIs:**
+- Express.js, Hono, NestJS, Fastify, Koa, AdonisJS, Sails.js, LoopBack, Feathers, Restify, and any Node.js web framework
+
+**Web Services:**
+- Next.js (full), Nuxt, TanStack Start, SvelteKit, Astro (server mode), Remix, and any containerized application
+
+If your framework isn't listed, you can likely still use Thunder with some customization. Check [Frameworks](/docs/frameworks) or ask in our [Discord community](https://discord.gg/uNbrp6QYZ6).
+
+### How do I get started?
+
+1. **Sign up** with your GitHub account at [thunder.so](https://thunder.so)
+2. **Connect an AWS account** through the console
+3. **Install the GitHub App** to give Thunder access to your repositories
+4. **Import a project** from GitHub
+5. **Choose a deployment pattern** (SPA, Functions, or Web Services)
+6. **Deploy** with one click
+
+---
+
+## AWS & Infrastructure
+
+### How do I connect my AWS account?
+
+Thunder uses AWS CloudFormation to create an IAM role in your account that grants us permission to provision infrastructure on your behalf.
+
+1. In the Thunder console, go to AWS Accounts
+2. Click "Connect AWS Account"
+3. You'll be redirected to CloudFormation with a pre-filled template
+4. Click "Create stack" in CloudFormation
+5. Thunder gets notified and you're connected
+
+You remain in full control—we only have permissions you grant through CloudFormation.
+
+### Is my AWS account secure?
+
+Yes. Thunder uses industry-standard security practices:
+
+- **IAM Roles** — We use temporary credentials, not API keys
+- **Least Privilege** — IAM role has minimal required permissions
+- **No Access to Secrets** — We can't read your data
+- **Your Control** — You can revoke permissions or delete the IAM role anytime
+- **No Vendor Lock-in** — Deploy infrastructure with standard AWS CDK
+
+You can review the exact IAM permissions granted in the CloudFormation template before creating the stack.
+
+### What happens if Thunder goes down?
+
+Your applications continue running on AWS—they're not affected by Thunder's availability. Thunder is only used during deployment and configuration.
+
+Your AWS resources (Lambda, S3, CloudFront, Fargate, etc.) run independently and are managed by AWS's infrastructure.
+
+### Can I manage resources outside Thunder?
+
+Yes, absolutely. You own the AWS infrastructure. You can:
+
+- Modify CloudFormation stacks directly
+- Use AWS Console to manage resources
+- Add additional resources alongside Thunder
+- Modify security groups, IAM policies, etc.
+
+Thunder doesn't prevent or interfere with direct AWS management.
+
+---
+
+## Development & Deployment
+
+### How do I manage environment variables and secrets?
+
+Thunder supports two ways to handle sensitive data:
+
+**Environment Variables** — Plain text configuration
+```ts
+variables: [
+  { key: 'API_URL', value: 'https://api.example.com' }
+]
+```
+
+**Secrets** — Stored securely in AWS Secrets Manager
+```ts
+secrets: [
+  { key: 'DATABASE_URL', resource: 'arn:aws:secretsmanager:...' }
+]
+```
+
+Create secrets in AWS Secrets Manager, then reference them in your Thunder configuration. Thunder automatically grants your Lambda/Fargate permissions to read them.
+
+### Can I use a database?
+
+Yes! You can use any AWS database service:
+
+- **RDS** — PostgreSQL, MySQL, MariaDB, Oracle, SQL Server
+- **DynamoDB** — NoSQL managed database
+- **ElastiCache** — Redis, Memcached for caching
+- **DocumentDB** — MongoDB-compatible database
+- **Neptune** — Graph database
+
+Create the database separately in AWS (or with CDK), then pass connection strings as environment variables or secrets.
+
+### How do CI/CD and deployments work?
+
+Thunder integrates with GitHub Actions:
+
+1. Create a `.github/workflows/deploy.yml` file in your repository
+2. Add AWS credentials as GitHub repository secrets
+3. On each push, GitHub Actions builds and deploys your app
+4. Thunder runs `cdk deploy` to update your infrastructure
+
+See deployment guides for [SPA](/docs/patterns/s3-cloudfront), [Functions](/docs/patterns/lambda-apigateway), and [Web Services](/docs/patterns/fargate-alb).
+
+### What's the cold start latency?
+
+**Lambda (Serverless Functions):**
+- Warm: ~10-50ms
+- Cold start: ~500ms-2s (Node.js), ~100-500ms (Bun)
+- Use `keepWarm: true` in config to prevent cold starts
+
+**Fargate (Web Services):**
+- Always warm, no cold starts
+- ~50-200ms response time depending on your app
+
+**CloudFront (SPA):**
+- Cached: under 50ms globally
+- Origin: ~100-500ms for cache misses
