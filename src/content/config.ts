@@ -47,7 +47,7 @@ export const sidebar: Sidebar = {
     { text: 'Getting Started', link: 'docs' },
     { text: 'Add an AWS account', link: 'docs/aws' },
     { text: 'Connect with Github', link: 'docs/github' },
-    { text: 'Import a repository', link: 'docs/import-repository' },
+    { text: 'First project', link: 'docs/import-repository' },
   ],
   'Patterns': [
     { 
