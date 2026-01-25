@@ -1,4 +1,212 @@
 ---
 title: Environment variables and Secrets
-description: Manage environment variables and secrets in Thunder Console
+description: Manage environment variables and secrets across your deployment pipeline
 ---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Thunder supports environment variables and secrets across all deployment patterns. Variables can be configured during the build phase via CodeBuild/CodePipeline, and at runtime for Lambda and Fargate deployments.
+
+## Architecture Support
+
+Different deployment architectures support different variable scopes:
+
+| Pattern | Build Env Vars | Runtime Env Vars |
+|---------|---|---|
+| **Single Page Application (SPA)** | ✓ CodeBuild | — |
+| **Serverless Functions** | ✓ CodeBuild | ✓ Lambda |
+| **Web Service** | ✓ CodeBuild | ✓ Fargate |
+
+## Build Environment Variables
+
+Build environment variables are available during the CodeBuild phase of your deployment pipeline and are used to configure your application before deployment.
+
+### Plain Variables
+
+Pass key-value pairs directly to CodeBuild:
+
+```ts
+const stackProps: SPAProps = {
+  // ... other props
+  buildProps: {
+    buildcmd: 'bun run build',
+    variables: [
+      { NODE_ENV: 'production' },
+      { PUBLIC_API_URL: 'https://api.example.com' },
+      { ANALYTICS_ID: 'gtag-12345' }
+    ],
+  },
+};
+```
+
+Variables are available during the build process and embedded in your application bundle:
+
+```bash
+# During build
+echo $NODE_ENV  # production
+echo $PUBLIC_API_URL  # https://api.example.com
+```
+
+### Secrets
+
+Store sensitive build secrets in **AWS Parameter Store** as SecureString parameters. CodeBuild automatically decrypts and injects them during the build phase.
+
+```ts
+const stackProps: SPAProps = {
+  // ... other props
+  buildProps: {
+    buildcmd: 'bun run build',
+    secrets: [
+      { 
+        key: 'NPM_TOKEN',
+        resource: 'arn:aws:ssm:us-east-1:123456789012:parameter/npm-token'
+      },
+      { 
+        key: 'GITHUB_TOKEN',
+        resource: 'arn:aws:ssm:us-east-1:123456789012:parameter/github-token'
+      }
+    ],
+  },
+};
+```
+
+**Creating Parameter Store Secrets:**
+
+<Tabs syncKey="secret-creation">
+  <TabItem label="AWS Console">
+1. Go to AWS Systems Manager → Parameter Store
+2. Create parameter with name: e.g. `/thunder/npm-token`
+3. Select **SecureString** type (uses KMS encryption)
+4. Paste your secret value
+5. Reference in your stack configuration
+  </TabItem>
+  <TabItem label="CLI">
+```bash
+# Create a SecureString parameter
+aws ssm put-parameter \
+  --name "/thunder/npm-token" \
+  --value "your-npm-token-value" \
+  --type "SecureString"
+```
+  </TabItem>
+</Tabs>
+
+Secrets are not embedded in your build output and are only available during the build phase.
+
+## Runtime Environment Variables
+
+Runtime environment variables are available when your application is executing. Supported for Serverless Functions (Lambda) and Web Service (Fargate) patterns.
+
+### Plain Variables
+
+Pass configuration to your Lambda function or Fargate container:
+
+```ts
+// Lambda/Serverless Functions
+const fnProps: FunctionProps = {
+  // ... other props
+  functionProps: {
+    variables: [
+      { NODE_ENV: 'production' },
+      { PUBLIC_API_URL: 'https://api.example.com' },
+      { MAX_CONNECTIONS: '100' }
+    ],
+  }
+};
+```
+
+```ts
+// Fargate/Web Service
+const svcProps: WebServiceProps = {
+  // ... other props
+  serviceProps: {
+    variables: [
+      { NODE_ENV: 'production' },
+      { PUBLIC_API_URL: 'https://api.example.com' },
+      { LOG_LEVEL: 'info' }
+    ],
+  },
+};
+```
+
+Access variables in your application code:
+
+```ts
+// Node.js/TypeScript
+const apiUrl = process.env.PUBLIC_API_URL;
+const maxConnections = parseInt(process.env.MAX_CONNECTIONS || '50');
+```
+
+### Secrets
+
+Store sensitive runtime secrets in **AWS Secrets Manager**. Your Lambda function or Fargate task automatically receives permissions to read these secrets.
+
+```ts
+// Lambda/Serverless Functions
+const fnProps: FunctionProps = {
+  // ... other props
+  functionProps: {
+    secrets: [
+      { 
+        key: 'DATABASE_URL',
+        resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:db-url-abc123'
+      },
+      { 
+        key: 'API_KEY',
+        resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:external-api-key-xyz789'
+      }
+    ],
+  }
+};
+```
+
+```ts
+// Fargate/Web Service
+const svcProps: WebServiceProps = {
+  // ... other props
+  serviceProps: {
+    secrets: [
+      { 
+        key: 'DATABASE_URL',
+        resource: 'arn:aws:secretsmanager:us-west-2:123456789012:secret:db-url-abc123'
+      },
+      { 
+        key: 'STRIPE_SECRET_KEY',
+        resource: 'arn:aws:secretsmanager:us-west-2:123456789012:secret:stripe-key-def456'
+      }
+    ],
+  },
+};
+```
+
+Access secrets the same way as environment variables:
+
+```ts
+// Access in your application code
+const dbUrl = process.env.DATABASE_URL;
+const stripeKey = process.env.STRIPE_SECRET_KEY;
+```
+
+**Creating Secrets Manager Secrets:**
+
+<Tabs syncKey="secret-creation">
+  <TabItem label="AWS Console">
+1. Go to AWS Secrets Manager
+2. Click **Store a new secret**
+3. Select **Other type of secret**
+4. Enter secret value (plain text)
+5. Give it a name: e.g. `db-url-abc123`
+6. Note the full ARN
+7. Reference the ARN in your stack configuration
+  </TabItem>
+  <TabItem label="CLI">
+```bash
+# Create a secret with plain text value
+aws secretsmanager create-secret \
+  --name "db-url-abc123" \
+  --secret-string "postgres://user:password@host:5432/dbname"
+```
+  </TabItem>
+</Tabs>
+
+The library automatically grants your Lambda function or Fargate task the `secretsmanager:GetSecretValue` permission for referenced secrets.

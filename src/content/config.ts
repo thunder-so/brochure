@@ -87,14 +87,13 @@ export const sidebar: Sidebar = {
     { text: 'Vite SPA', link: 'docs/frameworks/vite' },
     { text: 'Vitepress', link: 'docs/frameworks/vitepress' },
   ],
-  'Thunder Console': [
-    { text: 'Overview', link: 'docs/console' },
+  'Guides': [
     { text: 'Managing Workspaces and Teams', link: 'docs/console/workspaces' },
     { text: 'Subscriptions and Billing', link: 'docs/console/billing' },
     { text: 'Build configuration', link: 'docs/console/build-config' },
     { text: 'Environment variables and Secrets', link: 'docs/console/environment-variables' },
     { text: 'Custom domains', link: 'docs/console/domains' },
-    { text: 'Redirects and rewrites', link: 'docs/console/redirects-rewrites' },
+    { text: 'Redirects and Rewrites', link: 'docs/console/redirects-rewrites' },
     { text: 'Response Headers', link: 'docs/console/response-headers' },
     { text: 'Viewing Logs', link: 'docs/console/logs' },
     { text: 'Monitoring and Alerts', link: 'docs/console/monitoring' },
