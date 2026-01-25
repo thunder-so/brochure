@@ -169,7 +169,7 @@
  * Table
  * -------------------------------------------------------------------------- */
 
-.docs table {
+.docs-content table {
   display: table;
   border-collapse: collapse;
   margin: 20px 0;
@@ -180,32 +180,31 @@
   /* // white-space: nowrap; */
 }
 
-.docs tr {
-  background-color: var(--bg);
-  border-top: 1px solid var(--border);
+.docs-content tr {
+  background-color: hsl(var(--background));
+  border-top: 1px solid hsl(var(--border));
   transition: background-color 0.5s;
 }
 
-.docs tr:nth-child(2n) {
-  background-color: var(--bg-alt);
+.docs-content tr:nth-child(2n) {
+  background-color: hsl(var(--bg-card));
 }
 
-.docs th,
-.docs td {
-  border: 1px solid var(--border);
-  padding: 8px 16px;
+.docs-content th,
+.docs-content td {
+  border: 1px solid hsl(var(--border));
+  padding: 6px 12px;
   box-sizing: border-box;
+  /* white-space: nowrap; */
 }
 
-.docs th {
+.docs-content th {
   text-align: left;
   font-size: 14px;
   font-weight: 600;
-  color: var(--text-highlight);
-  background-color: var(--bg-alt);
 }
 
-.docs td {
+.docs-content td {
   font-size: 14px;
 }
 
@@ -216,7 +215,7 @@
 .docs hr {
   margin: 16px 0;
   border: none;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid hsl(var(--border));
 }
 
 /**

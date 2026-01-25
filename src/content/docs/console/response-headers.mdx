@@ -2,3 +2,70 @@
 title: Response Headers
 description: Configure response headers in Thunder Console
 ---
+
+import { Aside } from '@astrojs/starlight/components';
+
+Response headers are HTTP headers sent from your server to clients, controlling caching behavior, security policies, and cross-origin access.
+
+## CloudFront Lambda@Edge
+
+For patterns that use CloudFront distributions (such as [CDK-SPA](/docs/patterns/s3-cloudfront)), response headers are configured using [**AWS Lambda@Edge**](https://docs.aws.amazon.com/lambda/latest/dg/lambda-edge.html) functions that execute at [CloudFront](https://docs.aws.amazon.com/cloudfront/) edge locations. This allows you to:
+
+- Set headers at the edge before content is served to clients
+- Apply headers globally across all edge locations
+- Control caching and security headers with minimal latency
+- Override or supplement origin headers without origin server changes
+
+This feature is available for static site hosting patterns that leverage CloudFront. Other hosting patterns may have different header configuration capabilities.
+
+## Default Settings
+
+Thunder provides factory defaults for your single page application that implement security best practices:
+
+| Security Header              | Default Value                          |
+|------------------------------|-----------------------------------------|
+| `x-frame-options`            | `DENY`                                  |
+| `referrer-policy`            | `strict-origin-when-cross-origin`       |
+| `x-content-type-options`     | `nosniff`                               |
+| `strict-transport-security`  | `max-age=31536000; includeSubDomains`   |
+| `Content-Security-Policy`    | `default-src 'self'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:`               |
+| `X-XSS-Protection`           | `1; mode=block`                         |
+
+| CORS Header                                 | Default Value                        |
+|---------------------------------------------|---------------------------------------|
+| `Access-Control-Allow-Origin`               | `*`                                   |
+| `Access-Control-Allow-Credentials`          | `false`                               |
+| `Access-Control-Allow-Methods`              | `GET, HEAD, OPTIONS`                  |
+| `Access-Control-Allow-Headers`              | `*`                                   |
+| `Access-Control-Max-Age`                    | `600`                                 |
+
+
+## Header Syntax
+
+Define which requests receive custom headers using path patterns. The header path must be a relative path without the domain and will be matched across all custom domains attached to your site.
+
+You can use wildcards to match arbitrary request paths:
+
+| Path               | Effect                                   |
+|--------------------|------------------------------------------|
+| `/*`               | Only the root directory paths.           |
+| `/**`              | All request paths, including the root path and all sub-paths         |
+| `/blog/*`          | Matches `/blog/`, `/blog/latest-post/`, and all other paths under `/blog/` |
+| `/**/*`	         | Matches `/blog/`, `/assets/`, and all other paths with at least two slashes. |
+
+## Custom Response Headers
+
+Override the defaults and add custom headers with path patterns to control caching, security, and CORS behavior. Examples:
+
+| Path               | Name                         | Example Value                         |
+|--------------------|------------------------------|---------------------------------------|
+| `/*`               | Cache-Control                | `public, max-age=864000`              |
+| `/api/*`           | Cache-Control                | `max-age=0, no-cache, no-store, must-revalidate` |
+| `/blog/*`          | Cache-Control                | `public, max-age=31536000`            |
+| `/**`              | Access-Control-Allow-Origin  | `https://www.foo.com`                 |
+| `/**`              | Referrer-Policy              | `same-origin`                         |
+| `/**`              | Content-Type                 | `text/html; charset=UTF-8`            |
+
+<Aside type="note" title="Limitations">
+Security headers set in the Default Settings section cannot be modified using Lambda@Edge. These headers are configured at the origin level. For more information about Lambda@Edge header limitations, see [Restrictions on headers](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-requirements-limits.html#lambda-headers-restrictions) in the AWS CloudFront documentation.
+</Aside>
