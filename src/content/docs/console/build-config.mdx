@@ -3,14 +3,330 @@ title: Build configuration
 description: Configure build settings in Thunder Console
 ---
 
-Configure the install and build scripts for your application.
+import { Icon } from 'astro-icon/components';
 
-<img src="/screens/build-config.png" alt="Build configuration" class="mx-auto w-auto h-auto" />
+Configure the install and build scripts used by Thunder Console's CI/CD pipelines (CodePipeline + CodeBuild). These settings control how your project is installed, built, and where build artifacts are placed.
 
-- Install command: This command installs all the dependencies listed in the package.json file of the project.
+Below are the available properties and short descriptions for each pattern's build properties. The `rootDir` is common for all patterns used for monorepos.
 
-- Build command: This command runs the script that compiles and bundles the application resources.
+## Single Page Applications
 
-- Output directory: This specifies where the compiled files will be stored after the build process is complete. The interface notes that common alternatives might be "dist" or "build".
+The build configuration for [Single Page Application (S3 + CloudFront)](/docs/patterns/s3-cloudfront)
 
-- Runtime: This determines which version of Node.js will be used to run the build process. Options are Node version 16, 18, 20 and 22.
+
+<div class="rounded-xl overflow-hidden border border-border overflow-hidden">
+  <div class="p-8">
+    <div class="space-y-8">
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Output Directory</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center text-sm">
+              public/
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Runtime</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center justify-between text-sm">
+              <span>Node.js 24</span>
+              <span class="text-muted-foreground">▼</span>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Install Command</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center text-sm">
+              bun install
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Build Command</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center text-sm">
+              bun run build
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+- `outputDir` — Required. Directory containing built assets to publish (e.g., `dist/`, `build/`).
+- `runtime` — Nodejs runtime version (e.g., `20`, `18`).
+- `installcmd` — Command to install dependencies (e.g., `bun install`, `npm ci`).
+- `buildcmd` — Command to build the site (e.g., `bun run build`, `npm run build`).
+
+
+## Serverless Functions (Lambda)
+
+The build configuration for [Serverless Functions (Lambda + API Gateway)](/docs/patterns/lambda-apigateway)
+
+### Container mode
+
+Thunder supports Docker containers for Lambda functions.
+
+<div class="rounded-xl overflow-hidden border border-border overflow-hidden">
+  <div class="p-8">
+    <div class="space-y-8">
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Deployment mode</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center justify-between text-sm">
+              <span>Container</span>
+              <span class="text-muted-foreground">▼</span>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Dockerfile</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center text-sm">
+              Dockerfile
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Memory Size (MB)</label>
+          <div data-slot="root" class="relative flex items-center" role="group">
+            <input id="v-1-289" role="spinbutton" type="text" tabindex="0" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" aria-roledescription="Number field" aria-valuenow="1794" aria-valuemin="128" aria-valuemax="10240" aria-invalid="false" aria-describedby="v-1-289-description" data-slot="base" class="w-full rounded-md border border-border px-3 py-2 text-sm gap-2 text-highlighted bg-default text-center ps-10 pe-10" value="1,794" />
+            <div data-slot="increment" class="absolute flex items-center inset-y-0 end-0 pe-1">
+              <button type="button" tabindex="-1" aria-label="Increment" data-slot="base" class="font-medium inline-flex items-center text-sm gap-2 text-primary p-2" style="">
+                <Icon name="tabler:plus" class="text-muted-foreground w-full h-full" />
+              </button>
+            </div>
+            <div data-slot="decrement" class="absolute flex items-center inset-y-0 start-0 ps-1">
+              <button type="button" tabindex="-1" aria-label="Decrement" data-slot="base" class="font-medium inline-flex items-center text-sm gap-2 text-primary p-2">
+                <Icon name="tabler:minus" class="text-muted-foreground w-full h-full" />
+              </button>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+- `dockerfile` — Path to your Dockerfile
+- `memorySize` — Memory (MB) allocated to your Lambda function
+
+
+### Zip mode
+
+You can use the default Zip mode to deploy Lambda functions.
+
+<div class="rounded-xl overflow-hidden border border-border overflow-hidden">
+  <div class="p-8">
+    <div class="space-y-8">
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Deployment mode</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center justify-between text-sm">
+              <span>Zip</span>
+              <span class="text-muted-foreground">▼</span>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Install Command</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center text-sm">
+              bun install
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Build Command</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center text-sm">
+              bun run build
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Runtime</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center justify-between text-sm">
+              <span>Node.js 24</span>
+              <span class="text-muted-foreground">▼</span>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Code Directory</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center text-sm">
+              dist/server
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Handler</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center text-sm">
+              index.handler
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Memory Size (MB)</label>
+          <div data-slot="root" class="relative flex items-center" role="group">
+            <input id="v-1-289" role="spinbutton" type="text" tabindex="0" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" aria-roledescription="Number field" aria-valuenow="1794" aria-valuemin="128" aria-valuemax="10240" aria-invalid="false" aria-describedby="v-1-289-description" data-slot="base" class="w-full rounded-md border border-border px-3 py-2 text-sm gap-2 text-highlighted bg-default text-center ps-10 pe-10" value="1,794" />
+            <div data-slot="increment" class="absolute flex items-center inset-y-0 end-0 pe-1">
+              <button type="button" tabindex="-1" aria-label="Increment" data-slot="base" class="font-medium inline-flex items-center text-sm gap-2 text-primary p-2" style="">
+                <Icon name="tabler:plus" class="text-muted-foreground w-full h-full" />
+              </button>
+            </div>
+            <div data-slot="decrement" class="absolute flex items-center inset-y-0 start-0 ps-1">
+              <button type="button" tabindex="-1" aria-label="Decrement" data-slot="base" class="font-medium inline-flex items-center text-sm gap-2 text-primary p-2">
+                <Icon name="tabler:minus" class="text-muted-foreground w-full h-full" />
+              </button>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+- `installcmd` — Command to install dependencies (e.g., `bun install`, `npm ci`).
+- `buildcmd` — Command to build the site (e.g., `bun run build`, `npm run build`).
+- `runtime` — Nodejs runtime version (e.g., `20`, `18`).
+- `codeDir` — The output directory for your server-side code
+- `handler` — Lambda handler
+- `memorySize` — Memory (MB) allocated to your Lambda function
+
+## Web Service (Fargate)
+
+The build configuration for [Web Service (Fargate + ALB)](/docs/patterns/fargate-alb)
+
+### Container
+
+Use a Dockerfile to deploy any web app on AWS using Thunder.
+
+<div class="rounded-xl overflow-hidden border border-border overflow-hidden">
+  <div class="p-8">
+    <div class="space-y-8">
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Build system</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center justify-between text-sm">
+              <span>Custom Dockerfile</span>
+              <span class="text-muted-foreground">▼</span>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Dockerfile</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center text-sm">
+              Dockerfile
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Instances</label>
+          <div data-slot="root" class="relative flex items-center" role="group">
+            <input id="v-1-289" role="spinbutton" type="text" tabindex="0" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" aria-roledescription="Number field" aria-valuenow="1794" aria-valuemin="128" aria-valuemax="10240" aria-invalid="false" aria-describedby="v-1-289-description" data-slot="base" class="w-full rounded-md border border-border px-3 py-2 text-sm gap-2 text-highlighted bg-default text-center ps-10 pe-10" value="1" />
+            <div data-slot="increment" class="absolute flex items-center inset-y-0 end-0 pe-1">
+              <button type="button" tabindex="-1" aria-label="Increment" data-slot="base" class="font-medium inline-flex items-center text-sm gap-2 text-primary p-2" style="">
+                <Icon name="tabler:plus" class="text-muted-foreground w-full h-full" />
+              </button>
+            </div>
+            <div data-slot="decrement" class="absolute flex items-center inset-y-0 start-0 ps-1">
+              <button type="button" tabindex="-1" aria-label="Decrement" data-slot="base" class="font-medium inline-flex items-center text-sm gap-2 text-primary p-2">
+                <Icon name="tabler:minus" class="text-muted-foreground w-full h-full" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">CPU</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center justify-between text-sm">
+              <span>0.25 vCPU</span>
+              <span class="text-muted-foreground">▼</span>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Memory Size (MB)</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center justify-between text-sm">
+              <span>512 MB</span>
+              <span class="text-muted-foreground">▼</span>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Port</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center text-sm">
+              3000
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+### Nixpacks
+
+Use Nixpacks to generate your Dockerfile.
+
+<div class="rounded-xl overflow-hidden border border-border overflow-hidden">
+  <div class="p-8">
+    <div class="space-y-8">
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Build system</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center justify-between text-sm">
+              <span>Nixpacks</span>
+              <span class="text-muted-foreground">▼</span>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Install Command</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center text-sm">
+              bun install
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Build Command</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center text-sm">
+              bun run build
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Start Command</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center text-sm">
+              bun run start
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Instances</label>
+          <div data-slot="root" class="relative flex items-center" role="group">
+            <input id="v-1-289" role="spinbutton" type="text" tabindex="0" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" aria-roledescription="Number field" aria-valuenow="1794" aria-valuemin="128" aria-valuemax="10240" aria-invalid="false" aria-describedby="v-1-289-description" data-slot="base" class="w-full rounded-md border border-border px-3 py-2 text-sm gap-2 text-highlighted bg-default text-center ps-10 pe-10" value="1" />
+            <div data-slot="increment" class="absolute flex items-center inset-y-0 end-0 pe-1">
+              <button type="button" tabindex="-1" aria-label="Increment" data-slot="base" class="font-medium inline-flex items-center text-sm gap-2 text-primary p-2" style="">
+                <Icon name="tabler:plus" class="text-muted-foreground w-full h-full" />
+              </button>
+            </div>
+            <div data-slot="decrement" class="absolute flex items-center inset-y-0 start-0 ps-1">
+              <button type="button" tabindex="-1" aria-label="Decrement" data-slot="base" class="font-medium inline-flex items-center text-sm gap-2 text-primary p-2">
+                <Icon name="tabler:minus" class="text-muted-foreground w-full h-full" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">CPU</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center justify-between text-sm">
+              <span>0.25 vCPU</span>
+              <span class="text-muted-foreground">▼</span>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Memory Size (MB)</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center justify-between text-sm">
+              <span>512 MB</span>
+              <span class="text-muted-foreground">▼</span>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Port</label>
+          <div class="h-10 bg-card/70 rounded-md border border-border px-4 flex items-center text-sm">
+              3000
+          </div>
+        </div>
+    </div>
+  </div>
+</div>

@@ -59,7 +59,9 @@ export default defineConfig({
           "settings", 
           "cloud-bolt", 
           "arrow-narrow-right",
-          "users"
+          "users",
+          "plus",
+          "minus"
         ],
         logos: [
           "aws-s3",
