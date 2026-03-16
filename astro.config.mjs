@@ -13,7 +13,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://thunder.so',
+  site: 'https://www.thunder.so',
   trailingSlash: 'never',
   output: 'server',
   // adapter: node({
@@ -79,10 +79,15 @@ export default defineConfig({
   ],
 
   redirects: {
-    "/docs/frameworks/nextjs-spa": "/docs/frameworks/nextjs-static",
+    "/docs/frameworks/nextjs-spa": "/docs/frameworks/nextjs",
+    "/docs/frameworks/nextjs-static": "/docs/frameworks/nextjs",
     "/docs/patterns/s3-cloudfront": "/docs/patterns/static",
     "/docs/patterns/lambda-apigateway": "/docs/patterns/lambda",
     "/docs/patterns/fargate-alb": "/docs/patterns/fargate",
+    "/docs/frameworks/vite-react": "/docs/frameworks/vite",
+    "/docs/frameworks/vite-preact": "/docs/frameworks/vite",
+    "/docs/frameworks/vite-vue": "/docs/frameworks/vite",
+    "/docs/frameworks/vite-svelte": "/docs/frameworks/vite",
   },
 
   vite: {

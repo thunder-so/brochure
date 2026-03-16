@@ -90,8 +90,8 @@ const myApp: StaticProps = {
   service: 'your-service-id',
   environment: 'production',
 
-  rootDir: '', // e.g. 'frontend/' for monorepos
-  outputDir: '.output/public/',
+  rootDir: '', // e.g. 'frontend' for monorepos
+  outputDir: '.output/public',
 };
 
 new Static(
@@ -173,7 +173,7 @@ const svcProps: FargateProps = {
   service: 'your-service-id',
   environment: 'production',
 
-  rootDir: '', // e.g. 'app/' for monorepos
+  rootDir: '', // e.g. 'app' for monorepos
 };
 
 new Fargate(
