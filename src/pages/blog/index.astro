@@ -35,7 +35,7 @@ export const prerender = true;
                   </span>
                 </div>
                 
-                <a href={`/blog/${post.slug}/`}>
+                <a href={`/blog/${post.slug}`}>
                   <h2 class="text-2xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
                     {post.data.title}
                   </h2>
@@ -43,7 +43,7 @@ export const prerender = true;
                 
                 <p class="text-muted-foreground mb-4">{post.data.description}</p>
                 
-                <a href={`/blog/${post.slug}/`} class="inline-flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all">
+                <a href={`/blog/${post.slug}`} class="inline-flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all">
                   Read more <ArrowRight class="h-4 w-4" />
                 </a>
               </article>

@@ -1,5 +1,5 @@
 ---
-title: 'Manage AWS Accounts'
+title: 'Connect and Manage AWS Accounts with Thunder'
 description: 'Learn how to efficiently manage multiple AWS accounts and regions using Thunder, enhancing your workflow across diverse environments.'
 ---
 
