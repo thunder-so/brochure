@@ -44,6 +44,7 @@ if (isMarkdown) {
   return new Response(rawContent, {
     headers: { 
       'Content-Type': 'text/plain; charset=utf-8',
+      'X-Meta-Description': entry.data.description || '',
       'Link': `<${canonicalUrl}>; rel="canonical"`
     }
   })

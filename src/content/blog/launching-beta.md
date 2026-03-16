@@ -5,7 +5,7 @@ pubDate: 'Feb 28 2025'
 heroImage: '/opengraph-old.jpg'
 ---
 
-# Introducing Thunder: Simplify Your AWS Deployments 🚀
+## Introducing Thunder: Simplify Your AWS Deployments 🚀
 
 We are thrilled to announce the public beta launch of **Thunder**, a powerful platform designed to streamline your AWS deployment process. After months of development and private testing, we're excited to invite developers and teams to experience how Thunder can revolutionize the way you deploy applications on AWS.
 

@@ -31,7 +31,7 @@ Here's a breakdown of the three tiers:
 
 The Three-Tier Pattern promotes separation of concerns, making the software easier to understand, maintain, and scale. It also facilitates parallel development as different teams can work on different tiers independently. Additionally, it allows for easier replacement or upgrade of individual tiers without affecting the entire system.
 
-# Reactive Web Frameworks
+## Reactive Web Frameworks
 
 Modern Single Page Application (SPA) meta-frameworks like Next.js, Nuxt.js, and Remix can be effectively utilized to develop applications following the Three-Tier Pattern, albeit with some adjustments. Let's break down how each tier can be implemented using these frameworks:
 
@@ -61,7 +61,7 @@ Modern Single Page Application (SPA) meta-frameworks like Next.js, Nuxt.js, and 
 
 By leveraging the capabilities of SPA meta-frameworks like Next.js, Nuxt.js, and Remix, developers can effectively implement the Three-Tier Pattern in their applications, ensuring separation of concerns, modularity, and maintainability while building modern and interactive web experiences.
 
-# Database-as-a-Service (DBaaS)
+## Database-as-a-Service (DBaaS)
 
 Using Database as a Service (DBaaS) providers in conjunction with Single Page Applications (SPAs) involves leveraging cloud-based database solutions to handle data storage and management for your application. Here's how you can integrate DBaaS providers with SPAs:
 

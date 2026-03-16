@@ -1,4 +1,5 @@
 ---
+import { SEO } from "astro-seo";
 import Snippets from "../components/Snippets.astro";
 import type { MarkdownHeading } from 'astro'
 import Header from '../components/layout/Header.astro';
@@ -18,6 +19,8 @@ const makeTitle = title
   ? title + " | " + "Thunder"
   : "Thunder - Deploy Apps on AWS like a Pro";
 
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+
 // const currentPage = Astro.url.pathname;
 
 ---
@@ -25,11 +28,14 @@ const makeTitle = title
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8" />		
-		<title>{makeTitle}</title>
-
+		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/images/thunder.svg" />
+
+		<SEO
+			title={makeTitle}
+			canonical={canonicalURL}
+		/>
 	</head>
 	<body>
 		<Snippets />
