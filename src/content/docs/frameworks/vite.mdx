@@ -1,50 +1,27 @@
 ---
-title: 'Deploy Vite on AWS S3 and CloudFront'
-description: 'Deploy a Vite-based vanilla TypeScript single-page application (SPA) on your AWS account.'
+title: 'Deploy Vite on AWS'
+description: 'Deploy Vite-based single-page applications on AWS using S3 and CloudFront.'
 ---
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
 
-You can deploy a [Vite](https://vitejs.dev/) single-page application (SPA) on your AWS account using Thunder.
+Deploy your [Vite](https://vitejs.dev/) single-page applications (SPAs) to AWS using Thunder patterns. This guide covers static site deployment using S3 and CloudFront.
 
-At the end of this guide, you will have a Vite project deployed on AWS account using S3 and CloudFront. This web application will be running on resources within your AWS account, and will have a public accessible URL.
+Vite applications are deployed using the `Static` construct, which provides optimized static hosting with CDN distribution.
 
-## Prerequisites
-
-You'll need the following before you begin:
-
-- A Vite project to deploy - <a href="https://vitejs.dev/guide/">Get started with Vite</a>
-- A GitHub repository (public or private) with the Vite application
-- An AWS account - <a href="https://aws.amazon.com/">Create an account</a>
-- A Thunder account - <a href="https://console.thunder.so/login">Create an account</a>
-
-There are two ways to deploy your Vite SPA using Thunder:
-
-1. Using the CLI. With the [Single Page application](/docs/patterns/s3-cloudfront) pattern.
-
-2. Using the [Console](https://console.thunder.so) to deploy your app with a few clicks.
-
-The build artifacts (HTML, CSS and JavaScript) will be stored in an S3 bucket and served using CloudFront CDN.
-
-## Deploy using CLI
----
-
-[CDK-SPA](https://github.com/thunder-so/cdk-spa) is a package that simplifies the deployment of single-page applications (SPAs) to AWS using the AWS Cloud Development Kit (CDK). It provides a straightforward way to deploy your Vite app to AWS S3 and CloudFront.
-
-<Aside type="note" title="Prerequisites">
-- [AWS CDK](https://aws.amazon.com/cdk/) installed. You can install it globally using npm:
-
-```sh
-npm install -g aws-cdk
-```
-- Node.js version 20 or higher installed on your machine.
-
-- [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured on your machine and your preferred region bootstrapped with CDK.
+<Aside type="note" title="Requirements">
+- [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
+- Node.js version 20 or higher
+- [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured
+- AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
 </Aside>
 
-### 1. Create a project
+## Static Deployment
+---
 
-You can create a new Vite project with the vanilla-ts template using the following command:
+Deploy Vite SPAs to S3 and CloudFront using the `Static` construct.
+
+### Create Project
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
@@ -70,35 +47,30 @@ bun install
   </TabItem>
 </Tabs>
 
-### 2. Initialize your project
-
-Install the necessary dependencies and initialize your project:
+### Install Dependencies and Setup Stack
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm i tsx aws-cdk-lib @thunderso/cdk-spa --save-dev
+npm i tsx @thunder-so/thunder --save-dev
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm add -D tsx aws-cdk-lib @thunderso/cdk-spa
+pnpm add -D tsx @thunder-so/thunder
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
-bun add -d tsx aws-cdk-lib @thunderso/cdk-spa
+bun add -d tsx @thunder-so/thunder
 ```
   </TabItem>
 </Tabs>
 
-Create a `stack/index.ts` file. Edit it to match your project:
-
 ```ts title="stack/index.ts"
-import { App } from "aws-cdk-lib";
-import { SPAStack, type SPAProps } from "@thunderso/cdk-spa";
+import { Cdk, Static, type StaticProps } from "@thunder-so/thunder";
 
-const myApp: SPAProps = {
+const myApp: StaticProps = {
   env: {
     account: 'your-account-id',
     region: 'us-east-1'
@@ -111,128 +83,36 @@ const myApp: SPAProps = {
   outputDir: 'dist/',
 };
 
-new SPAStack(
-  new App(), 
+new Static(
+  new Cdk.App(), 
   `${myApp.application}-${myApp.service}-${myApp.environment}-stack`, 
   myApp
 );
 ```
 
-### 3. Deploy
+### Deploy
 
-Before you deploy, run your build script to generate artifacts in the `dist` directory.
+Build and deploy your Vite SPA:
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm run build
+npx cdk deploy --all --app="npx tsx stack/index.ts"
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
 pnpm run build
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun run build
-```
-  </TabItem>
-</Tabs>
-
-By running the following script, the CDK stack will be deployed to AWS.
-
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-cdk deploy --all --app="tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
 pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
-cdk deploy --all --app="bunx tsx stack/index.ts"
-```
-  </TabItem>
-</Tabs>
-
-When the deployment is complete, you will see the CloudFront URL in the output. You can access your Vite app at that URL.
-
-For complete documentation on how to use CDK-SPA, refer to the [CDK-SPA documentation](https://github.com/thunderso/cdk-spa).
-
-
-## Deploy using Thunder Console
----
-
-You can also deploy your Vite app on AWS using the [Thunder console](https://console.thunder.so).
-
-<Aside type="note" title="Prerequisites">
-- An [AWS account](/docs/aws) added to your workspace.
-- A [GitHub account](/docs/github) connected to your workspace.
-- [Import GitHub repository](/docs/import-repository) with your Vite app code.
-</Aside>
-
-
-### Build Settings
-
-Use the following commands in the build step settings:
-
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh title="Install command"
-npm install
-```
-```sh title="Build command"
-npm run build
-```
-```sh title="Output directory"
-dist
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh title="Install command"
-pnpm install
-```
-```sh title="Build command"
-pnpm run build
-```
-```sh title="Output directory"
-dist
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh title="Install command"
-bun install
-```
-```sh title="Build command"
 bun run build
-```
-```sh title="Output directory"
-dist
+npx cdk deploy --all --app="bunx tsx stack/index.ts"
 ```
   </TabItem>
 </Tabs>
 
-### Environment Variables
-
-Environment variables in Vite are available at build time and can be used both in your config files and templates. For more information, refer to the official [Vite documentation on environment variables](https://vite.dev/guide/env-and-mode.html#env-variables).
-
-1. Define your environment variables in the Thunder console under the [Environment Variables](/docs/environment-variables) section of your project settings.
-
-2. In your code, you can define them in an `.env` file at the root of your project:
-
-```sh title=".env"
-VITE_API_URL=https://api.example.com
-```
-
-Use it in your application:
-
-```ts title="src/main.ts"
-const apiUrl = import.meta.env.VITE_API_URL;
-
-console.log(`API URL: ${apiUrl}`);
-```
+After deployment, you'll receive a **CloudFront URL** to access your static site.

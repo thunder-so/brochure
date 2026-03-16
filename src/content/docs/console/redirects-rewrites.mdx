@@ -7,7 +7,7 @@ The terms "redirect" and "rewrite" refer to different ways of handling HTTP requ
 
 ## CloudFront Lambda@Edge
 
-For patterns that use CloudFront distributions (such as [CDK-SPA](/docs/patterns/s3-cloudfront)), redirects and rewrites are implemented using [**AWS Lambda@Edge**](https://docs.aws.amazon.com/lambda/latest/dg/lambda-edge.html) functions that execute at [CloudFront](https://docs.aws.amazon.com/cloudfront/) edge locations. This provides low-latency routing decisions across a global network of edge servers, allowing you to:
+For patterns that use CloudFront distributions (such as [Static](/docs/patterns/static)), redirects and rewrites are implemented using [**AWS Lambda@Edge**](https://docs.aws.amazon.com/lambda/latest/dg/lambda-edge.html) functions that execute at [CloudFront](https://docs.aws.amazon.com/cloudfront/) edge locations. This provides low-latency routing decisions across a global network of edge servers, allowing you to:
 
 - Process requests without additional server round-trips
 - Implement intelligent routing based on request properties

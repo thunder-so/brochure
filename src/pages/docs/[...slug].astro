@@ -37,8 +37,13 @@ if (isMarkdown) {
     rawContent = 'File not found'
   }
   
+  const canonicalUrl = `https://thunder.so/docs/${entry.slug}`
+  
   return new Response(rawContent, {
-    headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+    headers: { 
+      'Content-Type': 'text/plain; charset=utf-8',
+      'Link': `<${canonicalUrl}>; rel="canonical"`
+    }
   })
 }
 

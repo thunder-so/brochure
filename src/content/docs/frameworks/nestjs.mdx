@@ -1,45 +1,30 @@
 ---
-title: 'Deploy Nest JS on AWS'
-description: 'Deploy a Nest JS application on AWS Lambda and API Gateway using AWS CDK.'
+title: 'Deploy NestJS on AWS'
+description: 'Deploy NestJS applications on AWS Lambda and API Gateway, or as containerized services with ECS Fargate and Application Load Balancer.'
 ---
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
 
-Deploy your [Nest JS](https://nestjs.com/) app on AWS with Lambda and API Gateway using the [AWS CDK](https://aws.amazon.com/cdk/).
+Deploy your [NestJS](https://nestjs.com/) applications to AWS using Thunder patterns. This guide covers both serverless Lambda deployment and containerized service options.
 
-There are a few ways to deploy your Nest JS app on AWS:
+There are two deployment patterns available for NestJS on AWS:
 
-1. Standard Lambda and API Gateway.
+1. **Lambda** — Deploy NestJS API endpoints using AWS Lambda and API Gateway with the `Lambda` construct
+2. **Containerized Service** — Deploy containerized NestJS applications using ECS Fargate with the `Fargate` construct
 
-2. Node.js runtime container image on Lambda.
-
-3. Bun runtime container image on Lambda.
-
-4. One-click installation on your AWS account using [Thunder console](https://console.thunder.so).
-
-<LinkButton href="https://github.com/cloudbitsio/examples-lambda/tree/master/nestjs" target="_blank" variant="secondary" icon="external">
-  View example code 
-</LinkButton>
-
-## Deploy Nest JS on AWS Lambda + API Gateway
----
-
-[CDK Functions](https://github.com/thunder-so/cdk-functions) is a package that simplifies the deployment of Lambdas using the AWS Cloud Development Kit (CDK). It provides a straightforward way to deploy your Nest JS app to AWS Lambda and API Gateway.
-
-<Aside type="note" title="Prerequisites">
-- [AWS CDK](https://aws.amazon.com/cdk/) installed. You can install it globally using npm:
-
-```sh
-npm install -g aws-cdk
-```
-- Node.js version 20 or higher, or Bun installed on your machine.
-
-- [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured on your machine and your preferred region bootstrapped with CDK.
+<Aside type="note" title="Requirements">
+- [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
+- Node.js version 20 or higher
+- [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured
+- AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
 </Aside>
 
+## Lambda Deployment
+---
 
-### 1. Create a project
-You can create a new Nest JS project using the following commands:
+Deploy NestJS applications to AWS Lambda and API Gateway using the `Lambda` construct. This pattern is ideal for API endpoints, serverless functions, and event-driven architectures.
+
+### Create Project
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
@@ -62,94 +47,86 @@ cd my-nestjs-app
   </TabItem>
 </Tabs>
 
-### 2. Initialize your project
-
-Install the necessary dependencies and initialize your project:
+### Install Dependencies and Setup Stack
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm i tsx aws-cdk-lib @thunderso/cdk-functions --save-dev
+npm i tsx @thunder-so/thunder @vendia/serverless-express --save-dev
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm add -D tsx aws-cdk-lib @thunderso/cdk-functions
+pnpm add -D tsx @thunder-so/thunder @vendia/serverless-express
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
-bun add -d tsx aws-cdk-lib @thunderso/cdk-functions
+bun add -d tsx @thunder-so/thunder @vendia/serverless-express
 ```
   </TabItem>
 </Tabs>
 
+### Create Lambda Handler
 
+Create a Lambda handler file to bootstrap your NestJS application:
 
-### 3. Create a CDK stack and Lambda handler
-
-Create a `stack/index.ts` file to create your CDK stack. Edit it to match your project:
-
-```ts
-// stack/index.ts
-import { App } from "aws-cdk-lib";
-import { Runtime, Architecture} from 'aws-cdk-lib/aws-lambda';
-import { FunctionStack, type FunctionProps } from '@thunder-so/cdk-functions';
-
-const fnStack: FunctionProps = {
-    env: {
-        account: '4477996600XX',
-        region: 'us-east-1',
-    },
-    application: 'nestjs',
-    service: 'api',
-    environment: 'dev',
-
-    functionProps: {
-        codeDir: 'dist',
-        handler: 'lambda-node.handler',
-        include: [
-          'node_modules', // Include node_modules for dependencies
-          'lambda-node.js', // Include the Lambda handler file
-        ],
-        exclude: ['node_modules/.npmignore', '**/*.ts', '**/*.map'],
-    },
-};
-
-new FunctionStack(new App(), 
-    `${fnStack.application}-${fnStack.service}-${fnStack.environment}-stack`, 
-    fnStack
-);
-
-```
-
-Create a `lambda-node.js` file in the root directory to handle the Lambda function:
-
-```ts
-// src/lambda-node.js
-const { NestFactory } = require('@nestjs/core');
-const { AppModule } = require('./app.module');
-const { configure } = require('@vendia/serverless-express');
+```ts title="src/lambda.ts"
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { configure } from '@vendia/serverless-express';
 
 let cachedServer;
 
 async function bootstrapServer() {
-    if (!cachedServer) {
-        const app = await NestFactory.create(AppModule);
-        await app.init();
-        const expressApp = app.getHttpAdapter().getInstance();
-        cachedServer = configure({ app: expressApp });
-    }
-    return cachedServer;
+  if (!cachedServer) {
+    const app = await NestFactory.create(AppModule);
+    await app.init();
+    const expressApp = app.getHttpAdapter().getInstance();
+    cachedServer = configure({ app: expressApp });
+  }
+  return cachedServer;
 }
 
-exports.handler = async (event, context) => {
-    const server = await bootstrapServer();
-    return server(event, context);
+export const handler = async (event, context) => {
+  const server = await bootstrapServer();
+  return server(event, context);
 };
 ```
 
-### 4. Deploy
+### Setup Stack
+
+```ts title="stack/index.ts"
+import { Cdk, Lambda, type LambdaProps } from "@thunder-so/thunder";
+
+const fnProps: LambdaProps = {
+  env: {
+    account: 'your-account-id',
+    region: 'us-east-1'
+  },
+  application: 'your-application-id',
+  service: 'your-service-id',
+  environment: 'production',
+
+  functionProps: {
+    codeDir: 'dist',
+    handler: 'lambda.handler',
+    include: [
+      'node_modules',
+      'lambda.js',
+    ],
+    exclude: ['node_modules/.npmignore', '**/*.ts', '**/*.map'],
+  },
+};
+
+new Lambda(
+  new Cdk.App(), 
+  `${fnProps.application}-${fnProps.service}-${fnProps.environment}-stack`, 
+  fnProps
+);
+```
+
+### Deploy
 
 Before you deploy, run your build script to generate artifacts in the `dist` directory.
 
@@ -157,263 +134,176 @@ Before you deploy, run your build script to generate artifacts in the `dist` dir
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm run build
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm run build
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun run build
-```
-  </TabItem>
-</Tabs>
-
-By running the following script, the CDK stack will be deployed to AWS.
-
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
 npx cdk deploy --all --app="npx tsx stack/index.ts"
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
+pnpm run build
 pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
+bun run build
 npx cdk deploy --all --app="bunx tsx stack/index.ts"
 ```
   </TabItem>
 </Tabs>
 
-When the deployment is complete, you will see the API Gateway URL in the output. You can access your Nest JS app at that URL.
+When the deployment is complete, you will see the API Gateway URL in the output. You can access your NestJS app at that URL.
 
-For complete documentation, refer to the [CDK Functions documentation](https://github.com/thunderso/cdk-functions).
-
-
-## Node.js runtime container image on Lambda
+## Containerized Service Deployment
 ---
 
-You can also deploy your Nest JS app on AWS Lambda using a Node.js container image. This method allows you to package your application and its dependencies into a Docker image, which can then be deployed to AWS Lambda.
+Deploy containerized NestJS applications using ECS Fargate and Application Load Balancer with the `Fargate` construct. This pattern is ideal for long-running services, full-stack applications, and when you need persistent connections or WebSocket support.
 
-### 1. Create a lambda handler
-Create a `lambda-node.js` file in the root directory to handle the Lambda function:
-
-```js
-const { NestFactory } = require('@nestjs/core');
-const { AppModule } = require('./app.module');
-const { configure } = require('@vendia/serverless-express');
-
-let cachedServer;
-
-async function bootstrapServer() {
-    if (!cachedServer) {
-        const app = await NestFactory.create(AppModule);
-        await app.init();
-        const expressApp = app.getHttpAdapter().getInstance();
-        cachedServer = configure({ app: expressApp });
-    }
-    return cachedServer;
-}
-
-exports.handler = async (event, context) => {
-    const server = await bootstrapServer();
-    return server(event, context);
-};
-```
-
-### 2. Create a Dockerfile
-
-Create a `Dockerfile.node` in the root directory to build your Nest JS app as a container image:
-
-```dockerfile
-FROM public.ecr.aws/lambda/nodejs:22 AS base
-WORKDIR ${LAMBDA_TASK_ROOT}
-
-# Copy dist files and install dependencies
-COPY . .
-RUN npm install --omit=dev
-
-# Set the Lambda handler
-CMD [ "lambda-node.handler" ]
-```
-
-### Create/modify your CDK stack
-
-Create a `stack/node.ts` file (or modify your existing `stack/index.ts`) to define your CDK stack:
-
-```ts
-// stack/node.ts
-const fnStack: FunctionProps = {
-    // ... other props
-    
-    functionProps: {
-        codeDir: 'dist',
-        include: [
-            'package.json', // Include package.json for dependencies
-            'lambda-node.js' // Include the Lambda handler file
-        ],
-        dockerFile: 'Dockerfile.node',
-    },
-};
-```
-
-By running the following script, the CDK stack will be deployed to AWS.
+### Install Dependencies and Setup Stack
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npx cdk deploy --all --app="npx tsx stack/node.ts"
+npm i tsx @thunder-so/thunder --save-dev
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm exec cdk deploy --all --app="pnpm exec tsx stack/node.ts"
+pnpm add -D tsx @thunder-so/thunder
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
-npx cdk deploy --all --app="bunx tsx stack/node.ts"
+bun add -d tsx @thunder-so/thunder
 ```
   </TabItem>
 </Tabs>
 
+```ts title="stack/index.ts"
+import { Cdk, Fargate, type FargateProps } from "@thunder-so/thunder";
 
-## Bun runtime container image on Lambda
----
+const svcProps: FargateProps = {
+  env: {
+    account: 'your-account-id',
+    region: 'us-west-2'
+  },
+  application: 'your-application-id',
+  service: 'your-service-id',
+  environment: 'production',
 
-You can also deploy your Nest JS app on AWS Lambda with custom Bun runtime.
+  rootDir: '', // e.g. 'app/' for monorepos
+};
 
-### 1. Create a lambda handler
-Create a `lambda-bun.js` file in the root directory to handle the Lambda function:
+new Fargate(
+  new Cdk.App(), 
+  `${svcProps.application}-${svcProps.service}-${svcProps.environment}-stack`, 
+  svcProps
+);
+```
 
-```ts
-// lambda-bun.js
-const { NestFactory } = require('@nestjs/core');
-const { AppModule } = require('./app.module');
+### Build Settings Using Nixpacks
 
-let app, expressApp;
+Configure automatic containerization with Nixpacks:
 
-async function getExpressApp() {
-    if (!expressApp) {
-        app = await NestFactory.create(AppModule);
-        await app.init();
-        expressApp = app.getHttpAdapter().getInstance();
-    }
-    return expressApp;
-}
-
-exports.fetch = async (request /*: Request*/, server /*: Server*/) => {
-    const expressApp = await getExpressApp();
-
-    // Convert Bun's Request to Node.js req/res for Express
-    // Use 'node-fetch' Response to Express bridge
-    const { Readable } = require('stream');
-    const { Headers } = require('node-fetch');
-
-    // Create a mock req object
-    const url = new URL(request.url);
-    const req = new Readable();
-    req.url = url.pathname + url.search;
-    req.method = request.method;
-    req.headers = Object.fromEntries(request.headers.entries());
-    req._read = () => {};
-    if (request.body) {
-        const body = Buffer.from(await request.arrayBuffer());
-        req.push(body);
-    }
-    req.push(null);
-
-    // Create a mock res object
-    return new Promise((resolve) => {
-        const chunks = [];
-        const res = {
-            statusCode: 200,
-            headers: {},
-            setHeader(key, value) { this.headers[key] = value; },
-            getHeader(key) { return this.headers[key]; },
-            write(chunk) { chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk)); },
-            end(chunk) {
-                if (chunk) this.write(chunk);
-                const body = Buffer.concat(chunks);
-                resolve(
-                    new Response(body, {
-                        status: res.statusCode,
-                        headers: res.headers,
-                    })
-                );
-            },
-            status(code) { this.statusCode = code; return this; },
-            send(body) { this.end(body); },
-        };
-        expressApp(req, res);
-    });
+```ts title="stack/index.ts"
+const svcProps: FargateProps = {
+  // ... other props
+  
+  buildProps: {
+    buildSystem: 'Nixpacks',
+    installcmd: 'npm install',
+    buildcmd: 'npm run build',
+    startcmd: 'npm run start:prod',
+  },
 };
 ```
 
-### 2. Create a Dockerfile
+### Build Settings Using Docker Container
 
-Create a `Dockerfile.bun` in the root directory to build your Nest JS app as a container image with Bun runtime:
+Alternatively, use a custom Dockerfile:
 
-```dockerfile
-# Builder image
-FROM oven/bun:latest AS bun
-WORKDIR /tmp
+```dockerfile title="Dockerfile"
+FROM public.ecr.aws/docker/library/node:20-alpine AS base
 
-## Install the bun dependencies
-RUN apt-get update && apt-get install -y curl
-RUN curl -fsSL https://raw.githubusercontent.com/oven-sh/bun/main/packages/bun-lambda/runtime.ts -o /tmp/runtime.ts
-RUN bun install aws4fetch
-RUN bun build --compile runtime.ts --outfile bootstrap
+FROM base AS builder
+WORKDIR /app
 
-# Runtime image
-FROM public.ecr.aws/lambda/provided:al2023
-WORKDIR ${LAMBDA_TASK_ROOT}
+COPY package*.json ./
+RUN npm ci
 
-## Copy bun + bootstrap from the builder image
-COPY --from=bun /usr/local/bin/bun /opt/bun
-COPY --from=bun /tmp/bootstrap ${LAMBDA_RUNTIME_DIR}
-
-## Copy dist files and install dependencies
 COPY . .
-RUN /opt/bun install --frozen-lockfile
+RUN npm run build
 
-# Set our handler method
-CMD [ "lambda-bun.fetch" ]
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY package.json ./
+
+EXPOSE 3000
+
+CMD ["node", "dist/main"]
 ```
 
-### 3. Create/modify your CDK stack
-Create a `stack/bun.ts` file to define your CDK stack:
-
-```ts
-// stack/bun.ts
-const fnStack: FunctionProps = {
-    // ... other props
-
-    functionProps: {
-        codeDir: 'dist',
-        include: [
-            'package.json', // Include package.json for dependencies
-            'bun.lock', // Include bun.lock for Bun dependencies
-            'lambda-bun.js' // Include the Lambda handler file
-        ],
-        dockerFile: 'Dockerfile.bun',
-    },
+```ts title="stack/index.ts"
+const svcProps: FargateProps = {
+  // ... other props
+  
+  serviceProps: {
+    dockerFile: 'Dockerfile',
+    port: 3000,
+  },
 };
 ```
 
-By running the following script, the CDK stack will be deployed to AWS.
+### Environment Variables and Secrets
+
+Configure runtime environment variables and secrets:
+
+```ts title="stack/index.ts"
+const svcProps: FargateProps = {
+  // ... other props
+  
+  serviceProps: {
+    variables: [
+      { NODE_ENV: 'production' },
+      { API_URL: 'https://api.example.com' }
+    ],
+    secrets: [
+      { 
+        key: 'DATABASE_URL', 
+        resource: 'arn:aws:secretsmanager:us-west-2:123456789012:secret:/my-app/DATABASE_URL-abc123' 
+      },
+    ],
+  },
+};
+```
+
+### Deploy
+
+Build and deploy your containerized application:
 
 <Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm run build
+npx cdk deploy --all --app="npx tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm run build
+pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
+```
+  </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
-npx cdk deploy --all --app="bunx tsx stack/bun.ts"
+bun run build
+npx cdk deploy --all --app="bunx tsx stack/index.ts"
 ```
   </TabItem>
 </Tabs>
 
+After deployment, you'll receive an **Application Load Balancer URL** to access your containerized NestJS application.

@@ -1,14 +1,14 @@
 ---
-title: Web Service
+title: Fargate
 description: Deploy containerized applications using Fargate and ALB
 ---
 
 import { Icon } from 'astro-icon/components';
-import WebServiceArchitecture from '@/components/docs/patterns/WebServiceArchitecture.astro';
+import FargateArchitecture from '@/components/docs/patterns/FargateArchitecture.astro';
 
 Deploy containerized web services on AWS Fargate with Application Load Balancer for scalable, managed container hosting.
 
-Thunder provides the [@thunderso/cdk-webservice](https://github.com/thunder-so/cdk-webservice) package for deploying Docker containers to ECS Fargate with automatic VPC creation, load balancing, and support for Nixpacks to build containers without writing Dockerfiles.
+Thunder provides the [@thunder-so/thunder](https://github.com/thunder-so/thunder) package for deploying Docker containers to ECS Fargate with automatic VPC creation, load balancing, and support for Nixpacks to build containers without writing Dockerfiles.
 
 ## Supported Frameworks
 
@@ -25,7 +25,7 @@ Thunder provides the [@thunderso/cdk-webservice](https://github.com/thunder-so/c
 
 The container service architecture provides scalable, managed container hosting with load balancing and high availability.
 
-<WebServiceArchitecture />
+<FargateArchitecture />
 
 ## Container Deployment Pipeline
 
@@ -100,12 +100,12 @@ The container deployment pipeline builds Docker images and deploys them to manag
 
 ## Quick Start
 
-Deploy your containerized application to AWS Fargate with automatic infrastructure provisioning. This guide covers installation, configuration, and deployment.
+Deploy your containerized application to AWS Fargate with automatic infrastructure provisioning. This guide covers installation, configuration, and deployment with the `@thunder-so/thunder` package.
 
 ### Installation
 
 ```bash
-bun add -D tsx @thunderso/cdk-webservice
+bun add -D tsx @thunder-so/thunder
 ```
 
 ### Basic Setup
@@ -118,9 +118,9 @@ mkdir stack && touch stack/index.ts
 
 ```ts
 // stack/index.ts
-import { Cdk, WebServiceStack, type WebServiceProps } from "@thunderso/cdk-webservice";
+import { Cdk, Fargate, type FargateProps } from "@thunder-so/thunder";
 
-const svcProps: WebServiceProps = {
+const svcProps: FargateProps = {
   env: {
     account: 'your-account-id',
     region: 'us-west-2'
@@ -130,7 +130,7 @@ const svcProps: WebServiceProps = {
   environment: 'production',
 };
 
-new WebServiceStack(
+new Fargate(
   new Cdk.App(), 
   `${svcProps.application}-${svcProps.service}-${svcProps.environment}-stack`, 
   svcProps
@@ -148,7 +148,7 @@ bunx cdk deploy --all --app="bunx tsx stack/index.ts"
 Connect your service to a custom domain using Route 53 and ACM certificates. The certificate must be issued in the same region as your Fargate service.
 
 ```ts
-const svcProps: WebServiceProps = {
+const svcProps: FargateProps = {
   // ... other props
   domain: 'app.example.com',
   hostedZoneId: 'Z1D633PJN98FT9',
@@ -165,7 +165,7 @@ Configure CPU, memory, desired task count, and container port. Supports ARM64 ar
 ```ts
 import { CpuArchitecture } from 'aws-cdk-lib/aws-ecs';
 
-const svcProps: WebServiceProps = {
+const svcProps: FargateProps = {
   // ... other props
   serviceProps: {
     dockerFile: 'Dockerfile',
@@ -183,7 +183,7 @@ const svcProps: WebServiceProps = {
 Manage configuration with plain environment variables and secure secrets from AWS Secrets Manager. The library automatically grants ECS tasks permissions to read specified secrets.
 
 ```ts
-const svcProps: WebServiceProps = {
+const svcProps: FargateProps = {
   // ... other props
   serviceProps: {
     variables: [
@@ -205,7 +205,7 @@ const svcProps: WebServiceProps = {
 Use [Nixpacks](https://nixpacks.com/) to automatically generate Dockerfiles and build containers without manual configuration. Nixpacks detects your framework and creates optimized builds for Node.js, Python, Go, Rust, and more.
 
 ```ts
-const svcProps: WebServiceProps = {
+const svcProps: FargateProps = {
   // ... other props
   buildProps: {
     buildSystem: 'Nixpacks',

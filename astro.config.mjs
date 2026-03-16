@@ -80,6 +80,9 @@ export default defineConfig({
 
   redirects: {
     "/docs/frameworks/nextjs-spa": "/docs/frameworks/nextjs-static",
+    "/docs/patterns/s3-cloudfront": "/docs/patterns/static",
+    "/docs/patterns/lambda-apigateway": "/docs/patterns/lambda",
+    "/docs/patterns/fargate-alb": "/docs/patterns/fargate",
   },
 
   vite: {

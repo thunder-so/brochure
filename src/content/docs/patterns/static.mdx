@@ -1,13 +1,13 @@
 ---
-title: Single Page Application (SPA)
+title: Static
 description: Deploy SPAs using AWS S3 and CloudFront
 ---
 import { Icon } from 'astro-icon/components';
-import SPAArchitecture from '@/components/docs/patterns/SPAArchitecture.astro';
+import StaticArchitecture from '@/components/docs/patterns/StaticArchitecture.astro';
 
 Deploy any client-side Single Page Application (SPA) and static site generator (SSG) on AWS S3 and CloudFront.
 
-Thunder provides a secure and battle-tested pattern for deploying any SPA/SSG on AWS infrastructure using [AWS CDK](https://aws.amazon.com/cdk/). This pattern leverages the [@thunderso/cdk-spa](https://github.com/thunder-so/cdk-spa) package, which implements best practices for static site hosting with CloudFront distribution, S3 origin, and Lambda@Edge functions for advanced routing capabilities.
+Thunder provides a secure and battle-tested pattern for deploying any SPA/SSG on AWS infrastructure using [AWS CDK](https://aws.amazon.com/cdk/). This pattern leverages the [@thunder-so/thunder](https://github.com/thunder-so/thunder) package, which implements best practices for static site hosting with CloudFront distribution, S3 origin, and Lambda@Edge functions for advanced routing capabilities.
 
 ## Supported Frameworks
 
@@ -23,7 +23,7 @@ Thunder provides a secure and battle-tested pattern for deploying any SPA/SSG on
 
 The hosting architecture provides a globally distributed, secure, and performant infrastructure for serving static web applications.
 
-<SPAArchitecture />
+<StaticArchitecture />
 
 ## CI/CD Pipeline Architecture
 
@@ -87,12 +87,12 @@ The pipeline architecture automates the build and deployment process, ensuring c
 
 ## Quick Start
 
-Get your static site deployed to AWS in minutes with the CDK-SPA package. This guide walks through installation, configuration, and deployment of a basic static site.
+Get your static site deployed to AWS in minutes with the `@thunder-so/thunder` package. This guide walks through installation, configuration, and deployment of a basic static site.
 
 ### Installation
 
 ```bash
-bun add -D @thunderso/cdk-spa
+bun add -D @thunder-so/thunder
 ```
 
 ### Basic Setup
@@ -105,9 +105,9 @@ mkdir stack && touch stack/index.ts
 
 ```ts
 // stack/index.ts
-import { Cdk, SPAStack, type SPAProps } from "@thunderso/cdk-spa";
+import { Cdk, Static, type StaticProps } from "@thunder-so/thunder";
 
-const stackProps: SPAProps = {
+const stackProps: StaticProps = {
   env: {
     account: 'your-account-id',
     region: 'us-east-1'
@@ -119,7 +119,7 @@ const stackProps: SPAProps = {
   outputDir: 'dist/',
 };
 
-new SPAStack(
+new Static(
   new Cdk.App(), 
   `${stackProps.application}-${stackProps.service}-${stackProps.environment}-stack`, 
   stackProps
@@ -137,7 +137,7 @@ bunx cdk deploy --all --app="bunx tsx stack/index.ts"
 Connect your own domain to your static site using Route 53 and ACM certificates. Learn more about [domain configuration](/docs/console/domains).
 
 ```ts
-const stackProps: SPAProps = {
+const stackProps: StaticProps = {
   // ... other props
   domain: 'app.example.com',
   hostedZoneId: 'Z1D633PJN98FT9',
@@ -154,7 +154,7 @@ Configure URL redirects and rewrites using Lambda@Edge functions that run at Clo
 Learn more about [redirects and rewrites configuration](/docs/console/redirects-rewrites).
 
 ```ts
-const stackProps: SPAProps = {
+const stackProps: StaticProps = {
   // ... other props
   redirects: [
     { source: '/home', destination: '/' },
@@ -173,7 +173,7 @@ Add custom HTTP response headers using Lambda@Edge to control caching behavior. 
 Learn more about [response headers configuration](/docs/console/response-headers).
 
 ```ts
-const stackProps: SPAProps = {
+const stackProps: StaticProps = {
   // ... other props
   headers: [
     {
@@ -192,7 +192,7 @@ Automate your deployment workflow with AWS CodePipeline and CodeBuild. Configure
 Learn more about [build configuration](/docs/console/build-config).
 
 ```ts
-const stackProps: SPAProps = {
+const stackProps: StaticProps = {
   // ... other props
   githubAccessTokenArn: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:github-token-XXXXXX',
   sourceProps: {

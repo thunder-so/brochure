@@ -9,7 +9,7 @@ Response headers are HTTP headers sent from your server to clients, controlling 
 
 ## CloudFront Lambda@Edge
 
-For patterns that use CloudFront distributions (such as [CDK-SPA](/docs/patterns/s3-cloudfront)), response headers are configured using [**AWS Lambda@Edge**](https://docs.aws.amazon.com/lambda/latest/dg/lambda-edge.html) functions that execute at [CloudFront](https://docs.aws.amazon.com/cloudfront/) edge locations. This allows you to:
+For patterns that use CloudFront distributions (such as [Static](/docs/patterns/static)), response headers are configured using [**AWS Lambda@Edge**](https://docs.aws.amazon.com/lambda/latest/dg/lambda-edge.html) functions that execute at [CloudFront](https://docs.aws.amazon.com/cloudfront/) edge locations. This allows you to:
 
 - Set headers at the edge before content is served to clients
 - Apply headers globally across all edge locations

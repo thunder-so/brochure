@@ -1,22 +1,28 @@
 ---
 title: 'Deploy Solid Start on AWS'
-description: 'Deploy Solid Start applications on AWS with server-side rendering using ECS Fargate and Application Load Balancer.'
+description: 'Deploy Solid Start applications on AWS using static site generation with S3 and CloudFront, or full-stack SSR with ECS Fargate and Application Load Balancer.'
 ---
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
 
-Deploy your [Solid Start](https://start.solidjs.com) applications to AWS using Thunder patterns. This guide covers server-side rendering deployments with ECS Fargate and Application Load Balancer.
+Deploy your [Solid Start](https://start.solidjs.com) applications to AWS using Thunder patterns. This guide covers static site generation and full-stack server-side rendering options.
 
-Solid Start applications are deployed using the [Web Service](/docs/patterns/fargate-alb) pattern, which provides full-stack SSR capabilities with managed containerization.
+There are two deployment patterns available for Solid Start on AWS:
+
+1. **Static Site Generation (SSG)** — Deploy static Solid Start sites using S3 and CloudFront with the `Static` construct
+2. **Full Stack** — Deploy SSR Solid Start applications using ECS Fargate with the `Fargate` construct
 
 <Aside type="note" title="Requirements">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
-- Node.js version 18 or higher
+- Node.js version 20 or higher
 - [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured
 - AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
 </Aside>
 
-Deploy server-side rendered Solid Start applications using ECS Fargate and Application Load Balancer with the [CDK-WebService](https://github.com/thunder-so/cdk-webservice) library.
+## Static Site Generation (SSG) Deployment
+---
+
+Deploy static Solid Start applications to S3 and CloudFront using the `Static` construct. This pattern is ideal for static sites, blogs, and client-side applications.
 
 ### Create Project
 
@@ -41,30 +47,119 @@ cd my-solid-app
   </TabItem>
 </Tabs>
 
+### Configure Solid Start for SSG
+
+Configure your app for static site generation using the `static` preset:
+
+```ts title="app.config.ts"
+import { defineConfig } from '@solidjs/start/config';
+
+export default defineConfig({
+  server: {
+    preset: 'static'
+  }
+});
+```
+
 ### Install Dependencies and Setup Stack
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm i tsx @thunderso/cdk-webservice --save-dev
+npm i tsx @thunder-so/thunder --save-dev
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm add -D tsx @thunderso/cdk-webservice
+pnpm add -D tsx @thunder-so/thunder
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
-bun add -d tsx @thunderso/cdk-webservice
+bun add -d tsx @thunder-so/thunder
 ```
   </TabItem>
 </Tabs>
 
 ```ts title="stack/index.ts"
-import { Cdk, WebServiceStack, type WebServiceProps } from "@thunderso/cdk-webservice";
+import { Cdk, Static, type StaticProps } from "@thunder-so/thunder";
 
-const svcProps: WebServiceProps = {
+const myApp: StaticProps = {
+  env: {
+    account: 'your-account-id',
+    region: 'us-east-1'
+  },
+  application: 'your-application-id',
+  service: 'your-service-id',
+  environment: 'production',
+
+  rootDir: '', // e.g. 'frontend/' for monorepos
+  outputDir: 'dist/',
+};
+
+new Static(
+  new Cdk.App(), 
+  `${myApp.application}-${myApp.service}-${myApp.environment}-stack`, 
+  myApp
+);
+```
+
+### Deploy
+
+Build and deploy your static Solid Start site:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm run build
+npx cdk deploy --all --app="npx tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm run build
+pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+npx cdk deploy --all --app="bunx tsx stack/index.ts"
+```
+  </TabItem>
+</Tabs>
+
+After deployment, you'll receive a **CloudFront URL** to access your static site.
+
+## Full Stack Deployment
+---
+
+Deploy server-side rendered Solid Start applications using ECS Fargate and Application Load Balancer with the `Fargate` construct.
+
+### Install Dependencies and Setup Stack
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm i tsx @thunder-so/thunder --save-dev
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add -D tsx @thunder-so/thunder
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun add -d tsx @thunder-so/thunder
+```
+  </TabItem>
+</Tabs>
+
+```ts title="stack/index.ts"
+import { Cdk, Fargate, type FargateProps } from "@thunder-so/thunder";
+
+const svcProps: FargateProps = {
   env: {
     account: 'your-account-id',
     region: 'us-west-2'
@@ -76,7 +171,7 @@ const svcProps: WebServiceProps = {
   rootDir: '', // e.g. 'app/' for monorepos
 };
 
-new WebServiceStack(
+new Fargate(
   new Cdk.App(), 
   `${svcProps.application}-${svcProps.service}-${svcProps.environment}-stack`, 
   svcProps
@@ -88,7 +183,7 @@ new WebServiceStack(
 Configure automatic containerization with Nixpacks:
 
 ```ts title="stack/index.ts"
-const svcProps: WebServiceProps = {
+const svcProps: FargateProps = {
   // ... other props
   
   buildProps: {
@@ -105,20 +200,31 @@ const svcProps: WebServiceProps = {
 Alternatively, use a custom Dockerfile:
 
 ```dockerfile title="Dockerfile"
-FROM public.ecr.aws/docker/library/node:20-alpine
+FROM public.ecr.aws/docker/library/node:20-alpine AS base
 
-# Copy code and install dependencies
+FROM base AS builder
 WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
 COPY . .
-RUN npm install
 RUN npm run build
 
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+COPY --from=builder /app/dist ./dist
+
 EXPOSE 3000
-CMD ["npm", "run", "start"]
+
+CMD ["node", "./dist/server.js"]
 ```
 
 ```ts title="stack/index.ts"
-const svcProps: WebServiceProps = {
+const svcProps: FargateProps = {
   // ... other props
   
   serviceProps: {
@@ -133,7 +239,7 @@ const svcProps: WebServiceProps = {
 Configure runtime environment variables and secrets:
 
 ```ts title="stack/index.ts"
-const svcProps: WebServiceProps = {
+const svcProps: FargateProps = {
   // ... other props
   
   serviceProps: {
@@ -177,5 +283,3 @@ npx cdk deploy --all --app="bunx tsx stack/index.ts"
 </Tabs>
 
 After deployment, you'll receive an **Application Load Balancer URL** to access your SSR application.
-
-For complete documentation, see the [CDK-WebService README](https://github.com/thunder-so/cdk-webservice).

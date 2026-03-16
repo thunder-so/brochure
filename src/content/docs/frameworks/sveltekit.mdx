@@ -7,10 +7,10 @@ import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components'
 
 Deploy your [SvelteKit](https://svelte.dev/docs/kit) applications to AWS using Thunder patterns. This guide covers static deployments and server-side rendering options.
 
-SvelteKit offers flexible rendering modes that can be deployed using two Thunder libraries:
+SvelteKit offers flexible rendering modes that can be deployed using two Thunder constructs:
 
-1. **Static Deployment** — Deploy Static site generation (SSG) or client-side rendered Single-page apps (SPAs) built with SvelteKit - using S3 and CloudFront with the [Single Page Application](/docs/patterns/s3-cloudfront) pattern
-2. **Server-Side Rendering (SSR)** — Deploy server-rendered SvelteKit applications using ECS Fargate with the [Web Service](/docs/patterns/fargate-alb) pattern
+1. **Static Deployment** — Deploy Static site generation (SSG) or client-side rendered Single-page apps (SPAs) built with SvelteKit - using S3 and CloudFront with the `Static` construct
+2. **Server-Side Rendering (SSR)** — Deploy server-rendered SvelteKit applications using ECS Fargate with the `Fargate` construct
 
 <Aside type="note" title="Requirements">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
@@ -22,30 +22,24 @@ SvelteKit offers flexible rendering modes that can be deployed using two Thunder
 ## Static (SSG/SPA) Deployment
 ---
 
-Deploy static or client-side rendered SvelteKit applications to S3 and CloudFront using the [CDK-SPA](https://github.com/thunder-so/cdk-spa) library. Choose the configuration that best fits your needs:
+Deploy static or client-side rendered SvelteKit applications to S3 and CloudFront using the `Static` construct. Choose the configuration that best fits your needs:
 
 ### Create Project
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm create svelte@latest my-sveltekit-app
-cd my-sveltekit-app
-npm install
+npx sv create
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm create svelte my-sveltekit-app
-cd my-sveltekit-app
-pnpm install
+npx sv create
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
-bunx create-svelte my-sveltekit-app
-cd my-sveltekit-app
-bun install
+npx sv create
 ```
   </TabItem>
 </Tabs>
@@ -93,25 +87,25 @@ export default {
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm i tsx @thunderso/cdk-spa --save-dev
+npm i tsx @thunder-so/thunder --save-dev
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm add -D tsx @thunderso/cdk-spa
+pnpm add -D tsx @thunder-so/thunder
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
-bun add -d tsx @thunderso/cdk-spa
+bun add -d tsx @thunder-so/thunder
 ```
   </TabItem>
 </Tabs>
 
 ```ts title="stack/index.ts"
-import { Cdk, SPAStack, type SPAProps } from "@thunderso/cdk-spa";
+import { Cdk, Static, type StaticProps } from "@thunder-so/thunder";
 
-const myApp: SPAProps = {
+const myApp: StaticProps = {
   env: {
     account: 'your-account-id',
     region: 'us-east-1'
@@ -124,31 +118,11 @@ const myApp: SPAProps = {
   outputDir: 'build/',
 };
 
-new SPAStack(
+new Static(
   new Cdk.App(), 
   `${myApp.application}-${myApp.service}-${myApp.environment}-stack`, 
   myApp
 );
-```
-
-### Environment Variables and Secrets for Build
-
-Configure build-time environment variables using the `buildProps` configuration:
-
-```ts title="stack/index.ts"
-const myApp: SPAProps = {
-  // ... other props
-  
-  buildProps: {
-    environment: [
-      { VITE_API_URL: 'https://api.example.com' },
-      { VITE_ANALYTICS_ID: 'UA-XXXXXX' }
-    ],
-    secrets: [
-      { key: 'API_KEY', resource: '/my-app/API_KEY' },
-    ],
-  },
-};
 ```
 
 ### Deploy
@@ -178,39 +152,11 @@ npx cdk deploy --all --app="bunx tsx stack/index.ts"
 
 After deployment, you'll receive a **CloudFront URL** to access your static site.
 
-For complete documentation, see the [CDK-SPA README](https://github.com/thunder-so/cdk-spa).
-
 
 ## Full Stack Deployment
 ---
 
-Deploy server-side rendered SvelteKit applications using ECS Fargate and Application Load Balancer with the [CDK-WebService](https://github.com/thunder-so/cdk-webservice) library. This pattern is ideal for MPA and full-stack applications where you need server-side rendering, database integration, or API routes.
-
-### Create Project
-
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm create svelte@latest my-sveltekit-app
-cd my-sveltekit-app
-npm install
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm create svelte my-sveltekit-app
-cd my-sveltekit-app
-pnpm install
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bunx create-svelte my-sveltekit-app
-cd my-sveltekit-app
-bun install
-```
-  </TabItem>
-</Tabs>
+Deploy server-side rendered SvelteKit applications using ECS Fargate and Application Load Balancer with the `Fargate` construct. This pattern is ideal for MPA and full-stack applications where you need server-side rendering, database integration, or API routes.
 
 ### Configure SvelteKit for SSR
 
@@ -237,25 +183,25 @@ export const prerender = true; // Only for static pages
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm i tsx @thunderso/cdk-webservice --save-dev
+npm i tsx @thunder-so/thunder --save-dev
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm add -D tsx @thunderso/cdk-webservice
+pnpm add -D tsx @thunder-so/thunder
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
-bun add -d tsx @thunderso/cdk-webservice
+bun add -d tsx @thunder-so/thunder
 ```
   </TabItem>
 </Tabs>
 
 ```ts title="stack/index.ts"
-import { Cdk, WebServiceStack, type WebServiceProps } from "@thunderso/cdk-webservice";
+import { Cdk, Fargate, type FargateProps } from "@thunder-so/thunder";
 
-const svcProps: WebServiceProps = {
+const svcProps: FargateProps = {
   env: {
     account: 'your-account-id',
     region: 'us-west-2'
@@ -267,7 +213,7 @@ const svcProps: WebServiceProps = {
   rootDir: '', // e.g. 'app/' for monorepos
 };
 
-new WebServiceStack(
+new Fargate(
   new Cdk.App(), 
   `${svcProps.application}-${svcProps.service}-${svcProps.environment}-stack`, 
   svcProps
@@ -279,7 +225,7 @@ new WebServiceStack(
 Configure automatic containerization with Nixpacks:
 
 ```ts title="stack/index.ts"
-const svcProps: WebServiceProps = {
+const svcProps: FargateProps = {
   // ... other props
   
   buildProps: {
@@ -296,31 +242,36 @@ const svcProps: WebServiceProps = {
 Alternatively, use a custom Dockerfile:
 
 ```dockerfile title="Dockerfile"
-FROM public.ecr.aws/docker/library/alpine
+FROM public.ecr.aws/docker/library/node:20-alpine AS base
 
-# Install Bun
-RUN curl -fsSL https://bun.sh/install | bash
-
-# Update PATH for bun
-ENV PATH="/root/.bun/bin:$PATH"
-
-# Copy code, install and build
+FROM base AS builder
 WORKDIR /app
-COPY . .
-RUN bun install
-RUN bun run build
 
-EXPOSE 4321
-CMD ["bun", "start"]
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+COPY --from=builder /app/build ./
+
+EXPOSE 3000
+
+CMD ["node", "index.js"]
 ```
 
 ```ts title="stack/index.ts"
-const svcProps: WebServiceProps = {
+const svcProps: FargateProps = {
   // ... other props
   
   serviceProps: {
     dockerFile: 'Dockerfile',
-    port: 4321,
+    port: 3000,
   },
 };
 ```
@@ -330,7 +281,7 @@ const svcProps: WebServiceProps = {
 Configure runtime environment variables and secrets:
 
 ```ts title="stack/index.ts"
-const svcProps: WebServiceProps = {
+const svcProps: FargateProps = {
   // ... other props
   
   serviceProps: {
@@ -374,5 +325,3 @@ npx cdk deploy --all --app="bunx tsx stack/index.ts"
 </Tabs>
 
 After deployment, you'll receive an **Application Load Balancer URL** to access your application.
-
-For complete documentation, see the [CDK-WebService README](https://github.com/thunder-so/cdk-webservice).

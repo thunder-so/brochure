@@ -1,13 +1,13 @@
 ---
-title: Serverless Functions
+title: Lambda
 description: Deploy serverless functions using AWS Lambda and API Gateway
 ---
 import { Icon } from 'astro-icon/components';
-import ServerlessAPIArchitecture from '@/components/docs/patterns/ServerlessAPIArchitecture.astro';
+import LambdaArchitecture from '@/components/docs/patterns/LambdaArchitecture.astro';
 
 Deploy serverless APIs and backend functions on AWS Lambda with modern web frameworks like Express.js, Hono, NestJS, and Fastify.
 
-Thunder provides the [@thunderso/cdk-functions](https://github.com/thunder-so/cdk-functions) package for deploying Lambda functions with API Gateway, supporting both standard zip deployments and container images for custom runtimes.
+Thunder provides the [@thunder-so/thunder](https://github.com/thunder-so/thunder) package for deploying Lambda functions with API Gateway, supporting both standard zip deployments and container images for custom runtimes.
 
 ## Supported Frameworks
 
@@ -26,7 +26,7 @@ Thunder provides the [@thunderso/cdk-functions](https://github.com/thunder-so/cd
 
 The serverless architecture provides scalable, event-driven compute for APIs without managing servers.
 
-<ServerlessAPIArchitecture />
+<LambdaArchitecture />
 
 ## Zip Deployment Pipeline
 
@@ -151,12 +151,12 @@ The container deployment pipeline builds custom runtime environments for advance
 
 ## Quick Start
 
-Get your serverless API deployed to AWS Lambda in minutes. This guide covers installation, basic configuration, and deployment.
+Get your serverless API deployed to AWS Lambda in minutes. This guide covers installation, basic configuration, and deployment with the `@thunder-so/thunder` package.
 
 ### Installation
 
 ```bash
-bun add -D tsx @thunderso/cdk-functions
+bun add -D tsx @thunder-so/thunder
 ```
 
 ### Basic Setup
@@ -169,9 +169,9 @@ mkdir stack && touch stack/index.ts
 
 ```ts
 // stack/index.ts
-import { Cdk, FunctionStack, type FunctionProps } from '@thunderso/cdk-functions';
+import { Cdk, Lambda, type LambdaProps } from '@thunder-so/thunder';
 
-const fnProps: FunctionProps = {
+const fnProps: LambdaProps = {
   env: {
     account: 'your-account-id',
     region: 'us-east-1',
@@ -185,7 +185,7 @@ const fnProps: FunctionProps = {
   },
 };
 
-new FunctionStack(
+new Lambda(
   new Cdk.App(), 
   `${fnProps.application}-${fnProps.service}-${fnProps.environment}-stack`, 
   fnProps
@@ -203,7 +203,7 @@ bunx cdk deploy --all --app="bunx tsx stack/index.ts"
 Connect your API to a custom domain using Route 53 and ACM certificates. The certificate must be issued in the same region as your Lambda function.
 
 ```ts
-const fnProps: FunctionProps = {
+const fnProps: LambdaProps = {
   // ... other props
   domain: 'api.example.com',
   hostedZoneId: 'Z1D633PJN98FT9',
@@ -220,7 +220,7 @@ Fine-tune your function's performance with runtime selection, memory allocation,
 ```ts
 import { Runtime, Architecture } from 'aws-cdk-lib/aws-lambda';
 
-const fnProps: FunctionProps = {
+const fnProps: LambdaProps = {
   // ... other props
   functionProps: {
     runtime: Runtime.NODEJS_20_X,
@@ -238,7 +238,7 @@ const fnProps: FunctionProps = {
 Manage configuration with plain environment variables and secure secrets from AWS Secrets Manager. The library automatically grants Lambda permissions to read specified secrets.
 
 ```ts
-const fnProps: FunctionProps = {
+const fnProps: LambdaProps = {
   // ... other props
   functionProps: {
     variables: [
@@ -282,7 +282,7 @@ CMD [ "index.handler" ]
 ```
 
 ```ts
-const fnProps: FunctionProps = {
+const fnProps: LambdaProps = {
   // ... other props
   functionProps: {
     dockerFile: 'Dockerfile.node',
@@ -313,7 +313,7 @@ CMD [ "lambda-bun.fetch" ]
 ```
 
 ```ts
-const fnProps: FunctionProps = {
+const fnProps: LambdaProps = {
   // ... other props
   functionProps: {
     dockerFile: 'Dockerfile.bun',

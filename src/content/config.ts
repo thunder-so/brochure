@@ -55,18 +55,18 @@ export const sidebar: Sidebar = {
       link: 'docs/patterns' 
     },
     { 
-      text: 'Single Page Application', 
-      link: 'docs/patterns/s3-cloudfront',
+      text: 'Static', 
+      link: 'docs/patterns/static',
       description: "S3 + CloudFront" 
     },
     { 
-      text: 'Serverless Function', 
-      link: 'docs/patterns/lambda-apigateway',
+      text: 'Lambda', 
+      link: 'docs/patterns/lambda',
       description: "Lambda + API Gateway" 
     },
     { 
-      text: 'Web Service', 
-      link: 'docs/patterns/fargate-alb',
+      text: 'Fargate', 
+      link: 'docs/patterns/fargate',
       description: "Fargate + ALB" 
     }
   ],
