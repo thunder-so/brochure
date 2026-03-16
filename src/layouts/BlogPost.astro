@@ -7,10 +7,10 @@ import { ArrowLeft, User, Calendar } from "lucide-astro";
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, heroImageAlt } = Astro.props;
 ---
 
-<BaseLayout title={title}>
+<BaseLayout title={title} description={description}>
   <main class="pt-24">
     <article class="py-16">
       <div class="container mx-auto px-4">
@@ -44,7 +44,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
           {/* Hero Image */}
           {heroImage && (
             <div class="mb-12 rounded-2xl overflow-hidden border border-border">
-              <img width={1020} height={510} src={heroImage} alt="" class="w-full h-auto object-cover" />
+              <img width={1020} height={510} src={heroImage} alt={heroImageAlt || title} class="w-full h-auto object-cover" />
             </div>
           )}
 

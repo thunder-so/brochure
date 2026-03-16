@@ -2,7 +2,7 @@
 title: 'Announcing the Public Beta Launch of Thunder'
 description: 'Experience seamless AWS deployments with Thunder.so — now available in public beta.'
 pubDate: 'Feb 28 2025'
-heroImage: '/opengraph.jpg'
+heroImage: '/opengraph-old.jpg'
 ---
 
 # Introducing Thunder: Simplify Your AWS Deployments 🚀

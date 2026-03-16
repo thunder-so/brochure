@@ -7,12 +7,15 @@ import "../styles/main.css";
 
 interface Props {
 	title: string;
+	description?: string;
 }
-const { title } = Astro.props;
+const { title, description } = Astro.props;
 
 const makeTitle = title
   ? title + " | " + "Thunder"
   : "Thunder - Deploy Apps on AWS like a Pro";
+
+const makeDescription = description || "Thunder is an open-source platform-as-a-service that deploys your applications directly to your AWS account. Built for modern frameworks like Next.js, Astro, and more.";
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 
@@ -38,7 +41,7 @@ const resolvedImageWithDomain = new URL(
 
 		<SEO
 			title={makeTitle}
-			description=""
+			description={makeDescription}
 			canonical={canonicalURL}
 			twitter={{
 				title: makeTitle,
@@ -55,6 +58,9 @@ const resolvedImageWithDomain = new URL(
 				image: {
 					alt: makeTitle,
 				},
+				optional: {
+					description: makeDescription,
+				}
 			}}
 		/>
 	</head>

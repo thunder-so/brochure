@@ -37,7 +37,9 @@ if (isMarkdown) {
     rawContent = 'File not found'
   }
   
-  const canonicalUrl = `https://www.thunder.so/docs/${entry.slug}`
+  const canonicalUrl = entry.slug === 'index' 
+    ? `https://www.thunder.so/docs`
+    : `https://www.thunder.so/docs/${entry.slug}`
   
   return new Response(rawContent, {
     headers: { 

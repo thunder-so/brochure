@@ -2,7 +2,7 @@
 title: "Introducing the Unified Thunder Library"
 description: "We're consolidating our CDK libraries into a single, powerful package to simplify how you deploy modern web apps to AWS."
 pubDate: 2026-03-16
-heroImage: "/public/opengraph.jpg"
+heroImage: "/opengraph.jpg"
 ---
 
 Today, we're excited to announce a major milestone for Thunder: the launch of our unified CDK library, [`@thunder-so/thunder`](https://github.com/thunder-so/thunder).

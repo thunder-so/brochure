@@ -13,14 +13,17 @@ import "../styles/docs.css";
 
 interface Props {
 	title: string;
+	description?: string;
 	headings: MarkdownHeading[];
 }
 
-const { title, headings } = Astro.props
+const { title, description, headings } = Astro.props;
 
 const makeTitle = title
   ? title + " | Thunder"
   : "Thunder - Deploy Apps on AWS like a Pro";
+
+const makeDescription = description || "Deploy modern web applications on AWS with ease. Built for modern frameworks and workflows.";
 
 const currentPage = Astro.url.pathname;
 
@@ -48,7 +51,7 @@ const resolvedImageWithDomain = new URL(
 
 		<SEO
 			title={makeTitle}
-			description=""
+			description={makeDescription}
 			canonical={canonicalURL}
 			twitter={{
 				title: makeTitle,
@@ -65,6 +68,9 @@ const resolvedImageWithDomain = new URL(
 				image: {
 					alt: makeTitle,
 				},
+				optional: {
+					description: makeDescription,
+				}
 			}}
 		/>
 
