@@ -7,6 +7,10 @@ const footerLinks = {
     { name: "Console", href: "/platform" },
     { name: "Frameworks", href: "/docs/frameworks" },
   ],
+  alternatives: [
+    { name: 'vs AWS Amplify', href: '/alternatives/aws-amplify' },
+    { name: 'vs SST', href: '/alternatives/sst' },
+  ],
   company: [
     { name: "About", href: "https://www.linkedin.com/company/cloudbits" },
     { name: "Blog", href: "/blog" },
@@ -114,6 +118,19 @@ const footerLinks = {
             </li>
           ))}
         </ul>
+
+        <!-- <ul class="space-y-3 mt-4">
+          {footerLinks.alternatives.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {link.name}
+              </a>
+            </li>
+          ))}
+        </ul> -->
       </div>
 
       <div>

@@ -1,0 +1,50 @@
+---
+interface Props {
+  title: string;
+  columns: Array<{
+    name: string;
+    key: string;
+    highlight?: boolean;
+  }>;
+  rows: Array<Record<string, string>>;
+}
+
+const { title, columns, rows } = Astro.props;
+---
+
+<div class="mb-16">
+  <h2 class="text-3xl font-semibold mb-8 text-center">{title}</h2>
+  
+  <div class="overflow-x-auto rounded-3xl border border-border bg-secondary/30">
+    <table class="w-full min-w-full text-left">
+      <thead>
+        <tr class="border-b border-border">
+          {columns.map((col) => (
+            <th 
+              class={`px-8 py-6 font-medium text-sm uppercase tracking-wider
+                ${col.highlight ? 'text-primary bg-secondary' : 'text-muted-foreground'}`}
+            >
+              {col.name}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-border">
+        {rows.map((row) => (
+          <tr class="hover:bg-secondary/50 transition-colors">
+            {columns.map((col, index) => {
+              const cellValue = row[col.key];
+              return (
+                <td 
+                  class={`px-8 py-6 text-muted-foreground ${index === 0 ? 'font-medium text-foreground' : ''}`}
+                >
+                  {cellValue}
+                </td>
+              );
+            })}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>

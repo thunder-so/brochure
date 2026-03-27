@@ -12,6 +12,21 @@ export const prerender = true;
 ---
 
 <BaseLayout title="" description="Thunder is an open-source platform-as-a-service that deploys your applications directly to your AWS account. Built for modern frameworks and workflows.">
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Thunder",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web",
+    "description": "Thunder is an open-source platform-as-a-service that deploys your applications directly to your AWS account. Built for modern frameworks like Next.js, Astro, and more.",
+    "url": "https://thunderso.dev",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "license": "https://opensource.org/licenses/MIT"
+  })} />
   <main>
     <HeroSection />
     <FrameworksSection />

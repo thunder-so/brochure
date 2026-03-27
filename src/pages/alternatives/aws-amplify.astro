@@ -1,0 +1,125 @@
+---
+import Layout from '../../layouts/BaseLayout.astro';
+import ComparisonTable from '../../components/ComparisonTable.astro';
+import FeatureCard from '../../components/FeatureCard.astro';
+import { Icon } from 'astro-icon/components';
+
+const title = "Thunder.so vs AWS Amplify (2026 Comparison)";
+const description = "Detailed side-by-side comparison of Thunder.so and AWS Amplify. Discover why developers are choosing Thunder for deploying Next.js and other modern apps on AWS with zero lock-in.";
+---
+
+<Layout title={title} description={description}>
+  <div class="max-w-7xl mx-auto py-12 pt-36 pb-6">
+    <!-- Hero Section -->
+    <div class="text-center">
+      <div class="mx-auto inline-flex items-center gap-2 bg-secondary text-foreground px-4 py-2 rounded-full text-sm mb-6">
+        <span class="text-primary">●</span>
+        Open Source Alternative
+      </div>
+    </div>
+    
+    <div class="text-center mb-16">
+      <h1 class="inline-flex flex-wrap items-center justify-center gap-4 text-5xl md:text-6xl font-bold tracking-tight mb-6">
+        <img src="/images/thunder.svg" alt="Thunder" class="h-12 md:h-16 inline-block" />
+        Thunder
+        <span class="text-muted-foreground font-light">vs</span>
+        <Icon name="logos:aws-amplify" class="h-12 md:h-16 inline-block" />
+        AWS Amplify
+      </h1>
+      <p class="max-w-2xl mx-auto text-xl text-muted-foreground mb-8">
+        Deploy modern web apps (Next.js, Vite, Astro, etc.) directly to <strong>your AWS account</strong> with full control, no vendor lock-in, and transparent costs.
+      </p>
+    </div>
+
+    <!-- Quick Verdict -->
+    <div class="bg-secondary border border-border rounded-3xl p-8 mb-16">
+      <div class="flex flex-col md:flex-row items-center gap-8">
+        <div class="flex-1">
+          <h2 class="text-3xl font-semibold mb-4">The Bottom Line</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            <strong class="text-foreground">Thunder.so</strong> gives you the simplicity of Amplify with the freedom and cost transparency you actually want. 
+            You deploy to <em>your own AWS account</em>, own your infrastructure, and only pay AWS for what you use — plus Thunder is fully open-source.
+          </p>
+        </div>
+        <div class="text-center">
+          <div class="text-primary text-6xl font-bold">✓</div>
+          <p class="text-sm text-muted-foreground mt-2">Recommended for most teams in 2026</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature Comparison Table -->
+    <ComparisonTable 
+      title="Head-to-Head Comparison"
+      columns={[
+        { name: "Feature", key: "feature" },
+        { name: "Thunder.so", key: "thunder", highlight: true },
+        { name: "AWS Amplify", key: "amplify" }
+      ]}
+      rows={[
+        { feature: "Deployment Target", thunder: "Manage multiple AWS accounts and apps in one place", amplify: "Switch between AWS accounts" },
+        { feature: "Open Source", thunder: "Yes — self-hostable", amplify: "No" },
+        { feature: "Platform Cost", thunder: "Pay only for AWS resources + optional platform fee", amplify: "Amplify pricing + AWS resources" },
+        { feature: "Next.js Support (App Router + SSR)", thunder: "Excellent (Containers on Fargate)", amplify: "Good (managed compute)" },
+        { feature: "Static Hosting", thunder: "Yes (with Lambda@edge)", amplify: "Yes (no edge functions)" },
+        { feature: "Lambda Hosting", thunder: "Container and Zip modes", amplify: "Zip mode only" },
+        { feature: "ECS Fargate Hosting", thunder: "Container and Nixpacks", amplify: "No" },
+        { feature: "Infrastructure Control", thunder: "Full control via TypeScript SDK", amplify: "Limited via YML file" },
+        { feature: "GitOps & CI/CD", thunder: "Built-in with GitHub", amplify: "Built-in" },
+        { feature: "Custom Domains & HTTPS", thunder: "Yes", amplify: "Yes" },
+        { feature: "Cold Starts", thunder: "Avoidable with containers/Fargate", amplify: "Depends on compute type" },
+        { feature: "Pricing Transparency", thunder: "Very high", amplify: "Moderate" }
+      ]}
+    />
+
+    <!-- Key Advantages Section -->
+    <div class="grid md:grid-cols-2 gap-8 my-20">
+      <FeatureCard 
+        title="Zero Vendor Lock-in"
+        icon="🔓"
+        description="Everything deploys to your AWS account. You own the infrastructure, data, and can migrate anytime without pain."
+      />
+      <FeatureCard 
+        title="Flexible Deployment Options"
+        icon="⚡"
+        description="Choose the right pattern for your app: Static sites, Serverless Lambda, Containerized workloads with ECS/Fargate, or even nixpacks on EC2."
+      />
+      <FeatureCard 
+        title="Cost Efficient"
+        icon="💰"
+        description="Pay AWS directly for S3, Lambda, CloudFront, etc. No hidden platform markup on your infrastructure usage."
+      />
+      <FeatureCard 
+        title="Modern & Framework Agnostic"
+        icon="🌐"
+        description="First-class support for Next.js, Astro, Vite, Nuxt, Remix, SvelteKit, and dozens of other frameworks."
+      />
+    </div>
+
+    <!-- When to Choose Thunder -->
+    <div class="bg-secondary border border-border rounded-3xl p-12 mb-16">
+      <h2 class="text-3xl font-semibold mb-8 text-center">When Should You Choose Thunder.so?</h2>
+      <ul class="grid md:grid-cols-2 gap-6 text-lg">
+        <li class="flex gap-4"><span class="text-primary mt-1">→</span> You want full control over your AWS resources</li>
+        <li class="flex gap-4"><span class="text-primary mt-1">→</span> You dislike vendor lock-in</li>
+        <li class="flex gap-4"><span class="text-primary mt-1">→</span> You need containerized or high-performance workloads</li>
+        <li class="flex gap-4"><span class="text-primary mt-1">→</span> You value open-source and transparency</li>
+        <li class="flex gap-4"><span class="text-primary mt-1">→</span> You're deploying Next.js, Astro, Vite or similar modern frameworks</li>
+        <li class="flex gap-4"><span class="text-primary mt-1">→</span> You want predictable and transparent costs</li>
+      </ul>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center py-12 border-t border-border">
+      <h3 class="text-3xl font-semibold mb-6">Ready to deploy without compromise?</h3>
+      <p class="text-muted-foreground mb-8 max-w-md mx-auto">
+        Connect your AWS account and deploy your first app in minutes.
+      </p>
+      <a href="https://console.thunder.so" 
+         class="inline-block bg-primary hover:opacity-90 text-primary-foreground font-semibold text-lg px-10 py-5 rounded-2xl transition">
+        Get Started with Thunder →
+      </a>
+      <p class="text-xs text-muted-foreground mt-6">Free to start • Open Source • Deploys to your AWS</p>
+    </div>
+  </div>
+</Layout>

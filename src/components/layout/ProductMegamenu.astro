@@ -59,6 +59,21 @@ const frameworks = [
   },
 ];
 
+const comparisons = [
+  {
+    name: "vs AWS Amplify",
+    icon: 'logos:aws-amplify',
+    href: "/alternatives/aws-amplify",
+    description: "Thunder vs Amplify",
+  },
+  {
+    name: "vs SST",
+    icon: 'logos:sst-icon',
+    href: "/alternatives/sst",
+    description: "Thunder vs SST",
+  },
+];
+
 const patterns = [
   { 
     name: "Static", 
@@ -123,13 +138,26 @@ const patterns = [
           ))}
         </ul>
       </div>
+      {/* Comparisons Section */}
+      <div>
+        <div class="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Comparisons</div>
+        <ul class="space-y-2 ml-2">
+          {comparisons.map((item) => (
+            <li>
+              <a href={item.href} class="text-sm text-foreground hover:text-primary transition-colors">
+                {item.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   </>
 ) : (
   <>
     {/* Desktop Megamenu */}
-    <div class="absolute top-full left-0 mt-1 w-[48rem] rounded-xl border border-border bg-popover shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-      <div class="grid grid-cols-3 gap-6 p-6">
+    <div class="absolute top-full left-0 mt-1 w-[62rem] rounded-xl border border-border bg-popover shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+      <div class="grid grid-cols-4 gap-6 p-6">
         {/* Column 1: Platform Overview */}
         <a href="/platform" class="col-span-1 flex flex-col items-start rounded-lg border border-border/50 bg-secondary/30 p-4 hover:bg-secondary/50 transition-colors">
           <div class="mb-3 flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10">
@@ -177,6 +205,24 @@ const patterns = [
                 </li>
               );
             })}
+          </ul>
+        </div>
+
+        {/* Column 4: Comparisons */}
+        <div class="col-span-1">
+          <h3 class="font-semibold text-sm text-foreground mb-3">Comparisons</h3>
+          <ul class="space-y-2">
+            {comparisons.map((item) => (
+              <li>
+                <a href={item.href} class="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-secondary transition-colors">
+                  <Icon name={item.icon} class="text-primary" />
+                  <div>
+                    <div class="text-sm font-medium text-foreground">{item.name}</div>
+                    <div class="text-xs pt-1 font-mono text-muted-foreground">{item.description}</div>
+                  </div>
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

@@ -73,6 +73,8 @@ export default defineConfig({
           "aws-api-gateway",
           "aws-lambda",
           "aws-fargate",
+          "aws-amplify",
+          "sst-icon"
         ]
       }
     })

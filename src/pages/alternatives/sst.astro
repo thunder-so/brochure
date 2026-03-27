@@ -1,0 +1,126 @@
+---
+import Layout from '../../layouts/BaseLayout.astro';
+import ComparisonTable from '../../components/ComparisonTable.astro';
+import FeatureCard from '../../components/FeatureCard.astro';
+import { Icon } from 'astro-icon/components';
+
+const title = "Thunder.so vs SST (2026 Comparison)";
+const description = "Side-by-side comparison of Thunder.so and SST. See why developers are choosing Thunder.so as a more complete, flexible, and easier open-source alternative to SST for deploying on AWS.";
+---
+
+<Layout title={title} description={description}>
+  <div class="max-w-7xl mx-auto py-12 pt-36 pb-6">
+    <!-- Hero Section -->
+    <div class="text-center">
+      <div class="mx-auto inline-flex items-center gap-2 bg-secondary text-foreground px-4 py-2 rounded-full text-sm mb-6">
+        <span class="text-primary">●</span>
+        Open Source IaC Alternative
+      </div>
+    </div>
+
+    <div class="text-center mb-16">
+      <h1 class="inline-flex flex-wrap items-center justify-center gap-4 text-5xl md:text-6xl font-bold tracking-tight mb-6">
+        <img src="/images/thunder.svg" alt="Thunder" class="h-12 md:h-16 inline-block" />
+        Thunder
+        <span class="text-muted-foreground font-light">vs</span>
+        <Icon name="logos:sst-icon" class="h-12 md:h-16 inline-block" />
+        SST
+      </h1>
+      <p class="max-w-2xl mx-auto text-xl text-muted-foreground mb-8">
+        Thunder.so delivers the power of SST with better DX, broader deployment options (including containers & nixpacks), 
+        and true AWS-native infrastructure — built on CDK, not Pulumi's custom IaC syntax.
+      </p>
+    </div>
+
+    <!-- Quick Verdict -->
+    <div class="bg-secondary border border-border rounded-3xl p-8 mb-16">
+      <div class="flex flex-col md:flex-row items-center gap-8">
+        <div class="flex-1">
+          <h2 class="text-3xl font-semibold mb-4">The Bottom Line</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            <strong class="text-foreground">SST</strong> uses Pulumi under the hood with its own custom IaC syntax, while <strong class="text-foreground">Thunder.so</strong> is built natively on AWS CDK — giving you standard, well-documented infrastructure constructs, better AWS service coverage, and no proprietary abstraction layer to learn.
+          </p>
+        </div>
+        <div class="text-center">
+          <div class="text-primary text-6xl font-bold">✓</div>
+          <p class="text-sm text-muted-foreground mt-2">Better choice for most teams in 2026</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature Comparison Table -->
+    <ComparisonTable 
+      title="Head-to-Head Comparison: Thunder.so vs SST"
+      columns={[
+        { name: "Feature", key: "feature" },
+        { name: "Thunder.so", key: "thunder", highlight: true },
+        { name: "SST", key: "sst" }
+      ]}
+      rows={[
+        { feature: "Core Philosophy", thunder: "PaaS experience on your AWS, built on CDK", sst: "IaC using Pulumi with custom SST syntax" },
+        { feature: "Open Source", thunder: "Yes — fully open source & self-hostable", sst: "Yes (open source)" },
+        { feature: "Ease of Use", thunder: "Very High (Click-click-deploy)", sst: "Medium (requires learning SST/Pulumi IaC)" },
+        { feature: "Infrastructure Layer", thunder: "AWS CDK (standard, well-documented)", sst: "Pulumi (custom SST abstraction)" },
+        { feature: "Deployment Options", thunder: "Static, Lambda (zip + container), ECS/Fargate, EC2 + nixpacks", sst: "Primarily Lambda + CloudFront" },
+        { feature: "Container Support", thunder: "Native (Docker + Fargate/ECS)", sst: "Limited / manual" },
+        { feature: "Nixpacks Support", thunder: "Yes", sst: "No" },
+        { feature: "Next.js Support", thunder: "Excellent (ECS Fargate)", sst: "Good (via construct)" },
+        { feature: "Framework Support", thunder: "Next.js, Astro, Vite, Nuxt, Remix, SvelteKit, and more", sst: "Good, but mostly React-focused" },
+        { feature: "Infrastructure Control", thunder: "Full ownership via AWS CDK constructs", sst: "Full control via SST/Pulumi config" },
+        { feature: "Cold Starts", thunder: "Avoidable with containers/Fargate", sst: "Common with Lambda" },
+        { feature: "Learning Curve", thunder: "Low to Medium", sst: "Medium to High (SST syntax + Pulumi)" },
+        { feature: "Platform Cost", thunder: "Pay only for AWS resources", sst: "Pay only for AWS resources" }
+      ]}
+    />
+
+    <!-- Key Advantages of Thunder.so -->
+    <div class="grid md:grid-cols-2 gap-8 my-20">
+      <FeatureCard 
+        title="AWS CDK Native"
+        icon="🏗️"
+        description="Thunder is built on AWS CDK — the industry-standard IaC for AWS. No Pulumi, no custom syntax, just well-documented CDK constructs you already know."
+      />
+      <FeatureCard 
+        title="Better Developer Experience"
+        icon="⚡"
+        description="Automatic framework detection and a simple GitOps workflow — no custom IaC config files required for common deployments."
+      />
+      <FeatureCard 
+        title="Native Container Support"
+        icon="📦"
+        description="First-class Docker and containerized workloads without extra complexity — a major advantage over SST."
+      />
+      <FeatureCard 
+        title="Nixpacks & EC2 Support"
+        icon="🛠️"
+        description="Deploy any language or framework easily using nixpacks on EC2 — not natively available in SST."
+      />
+    </div>
+
+    <!-- When to Choose Thunder over SST -->
+    <div class="bg-secondary border border-border rounded-3xl p-12 mb-16">
+      <h2 class="text-3xl font-semibold mb-8 text-center">When Should You Choose Thunder.so Over SST?</h2>
+      <ul class="grid md:grid-cols-2 gap-6 text-lg">
+        <li class="flex gap-4"><span class="text-primary mt-1">→</span> You want AWS CDK instead of Pulumi/custom IaC syntax</li>
+        <li class="flex gap-4"><span class="text-primary mt-1">→</span> You need containerized or high-scale workloads</li>
+        <li class="flex gap-4"><span class="text-primary mt-1">→</span> You prefer a PaaS experience over writing IaC config</li>
+        <li class="flex gap-4"><span class="text-primary mt-1">→</span> You want native nixpacks support</li>
+        <li class="flex gap-4"><span class="text-primary mt-1">→</span> You're deploying diverse frameworks beyond React/Next.js</li>
+        <li class="flex gap-4"><span class="text-primary mt-1">→</span> You value simplicity and speed of deployment</li>
+      </ul>
+    </div>
+
+    <!-- Final CTA -->
+    <div class="text-center py-12 border-t border-border">
+      <h3 class="text-3xl font-semibold mb-6">Ready to experience a better way to deploy on AWS?</h3>
+      <p class="text-muted-foreground mb-8 max-w-md mx-auto">
+        Connect your AWS account and deploy your app with Thunder.so in minutes — no complex setup required.
+      </p>
+      <a href="https://console.thunder.so" 
+         class="inline-block bg-primary hover:opacity-90 text-primary-foreground font-semibold text-lg px-10 py-5 rounded-2xl transition">
+        Start Deploying with Thunder →
+      </a>
+      <p class="text-xs text-muted-foreground mt-6">Fully Open Source • Deploys to Your AWS • Free to Start</p>
+    </div>
+  </div>
+</Layout>
