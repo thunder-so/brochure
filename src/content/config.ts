@@ -81,7 +81,7 @@ export const sidebar: Sidebar = {
     { text: 'Next.js', link: 'docs/frameworks/nextjs' },
     { text: 'Nuxt', link: 'docs/frameworks/nuxt' },
     { text: 'Nest JS', link: 'docs/frameworks/nestjs' },
-    { text: 'React Router', link: 'docs/frameworks/react-router' },
+    // { text: 'React Router', link: 'docs/frameworks/react-router' },
     { text: 'Solid Start', link: 'docs/frameworks/solidjs' },
     { text: 'SvelteKit', link: 'docs/frameworks/sveltekit' },
     { text: 'TanStack Start', link: 'docs/frameworks/tanstack' },

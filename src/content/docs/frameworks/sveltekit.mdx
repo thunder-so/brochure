@@ -1,16 +1,17 @@
 ---
 title: 'Deploy SvelteKit on AWS'
-description: 'Deploy SvelteKit applications on AWS using static site generation with S3 and CloudFront, single-page apps, or full-stack SSR with ECS Fargate and Application Load Balancer.'
+description: 'Deploy SvelteKit applications on AWS using static site generation with S3 and CloudFront, serverless SSR with Lambda, or containerized SSR with ECS Fargate.'
 ---
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
 
-Deploy your [SvelteKit](https://svelte.dev/docs/kit) applications to AWS using Thunder patterns. This guide covers static deployments and server-side rendering options.
+Deploy your [SvelteKit](https://svelte.dev/docs/kit) applications to AWS using Thunder patterns. This guide covers static deployments, serverless SSR, and containerized deployments.
 
-SvelteKit offers flexible rendering modes that can be deployed using two Thunder constructs:
+SvelteKit offers flexible rendering modes that can be deployed using three Thunder constructs:
 
 1. **Static Deployment** — Deploy Static site generation (SSG) or client-side rendered Single-page apps (SPAs) built with SvelteKit - using S3 and CloudFront with the `Static` construct
-2. **Server-Side Rendering (SSR)** — Deploy server-rendered SvelteKit applications using ECS Fargate with the `Fargate` construct
+2. **Serverless SSR** — Deploy server-rendered SvelteKit applications using Lambda, S3, and CloudFront with the `SvelteKit` construct
+3. **Containerized SSR** — Deploy server-rendered SvelteKit applications using ECS Fargate with the `Fargate` construct
 
 <Aside type="note" title="Requirements">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
@@ -153,7 +154,168 @@ npx cdk deploy --all --app="bunx tsx stack/index.ts"
 After deployment, you'll receive a **CloudFront URL** to access your static site.
 
 
-## Full Stack Deployment
+## Serverless SSR Deployment
+---
+
+Deploy server-side rendered SvelteKit applications using Lambda, S3, and CloudFront with the `SvelteKit` construct. This pattern provides auto-scaling SSR with pay-per-request pricing.
+
+### Create Project
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npx sv create
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+npx sv create
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+npx sv create
+```
+  </TabItem>
+</Tabs>
+
+### Configure SvelteKit for AWS Lambda
+
+Install the Lambda adapter:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm install @foladayo/sveltekit-adapter-lambda
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add @foladayo/sveltekit-adapter-lambda
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun add @foladayo/sveltekit-adapter-lambda
+```
+  </TabItem>
+</Tabs>
+
+```javascript title="svelte.config.js"
+import adapter from '@foladayo/sveltekit-adapter-lambda';
+
+export default {
+  kit: {
+    adapter: adapter({
+      serveStatic: true
+    })
+  }
+};
+```
+
+### Install Dependencies and Setup Stack
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm i tsx @thunder-so/thunder --save-dev
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add -D tsx @thunder-so/thunder
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun add -d tsx @thunder-so/thunder
+```
+  </TabItem>
+</Tabs>
+
+```ts title="stack/index.ts"
+import { Cdk, SvelteKit, type SvelteKitProps } from "@thunder-so/thunder";
+
+const config: SvelteKitProps = {
+  env: {
+    account: 'your-account-id',
+    region: 'us-east-1'
+  },
+  application: 'your-application-id',
+  service: 'your-service-id',
+  environment: 'production',
+
+  rootDir: '',
+
+  serverProps: {
+    runtime: Cdk.aws_lambda.Runtime.NODEJS_22_X,
+    architecture: Cdk.aws_lambda.Architecture.ARM_64,
+    memorySize: 1024,
+    timeout: 10,
+    keepWarm: true,
+  },
+};
+
+new SvelteKit(
+  new Cdk.App(),
+  `${config.application}-${config.service}-${config.environment}-stack`,
+  config
+);
+```
+
+### Environment Variables and Secrets
+
+Configure runtime environment variables and secrets:
+
+```ts title="stack/index.ts"
+const config: SvelteKitProps = {
+  // ... other props
+  
+  serverProps: {
+    // ... other serverProps
+    variables: [
+      { NODE_ENV: 'production' },
+      { PUBLIC_API_URL: 'https://api.example.com' }
+    ],
+    secrets: [
+      { 
+        key: 'DATABASE_URL', 
+        resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:/my-app/DATABASE_URL-abc123' 
+      },
+    ],
+  },
+};
+```
+
+### Deploy
+
+Build and deploy your serverless SvelteKit application:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm run build
+npx cdk deploy --all --app="npx tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm run build
+pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+npx cdk deploy --all --app="bunx tsx stack/index.ts"
+```
+  </TabItem>
+</Tabs>
+
+After deployment, you'll receive a **CloudFront URL** to access your serverless SSR application.
+
+
+## Containerized SSR Deployment
 ---
 
 Deploy server-side rendered SvelteKit applications using ECS Fargate and Application Load Balancer with the `Fargate` construct. This pattern is ideal for MPA and full-stack applications where you need server-side rendering, database integration, or API routes.

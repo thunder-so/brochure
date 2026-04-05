@@ -1,16 +1,17 @@
 ---
 title: 'Deploy Astro on AWS'
-description: 'Deploy Astro applications on AWS using static hosting with S3 and CloudFront, or full-stack SSR with ECS Fargate and Application Load Balancer.'
+description: 'Deploy Astro applications on AWS using static hosting with S3 and CloudFront, serverless SSR with Lambda, or containerized SSR with ECS Fargate.'
 ---
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
 
-Deploy your [Astro](https://astro.build/) applications to AWS using Thunder patterns. This guide covers both static site deployment and full-stack server-side rendering options.
+Deploy your [Astro](https://astro.build/) applications to AWS using Thunder patterns. This guide covers static site deployment, serverless SSR, and containerized deployments.
 
-There are two deployment patterns available for Astro on AWS:
+There are three deployment patterns available for Astro on AWS:
 
 1. **Static Site** — Deploy static Astro sites using S3 and CloudFront with the `Static` construct
-2. **Full Stack** — Deploy SSR Astro applications using ECS Fargate with the `Fargate` construct
+2. **Serverless SSR** — Deploy SSR Astro applications using Lambda, S3, and CloudFront with the `Astro` construct
+3. **Containerized SSR** — Deploy SSR Astro applications using ECS Fargate with the `Fargate` construct
 
 <Aside type="note" title="Requirements">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
@@ -127,7 +128,168 @@ npx cdk deploy --all --app="bunx tsx stack/index.ts"
 
 After deployment, you'll receive a **CloudFront URL** to access your static site.
 
-## Full Stack Deployment
+## Serverless SSR Deployment
+---
+
+Deploy server-side rendered Astro applications using Lambda, S3, and CloudFront with the `Astro` construct. This pattern provides auto-scaling SSR with pay-per-request pricing.
+
+### Create Project
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm create astro@latest my-astro-app
+cd my-astro-app
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm create astro my-astro-app
+cd my-astro-app
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun create astro my-astro-app
+cd my-astro-app
+```
+  </TabItem>
+</Tabs>
+
+### Configure Astro for AWS Lambda
+
+Install the AWS adapter:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm install @astro-aws/adapter
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add @astro-aws/adapter
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun add @astro-aws/adapter
+```
+  </TabItem>
+</Tabs>
+
+```ts title="astro.config.mjs"
+import { defineConfig } from 'astro/config';
+import aws from '@astro-aws/adapter';
+
+export default defineConfig({
+  output: 'server',
+  adapter: aws(),
+});
+```
+
+### Install Dependencies and Setup Stack
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm i tsx @thunder-so/thunder --save-dev
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add -D tsx @thunder-so/thunder
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun add -d tsx @thunder-so/thunder
+```
+  </TabItem>
+</Tabs>
+
+```ts title="stack/index.ts"
+import { Cdk, Astro, type AstroProps } from "@thunder-so/thunder";
+
+const config: AstroProps = {
+  env: {
+    account: 'your-account-id',
+    region: 'us-east-1'
+  },
+  application: 'your-application-id',
+  service: 'your-service-id',
+  environment: 'production',
+
+  rootDir: '',
+
+  serverProps: {
+    runtime: Cdk.aws_lambda.Runtime.NODEJS_22_X,
+    architecture: Cdk.aws_lambda.Architecture.ARM_64,
+    memorySize: 1024,
+    timeout: 10,
+    keepWarm: true,
+  },
+};
+
+new Astro(
+  new Cdk.App(),
+  `${config.application}-${config.service}-${config.environment}-stack`,
+  config
+);
+```
+
+### Environment Variables and Secrets
+
+Configure runtime environment variables and secrets:
+
+```ts title="stack/index.ts"
+const config: AstroProps = {
+  // ... other props
+  
+  serverProps: {
+    // ... other serverProps
+    variables: [
+      { NODE_ENV: 'production' },
+      { PUBLIC_API_URL: 'https://api.example.com' }
+    ],
+    secrets: [
+      { 
+        key: 'DATABASE_URL', 
+        resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:/my-app/DATABASE_URL-abc123' 
+      },
+    ],
+  },
+};
+```
+
+### Deploy
+
+Build and deploy your serverless Astro application:
+
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm run build
+npx cdk deploy --all --app="npx tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm run build
+pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+npx cdk deploy --all --app="bunx tsx stack/index.ts"
+```
+  </TabItem>
+</Tabs>
+
+After deployment, you'll receive a **CloudFront URL** to access your serverless SSR application.
+
+## Containerized SSR Deployment
 ---
 
 Deploy server-side rendered Astro applications using ECS Fargate and Application Load Balancer with the `Fargate` construct.
