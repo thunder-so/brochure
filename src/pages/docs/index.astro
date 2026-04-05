@@ -1,18 +1,18 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content'
+export const prerender = true;
+
+import { getCollection, render } from 'astro:content'
 import DocsLayout from '../../layouts/DocsLayout.astro'
 
 const docs = await getCollection('docs')
-const indexDoc = docs.find((entry) => entry.slug === 'index')
+const indexDoc = docs.find((entry) => entry.id === 'index')
 
 if (!indexDoc) {
   throw new Error('Index doc not found')
 }
 
-const { Content, headings } = await indexDoc.render()
+const { Content, headings } = await render(indexDoc)
 const { title } = indexDoc.data
-
-export const prerender = true
 ---
 
 <DocsLayout title={title} headings={headings}>

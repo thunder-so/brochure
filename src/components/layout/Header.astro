@@ -1,19 +1,20 @@
 ---
 import { ChevronDown, Menu, X } from "lucide-astro";
+import { Icon } from "astro-icon/components";
 import Button from "../Button.astro";
 import ProductMegamenu from "./ProductMegamenu.astro";
 ---
 
 <header class="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
-  <div class="mx-auto px-4">
+  <div class="mx-auto container">
     <nav class="flex h-16 items-center justify-between">
-      {/* Logo */}
-      <a href="/" class="flex items-center gap-2">
-        <img src="/images/thunder.svg" alt="Thunder" class="h-6 w-6" />
-        <span class="text-md font-bold text-foreground">Thunder</span>
-      </a>
+      {/* Logo + Desktop Navigation */}
+      <div class="flex items-center gap-2">
+        <a href="/" class="flex items-center gap-2 mr-4">
+          <img src="/images/thunder.svg" alt="Thunder" class="h-6 w-6" />
+          <!-- <span class="text-md font-bold text-foreground">Thunder</span> -->
+        </a>
 
-      {/* Desktop Navigation */}
       <div class="hidden lg:flex items-center gap-1">
         {/* Product Dropdown */}
         <div class="relative group">
@@ -39,11 +40,20 @@ import ProductMegamenu from "./ProductMegamenu.astro";
           Support
         </a>
       </div>
+      </div>
 
       {/* Desktop CTAs */}
-      <div class="hidden lg:flex items-center gap-3">
-        <Button variant="ghost" href="/api/login" data-auth-button>Log in</Button>
-        <Button variant="hero" href="/api/login" data-auth-button>Sign Up</Button>
+      <div class="hidden lg:flex items-center gap-1">
+        <div class="mr-4 flex items-center">
+          <a href="https://github.com/thunder-so/thunder" target="_blank" rel="noopener" class="p-2 text-muted-foreground hover:text-foreground transition-colors" aria-label="GitHub">
+            <Icon name="tabler:brand-github" class="h-5 w-5" />
+          </a>
+          <a href="https://x.com/thunderdotso" target="_blank" rel="noopener" class="p-2 text-muted-foreground hover:text-foreground transition-colors" aria-label="X">
+            <Icon name="tabler:brand-x" class="h-5 w-5" />
+          </a>
+        </div>
+        
+        <Button variant="hero" href="/api/login" data-auth-button>Login</Button>
       </div>
 
       {/* Mobile Menu Button */}
@@ -60,7 +70,7 @@ import ProductMegamenu from "./ProductMegamenu.astro";
 
   {/* Mobile Menu */}
   <div id="mobile-menu" class="hidden lg:hidden border-t border-border bg-background">
-    <div class="container mx-auto px-4 py-6 space-y-6">
+    <div class="mx-auto px-4 py-6 space-y-6 max-w-[1440px]">
       {/* Product Section */}
       <div class="space-y-2">
         <div class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Product</div>

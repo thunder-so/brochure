@@ -1,0 +1,83 @@
+---
+import { Icon } from "astro-icon/components";
+import { ArrowRight } from "lucide-astro";
+---
+
+<section class="relative">
+  <div class="container mx-auto px-4 py-24 ">
+    <div class="max-w-5xl mx-auto">
+
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+
+        {/* Left: explanation */}
+        <div class="space-y-6">
+          <div class="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-1.5 text-sm text-muted-foreground">
+            <Icon name="logos:claude-icon" class="h-4 w-4" />
+            <span>Claude Code Skill</span>
+          </div>
+
+          <h2 class="text-xl font-extrabold tracking-tight text-foreground leading-tight">
+            Just ask Claude to <span class="text-primary">deploy.</span>
+          </h2>
+
+          <p class="text-md text-muted-foreground leading-relaxed">
+            Installing Thunder automatically registers the <code class="text-primary font-mono text-sm bg-secondary px-1.5 py-0.5 rounded">/aws-deploy</code> skill in your Claude Code project. The skill reads your configs, finds the most efficient method of deployment with cost breakdown, and generates the necessary stacks and Dockerfiles if needed.
+          </p>
+
+          <ul class="space-y-3 text-sm text-muted-foreground">
+            <li class="flex items-start gap-3">
+              <ArrowRight class="h-4 w-4 text-primary mt-0.5 shrink-0" />
+              <span>Skill auto-installs when you add <code class="font-mono text-xs bg-secondary px-1 py-0.5 rounded text-foreground">@thunder-so/thunder</code></span>
+            </li>
+            <li class="flex items-start gap-3">
+              <ArrowRight class="h-4 w-4 text-primary mt-0.5 shrink-0" />
+              <span>Claude detects your framework and configs to recommend solutions</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <ArrowRight class="h-4 w-4 text-primary mt-0.5 shrink-0" />
+              <span>Generates <code class="font-mono text-xs bg-secondary px-1 py-0.5 rounded text-foreground">AWS CDK stack</code> that you can run with a single command</span>
+            </li>
+          </ul>
+        </div>
+
+        {/* Right: chat mockup */}
+        <div class="bg-secondary/50 rounded-2xl border border-border overflow-hidden">
+          {/* titlebar */}
+          <div class="flex items-center gap-2 px-4 py-3 border-b border-border bg-secondary/80">
+            <Icon name="logos:claude-icon" class="h-4 w-4 text-muted-foreground" />
+            <span class="text-xs font-mono text-muted-foreground">Claude Code</span>
+          </div>
+
+          <div class="p-6 space-y-4 font-mono text-sm">
+            {/* user message */}
+            <div class="flex justify-end">
+              <div class="bg-primary/10 border border-primary/20 text-foreground rounded-2xl rounded-tr-sm px-4 py-2.5 max-w-xs text-right">
+                Deploy
+              </div>
+            </div>
+
+            {/* claude response */}
+            <div class="flex gap-3">
+              <div class="shrink-0 w-7 h-7 rounded-full bg-secondary border border-border flex items-center justify-center">
+                <Icon name="logos:claude-icon" class="h-3.5 w-3.5" />
+              </div>
+              <div class="bg-card border border-border rounded-2xl rounded-tl-sm px-4 py-3 space-y-2 text-muted-foreground text-xs leading-relaxed">
+                <p>Skill use: <span class="text-foreground">/aws-deploy</span></p>
+                <p>Detected <span class="text-foreground">Vite SPA</span></p>
+                <p>Recommending the <span class="text-foreground">Static (S3 + CloudFront)</span> pattern</p>
+                <p>Free to host; ~$1-5/mo for low traffic</p>
+                <p>Generating <span class="text-primary">stack/dev.ts</span>…</p>
+                <p>✓ Config written. Deploying to AWS…</p>
+                <div class="bg-background rounded-lg p-3 border border-border text-[11px] text-foreground/70 space-y-0.5">
+                  <!-- <div><span class="text-primary">th deploy dev --profile default</span></div> -->
+                   <div><span class="text-primary">cdk deploy --app "npx tsx stack/dev.ts"</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>

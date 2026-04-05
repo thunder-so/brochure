@@ -61,7 +61,9 @@ export default defineConfig({
           "arrow-narrow-right",
           "users",
           "plus",
-          "minus"
+          "minus",
+          "brand-nextjs",
+          "brand-x"
         ],
         logos: [
           "aws-s3",
@@ -74,8 +76,17 @@ export default defineConfig({
           "aws-lambda",
           "aws-fargate",
           "aws-amplify",
-          "sst-icon"
-        ]
+          "sst-icon",
+          "claude-icon"
+        ],
+        "vscode-icons": [
+          "file-type-nuxt",
+          "file-type-astro",
+          "file-type-vite",
+          "file-type-nestjs",
+          "file-type-reactjs"
+        ],
+        
       }
     })
   ],

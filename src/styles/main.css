@@ -99,7 +99,7 @@
     --border: 240 6% 18%;
     --input: 240 6% 18%;
     --ring: 54 100% 50%;
-    --radius: 0.75rem;
+    --radius: 0.25rem;
     --sidebar-background: 240 10% 6%;
     --sidebar-foreground: 0 0% 98%;
     --sidebar-primary: 54 100% 50%;
@@ -149,6 +149,12 @@
   }
 }
 
+@utility container {
+  margin-inline: auto;
+  max-width: 1440px;
+  @apply border-x border-border px-6;
+}
+
 @layer utilities {
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary;
@@ -180,4 +186,12 @@
 @keyframes pulse-glow {
   0%, 100% { opacity: 0.5; }
   50% { opacity: 1; }
+}
+
+/* Seamless border grid */
+.border-grid {
+  @apply border-t border-l border-border;
+}
+.border-grid > * {
+  @apply border-r border-b border-border;
 }

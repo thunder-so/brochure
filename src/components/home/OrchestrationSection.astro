@@ -1,0 +1,49 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<section class="relative bg-card/50">
+  <div class="container mx-auto px-0 py-24">
+    <div class="text-center mb-8">
+      <h2 class="text-2xl font-bold text-foreground mb-4">Orchestration Intelligence</h2>
+      <p class="text-md text-muted-foreground">Enterprise-grade AWS management, simplified.</p>
+    </div>
+    
+    {/* 3-Column seamless grid */}
+    <div class="grid grid-cols-1 md:grid-cols-3 border-grid mb-0">
+      <div class="p-8 group hover:bg-card/50 transition-colors">
+        <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-4 group-hover:bg-primary group-hover:text-white transition-all">
+          <Icon name="tabler:cloud-bolt" class="w-5 h-5" />
+        </div>
+        <h3 class="text-lg font-bold text-foreground mb-2">Connect AWS</h3>
+        <p class="text-muted-foreground text-sm leading-relaxed">Securely link accounts using OIDC. No long-lived credentials stored.</p>
+      </div>
+      <div class="p-8 group hover:bg-card/50 transition-colors">
+        <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-4 group-hover:bg-primary group-hover:text-white transition-all">
+          <Icon name="tabler:brand-github" class="w-5 h-5" />
+        </div>
+        <h3 class="text-lg font-bold text-foreground mb-2">GitHub Native</h3>
+        <p class="text-muted-foreground text-sm leading-relaxed">Sync deployments directly with your CI/CD pipelines natively.</p>
+      </div>
+      <div class="p-8 group hover:bg-card/50 transition-colors">
+        <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-4 group-hover:bg-primary group-hover:text-white transition-all">
+          <Icon name="tabler:settings" class="w-5 h-5" />
+        </div>
+        <h3 class="text-lg font-bold text-foreground mb-2">Auto Provision</h3>
+        <p class="text-muted-foreground text-sm leading-relaxed">Detects storage and compute needs from your code automatically.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 border-grid mb-0">
+      {/* 2-Column row — span within same grid */}
+      <div class="p-8 group hover:bg-card/50 transition-colors">
+        <h3 class="text-xl font-bold text-foreground mb-2">Real-time Observability</h3>
+        <p class="text-muted-foreground text-sm">Visual logs and traces unified in one dashboard.</p>
+      </div>
+      <div class="p-8 group hover:bg-card/50 transition-colors">
+        <h3 class="text-xl font-bold text-foreground mb-2">Hardened Security</h3>
+        <p class="text-muted-foreground text-sm">Least-privilege IAM policies based on code analysis.</p>
+      </div>
+    </div>
+  </div>
+</section>

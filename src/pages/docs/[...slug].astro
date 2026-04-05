@@ -1,5 +1,7 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content'
+export const prerender = true;
+
+import { type CollectionEntry, getCollection, render } from 'astro:content'
 import DocsLayout from '../../layouts/DocsLayout.astro'
 import fs from 'fs'
 import path from 'path'
@@ -8,16 +10,13 @@ export async function getStaticPaths() {
   const docs = await getCollection('docs')
   const paths = [] as any[]
   
-  // Regular docs pages
   docs.forEach((entry) => {
     paths.push({
-      params: { slug: entry.slug },
+      params: { slug: entry.id },
       props: { entry, isMarkdown: false }
     })
-    
-    // Markdown view pages
     paths.push({
-      params: { slug: `${entry.slug}.md` },
+      params: { slug: `${entry.id}.md` },
       props: { entry, isMarkdown: true }
     })
   })
@@ -28,8 +27,7 @@ export async function getStaticPaths() {
 const { entry, isMarkdown } = Astro.props
 
 if (isMarkdown) {
-  // Read raw file content for markdown view
-  const filePath = path.join(process.cwd(), 'src/content/docs', `${entry.slug}.mdx`)
+  const filePath = path.join(process.cwd(), 'src/content/docs', `${entry.id}.mdx`)
   let rawContent = ''
   try {
     rawContent = fs.readFileSync(filePath, 'utf-8')
@@ -37,9 +35,9 @@ if (isMarkdown) {
     rawContent = 'File not found'
   }
   
-  const canonicalUrl = entry.slug === 'index' 
+  const canonicalUrl = entry.id === 'index' 
     ? `https://www.thunder.so/docs`
-    : `https://www.thunder.so/docs/${entry.slug}`
+    : `https://www.thunder.so/docs/${entry.id}`
   
   return new Response(rawContent, {
     headers: { 
@@ -50,12 +48,7 @@ if (isMarkdown) {
   })
 }
 
-const { Content, headings } = await entry.render()
-// console.log("post", post.data);
-// console.log("Content", Content);
-// console.log("headings", headings);
-
-export const prerender = true;
+const { Content, headings } = await render(entry)
 ---
 
 <DocsLayout headings={headings} {...entry.data}>

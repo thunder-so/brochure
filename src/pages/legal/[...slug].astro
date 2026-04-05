@@ -1,25 +1,20 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content'
+export const prerender = true;
+
+import { type CollectionEntry, getCollection, render } from 'astro:content'
 import LegalLayout from '../../layouts/LegalLayout.astro'
 
 export async function getStaticPaths() {
   const legal = await getCollection('legal')
   return legal.map((entry) => ({
-    params: {
-      slug: entry.slug
-    },
+    params: { slug: entry.id },
     props: entry
   }))
 }
 type Props = CollectionEntry<'legal'>
 
 const post = Astro.props;
-const { Content, headings } = await post.render();
-// console.log("post", post.data);
-// console.log("Content", Content);
-// console.log("headings", headings);
-
-export const prerender = true;
+const { Content, headings } = await render(post);
 ---
 
 <LegalLayout headings={headings} {...post.data}>

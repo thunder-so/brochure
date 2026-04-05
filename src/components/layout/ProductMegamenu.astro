@@ -4,7 +4,8 @@ import { Icon } from 'astro-icon/components';
 
 interface Framework {
   name: string;
-  icon: any;
+  icon?: any;
+  logo?: string;
   href: string;
 }
 
@@ -23,19 +24,19 @@ const { isMobile = false } = Astro.props;
 const frameworks = [
   {
     name: "Next.js",
-    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-plain.svg",
+    icon: "tabler:brand-nextjs",
     description: "Full-stack React framework",
     href: '/docs/frameworks/nextjs',
   },
   {
     name: "Nuxt",
-    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nuxtjs/nuxtjs-original.svg",
+    icon: "vscode-icons:file-type-nuxt",
     description: "Vue.js framework",
     href: '/docs/frameworks/nuxt',
   },
   {
     name: "Astro",
-    logo: "https://astro.build/assets/press/astro-icon-light-gradient.svg",
+    icon: "vscode-icons:file-type-astro",
     description: "Content-focused framework",
     href: '/docs/frameworks/astro',
   },
@@ -47,15 +48,15 @@ const frameworks = [
   },
   {
     name: "Vite",
-    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-plain.svg",
+    icon: "vscode-icons:file-type-vite",
     description: "Next-gen frontend tooling",
     href: '/docs/frameworks/vite',
   },
   {
-    name: "React Router",
-    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/reactrouter/reactrouter-original.svg",
-    description: "React routing & framework",
-    href: '/docs/frameworks/react-router',
+    name: "NestJS",
+    icon: "vscode-icons:file-type-nestjs",
+    description: "Node.js framework",
+    href: '/docs/frameworks/nestjs',
   },
 ];
 
@@ -101,7 +102,7 @@ const patterns = [
     {/* Mobile Menu Content */}
     <div class="space-y-4">
       {/* Platform Overview */}
-      <a href="/platform" class="flex items-start gap-3 rounded-lg p-3 hover:bg-secondary transition-colors">
+      <a href="/platform" class="flex items-start gap-3 rounded p-3 hover:bg-secondary transition-colors">
         <div class="flex-shrink-0 mt-1">
           <Box class="h-5 w-5 text-primary" />
         </div>
@@ -156,11 +157,11 @@ const patterns = [
 ) : (
   <>
     {/* Desktop Megamenu */}
-    <div class="absolute top-full left-0 mt-1 w-[62rem] rounded-xl border border-border bg-popover shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+    <div class="absolute top-full left-0 mt-1 w-[62rem] rounded border border-border bg-popover shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
       <div class="grid grid-cols-4 gap-6 p-6">
         {/* Column 1: Platform Overview */}
-        <a href="/platform" class="col-span-1 flex flex-col items-start rounded-lg border border-border/50 bg-secondary/30 p-4 hover:bg-secondary/50 transition-colors">
-          <div class="mb-3 flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10">
+        <a href="/platform" class="col-span-1 flex flex-col items-start rounded border border-border/50 bg-secondary/30 p-4 hover:bg-secondary/50 transition-colors">
+          <div class="mb-3 flex items-center justify-center w-12 h-12 rounded bg-primary/10">
             <Box class="h-6 w-6 text-primary" />
           </div>
           <h3 class="font-semibold text-foreground mb-1">Platform Overview</h3>
@@ -173,13 +174,12 @@ const patterns = [
           <ul class="space-y-2">
             {frameworks.map((framework) => (
               <li>
-                <a href={framework.href} class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-foreground hover:bg-secondary transition-colors">
+                <a href={framework.href} class="flex items-center gap-3 rounded px-3 py-2 text-sm text-foreground hover:bg-secondary transition-colors">
                   <span class="text-lg">
-                    <img
-                      src={framework.logo}
-                      alt={framework.name}
-                      class="w-5 h-5 object-contain filter brightness-0 invert opacity-70 group-hover:opacity-100 transition-opacity"
-                    />
+                    {framework.icon
+                      ? <Icon name={framework.icon} class="w-5 h-5 opacity-70" />
+                      : <img src={framework.logo} alt={framework.name} class="w-5 h-5 object-contain filter brightness-0 invert opacity-70 group-hover:opacity-100 transition-opacity" />
+                    }
                   </span>
                   <span>{framework.name}</span>
                 </a>
@@ -195,7 +195,7 @@ const patterns = [
             {patterns.map((pattern) => {
               return (
                 <li>
-                  <a href={pattern.href} class="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-secondary transition-colors">
+                  <a href={pattern.href} class="flex items-center gap-3 rounded px-3 py-2 hover:bg-secondary transition-colors">
                     <Icon name={pattern.icon} class="text-primary" />
                     <div>
                       <div class="text-sm font-medium text-foreground">{pattern.name}</div>
@@ -214,7 +214,7 @@ const patterns = [
           <ul class="space-y-2">
             {comparisons.map((item) => (
               <li>
-                <a href={item.href} class="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-secondary transition-colors">
+                <a href={item.href} class="flex items-center gap-3 rounded px-3 py-2 hover:bg-secondary transition-colors">
                   <Icon name={item.icon} class="text-primary" />
                   <div>
                     <div class="text-sm font-medium text-foreground">{item.name}</div>

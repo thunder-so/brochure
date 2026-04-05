@@ -1,11 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroSection from '../components/home/HeroSection.astro';
+import ClaudeSkillSection from '../components/home/ClaudeSkillSection.astro';
 import FeaturesSection from '../components/home/FeaturesSection.astro';
 import PatternsSection from '../components/home/PatternsSection.astro';
 import StepsSection from '../components/home/StepsSection.astro';
 import ConsoleSection from '../components/home/ConsoleSection.astro';
 import FrameworksSection from '../components/home/FrameworksSection.astro';
+import OrchestrationSection from '../components/home/OrchestrationSection.astro';
 import CTASection from '../components/home/CTASection.astro';
 
 export const prerender = true;
@@ -29,10 +31,12 @@ export const prerender = true;
   })} />
   <main>
     <HeroSection />
+    <ClaudeSkillSection />
     <FrameworksSection />
+    <OrchestrationSection />
     <StepsSection />
     <PatternsSection />
-    <ConsoleSection />
+    <!-- <ConsoleSection /> -->
     <CTASection />
   </main>
 </BaseLayout>
