@@ -63,7 +63,9 @@ export default defineConfig({
           "plus",
           "minus",
           "brand-nextjs",
-          "brand-x"
+          "brand-x",
+          "brand-discord",
+          "brand-typescript"
         ],
         logos: [
           "aws-s3",
@@ -77,14 +79,16 @@ export default defineConfig({
           "aws-fargate",
           "aws-amplify",
           "sst-icon",
-          "claude-icon"
+          "claude-icon",
+          "bun"
         ],
         "vscode-icons": [
           "file-type-nuxt",
           "file-type-astro",
           "file-type-vite",
           "file-type-nestjs",
-          "file-type-reactjs"
+          "file-type-reactjs",
+          "file-type-typescript-official"
         ],
         
       }

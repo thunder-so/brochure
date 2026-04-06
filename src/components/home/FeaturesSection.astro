@@ -1,66 +1,53 @@
 ---
-import { Cloud, Cpu, Globe, Lock, Rocket, Terminal } from "lucide-astro";
-
-const features = [
-  {
-    icon: Cloud,
-    title: "Deploy to Your AWS",
-    description: "Use your own AWS account. Your infrastructure, your data, your control.",
-  },
-  {
-    icon: Lock,
-    title: "Zero Vendor Lock-in",
-    description: "Standard AWS services. Export anytime. Your code runs on CloudFront, Lambda, and Fargate.",
-  },
-  {
-    icon: Rocket,
-    title: "Multiple Stacks",
-    description: "SPA (S3 + CloudFront), Functions (Lambda + API Gateway), Web Services (Fargate + ALB).",
-  },
-  {
-    icon: Terminal,
-    title: "Framework Support",
-    description: "Next.js, Nuxt, Astro, Hono, and more. Automatic detection and configuration.",
-  },
-  {
-    icon: Cpu,
-    title: "Thunder Console",
-    description: "Beautiful UI for managing workspaces, deployments, logs, and monitoring.",
-  },
-  {
-    icon: Globe,
-    title: "Global CDN",
-    description: "Deploy to edge locations worldwide via CloudFront for lightning-fast performance.",
-  },
-];
+import { Icon } from "astro-icon/components";
 ---
 
 <section class="relative">
-  <div class="container mx-auto px-4 py-24">
-    <div class="text-center mb-16">
-      <h2 class="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-        Everything you need to deploy
-      </h2>
-      <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
-        A complete platform for deploying modern applications to AWS, without the complexity.
-      </p>
+  <div class="container mx-auto px-0 py-24">
+    <div class="text-center mb-8 px-4">
+      <h2 class="text-xl font-bold text-foreground mb-4">Deploy to your AWS with lightning speed </h2>
+      <p class="text-md text-muted-foreground">Everything you need, nothing you don't.</p>
     </div>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {features.map((feature) => {
-        const Icon = feature.icon;
-        return (
-          <div
-            class="group relative rounded-2xl border border-border bg-card p-8 hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_30px_hsl(var(--thunder-yellow)/0.1)]"
-          >
-            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-6 group-hover:bg-primary/20 transition-colors">
-              <Icon class="h-6 w-6" />
-            </div>
-            <h3 class="text-xl font-semibold text-foreground mb-3">{feature.title}</h3>
-            <p class="text-muted-foreground">{feature.description}</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 border-grid">
+      <div class="p-8 group hover:bg-card/50 transition-colors">
+        <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-4 group-hover:bg-primary group-hover:text-black transition-all">
+          <Icon name="tabler:brand-github" class="w-5 h-5" />
+        </div>
+        <h3 class="text-lg font-bold text-foreground mb-2">Built-in CI/CD</h3>
+        <p class="text-muted-foreground text-sm leading-relaxed">Every push triggers an automated pipeline. CodePipeline and CodeBuild are provisioned for you — no YAML wrangling required.</p>
+      </div>
+      <div class="p-8 group hover:bg-card/50 transition-colors">
+        <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-4 group-hover:bg-primary group-hover:text-black transition-all">
+          <Icon name="logos:bun" class="w-5 h-5" />
+        </div>
+        <h3 class="text-lg font-bold text-foreground mb-2">Bun is a first-class citizen</h3>
+        <p class="text-muted-foreground text-sm leading-relaxed">Install, build, and run with Bun out of the box. Faster installs, faster builds, and a runtime that keeps up with your code.</p>
+      </div>
+      <div class="p-8 group hover:bg-card/50 transition-colors">
+        <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-4 group-hover:bg-primary group-hover:text-black transition-all">
+          <Icon name="tabler:brand-typescript" class="w-5 h-5" />
+        </div>
+        <h3 class="text-lg font-bold text-foreground mb-2">TypeScript native</h3>
+        <p class="text-muted-foreground text-sm leading-relaxed">Infrastructure defined in TypeScript via AWS CDK. Type-safe configs, full IDE support, and no context switching between languages.</p>
+      </div>
+
+      <div class="md:col-span-3 grid grid-cols-1 md:grid-cols-2 border-grid-inner">
+        <div class="p-8 group hover:bg-card/50 transition-colors">
+          <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-4 group-hover:bg-primary group-hover:text-black transition-all">
+            <Icon name="tabler:brand-aws" class="w-5 h-5" />
           </div>
-        );
-      })}
+          <h3 class="text-xl font-bold text-foreground mb-2">Bring your own AWS</h3>
+          <p class="text-muted-foreground text-sm leading-relaxed">Your infrastructure lives in your AWS account — not ours. Thunder provisions resources directly into your account using a scoped IAM role. You own everything.</p>
+        </div>
+        <div class="p-8 group hover:bg-card/50 transition-colors">
+          <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-4 group-hover:bg-primary group-hover:text-black transition-all">
+            <Icon name="tabler:brand-github" class="w-5 h-5" />
+          </div>
+          <h3 class="text-xl font-bold text-foreground mb-2">Open Source</h3>
+          <p class="text-muted-foreground text-sm leading-relaxed">The CDK constructs powering every deployment are open source. Inspect, fork, or extend them. Your pipelines keep running even if you stop using Thunder.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>

@@ -13,19 +13,19 @@ import Button from "../Button.astro";
         <Zap class="h-8 w-8" />
       </div>
       
-      <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-6">
+      <h2 class="text-2xl font-bold text-foreground mb-6">
         Ready to deploy?
       </h2>
-      <p class="text-lg text-muted-foreground max-w-xl mx-auto mb-10">
-        Start deploying to your AWS account in minutes. Free tier available. No credit card required.
+      <p class="text-md text-muted-foreground max-w-xl mx-auto mb-10">
+        Start deploying to your AWS account in minutes. Free tier available. <br />No credit card required.
       </p>
 
       <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-        <Button variant="hero" size="xl" href="/api/login" data-auth-button>
+        <Button variant="hero" size="md" href="/api/login" data-auth-button>
           Get Started Free
           <ArrowRight class="h-5 w-5 ml-2" />
         </Button>
-        <Button variant="ghost" size="lg" href="/docs">
+        <Button variant="ghost" size="md" href="/docs">
           Read the docs
         </Button>
       </div>

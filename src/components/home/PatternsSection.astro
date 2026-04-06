@@ -38,19 +38,22 @@ const patterns = [
 <section>
   <div class="container mx-auto px-4 py-24">
     <div class="text-center mb-16">
-      <h2 class="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+      <h2 class="text-xl font-bold text-foreground mb-4">
         Three patterns, infinite possibilities
       </h2>
+      <p class="text-md text-muted-foreground max-w-2xl mx-auto">
+        Thunder provides enterprise grade deployment patterns for your project
+      </p>
     </div>
 
     <div class="grid lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
       {patterns.map((pattern) => {
         return (
-          <a href={pattern.link} class="rounded-2xl border border-border bg-card p-8 hover:border-primary/30 transition-all duration-300 block">
+          <a href={pattern.link} class="rounded border border-border bg-card p-8 hover:border-primary/30 transition-all duration-300 block">
             <Icon name={pattern.icon} class={`h-10 w-10 ${pattern.color} mb-4`} />
-            <h3 class="text-2xl font-bold text-foreground mb-2">{pattern.name}</h3>
+            <h3 class="text-md font-bold text-foreground mb-2">{pattern.name}</h3>
             <p class="text-sm font-mono text-muted-foreground mb-4">{pattern.services}</p>
-            <p class="text-muted-foreground">
+            <p class="text-md text-muted-foreground">
               {pattern.description}
             </p>
           </a>

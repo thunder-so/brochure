@@ -195,3 +195,11 @@
 .border-grid > * {
   @apply border-r border-b border-border;
 }
+
+/* Inner grid — only right border on children (top/left/bottom inherited from parent cell) */
+.border-grid-inner > * {
+  @apply border-r border-border;
+}
+.border-grid-inner > *:last-child {
+  @apply border-r-0;
+}
