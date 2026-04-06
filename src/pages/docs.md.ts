@@ -5,7 +5,7 @@ import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async () => {
   const docs = await getCollection('docs');
-  const entry = docs.find((e) => e.slug === 'index');
+  const entry = docs.find((e) => e.id === 'index.mdx');
 
   if (!entry) {
     return new Response('Not Found', { status: 404 });

@@ -79,19 +79,19 @@ const resolvedImageWithDomain = new URL(
 		<Header />
 		
 		<main class="pt-[65px] min-h-screen bg-card mx-auto w-full">
-                <div class="flex pt-8 pb-12 gap-8 items-start">
+                <div class="container mx-auto flex gap-8 items-start">
                     {/* Sidebar */}
                     <Sidebar currentPage={currentPage} />
 
                     {/* Main content */}
-                    <article class="flex-1 min-w-0 max-w-2xl mx-auto docs-content">                    
+                    <article class="flex-1 min-w-0 max-w-2xl pt-4 pb-4 mx-auto docs-content">                    
                         <div class="flex items-center justify-between mb-8">
 	                        <Breadcrumb currentPage={currentPage} />
 
 							<PageActions currentPage={currentPage} />
                         </div>
 
-						<h1 class="text-3xl font-bold text-foreground">{title}</h1>
+						<h1 class="text-2xl font-bold text-foreground">{title}</h1>
 
                         <div class="docs max-w-none">
                             <slot />

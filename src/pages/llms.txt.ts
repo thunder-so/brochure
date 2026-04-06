@@ -51,7 +51,7 @@ export const GET: APIRoute = async () => {
       llmsContent += `# ${post.data.title}\n\n`;
       
       // Process the content, keeping frontmatter as text
-      const processedContent = cleanContent(post.body);
+      const processedContent = cleanContent(post.body ?? '');
       llmsContent += processedContent + '\n\n';
       
       // Add separator between posts

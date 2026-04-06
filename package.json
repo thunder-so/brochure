@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro check && astro build && npx pagefind --site dist --output-path dist/pagefind",
+    "index": "npx pagefind --site dist --output-path public/pagefind",
     "preview": "astro preview",
     "astro": "astro"
   },
