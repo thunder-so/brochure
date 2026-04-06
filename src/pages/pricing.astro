@@ -49,14 +49,14 @@ const tiers = [
 ---
 
 <BaseLayout title="Thunder Pricing - Simple, Transparent Plans">
-  <main class="pt-24">
-    <section class="py-24">
-      <div class="container mx-auto px-4">
+  <main class="">
+    <section class="">
+      <div class="container mx-auto px-4 pt-32 pb-24">
         <div class="text-center mb-16">
-          <h1 class="text-4xl sm:text-5xl font-bold text-foreground mb-4">
+          <h1 class="text-2xl font-bold text-foreground mb-4">
             Simple, transparent pricing
           </h1>
-          <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p class="text-md text-muted-foreground max-w-2xl mx-auto">
             Pay for the platform, not your AWS usage. Your infrastructure costs stay in your account.
           </p>
         </div>
@@ -64,14 +64,14 @@ const tiers = [
         <div class="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {tiers.map((tier) => (
             <div
-              class={`relative rounded-2xl border p-8 ${
+              class={`relative rounded border p-8 ${
                 tier.popular
                   ? "border-primary bg-card shadow-[0_0_40px_hsl(var(--thunder-yellow)/0.1)]"
                   : "border-border bg-background"
               }`}
             >
               {tier.popular && (
-                <div class="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1 text-sm font-medium text-primary-foreground">
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 rounded bg-primary px-4 py-1 text-sm font-medium text-primary-foreground">
                   Most Popular
                 </div>
               )}
