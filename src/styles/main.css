@@ -29,7 +29,7 @@
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
 
-  --color-docs-text: hsl(216, 12%, 84%);
+  --color-docs-text: hsl(216, 12%, 82%);
 
   --color-sidebar: hsl(var(--sidebar-background));
   --color-sidebar-foreground: hsl(var(--sidebar-foreground));
@@ -118,7 +118,7 @@
   .dark {
     --background: 240 10% 4%;
     --foreground: 0 0% 98%;
-    --docs-text: 0 0% 70%;
+    --docs-text: 0 0% 72%;
     --card: 240 10% 6%;
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 8%;

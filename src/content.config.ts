@@ -44,9 +44,6 @@ export type Sidebar = Record<string, { text: string; link: string, description?:
 export const sidebar: Sidebar = {
   'Introduction': [
     { text: 'Getting Started', link: 'docs' },
-    { text: 'Add an AWS account', link: 'docs/aws' },
-    { text: 'Connect with Github', link: 'docs/github' },
-    { text: 'First project', link: 'docs/import-repository' },
   ],
   'Patterns': [
     { text: 'Overview', link: 'docs/patterns' },
@@ -68,7 +65,10 @@ export const sidebar: Sidebar = {
     { text: 'Vite SPA', link: 'docs/frameworks/vite' },
     { text: 'Vitepress', link: 'docs/frameworks/vitepress' },
   ],
-  'Guides': [
+  'Console Guides': [
+    { text: 'Add an AWS account', link: 'docs/aws' },
+    { text: 'Connect with Github', link: 'docs/github' },
+    { text: 'Import repository', link: 'docs/import-repository' },
     { text: 'Build configuration', link: 'docs/console/build-config' },
     { text: 'Environment variables and Secrets', link: 'docs/console/environment-variables' },
     { text: 'Custom domains', link: 'docs/console/domains' },

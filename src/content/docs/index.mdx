@@ -3,31 +3,207 @@ title: Getting Started with Thunder
 description: Get started with Thunder, the open source platform-as-a-service for AWS
 ---
 
-Deploy modern web applications on AWS with ease. Built for modern frameworks and workflows.
+import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+import { Icon } from 'astro-icon/components';
+import Button from '../../components/Button.astro';
 
-## Prerequisites
+Thunder is an open-source CDK library and CLI for deploying modern web applications on your own AWS account — no vendor lock-in, no black boxes.
 
-Before you begin, make sure you have the following:
+## The Library — `@thunder-so/thunder`
 
-- A Github account
-- An AWS account (root or IAM access)
+The `@thunder-so/thunder` package provides CDK constructs for every deployment pattern: static sites, serverless functions, containers on Fargate, and full-stack SSR frameworks.
 
-## Signup with Github
+### Install
 
-Thunder uses a Github OAuth App to authenticate users. Your signup process will require you to authorize the app. On successful authorization, you will be redirected to Thunder and we will set up your account.
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm install @thunder-so/thunder --save-dev
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add -D @thunder-so/thunder
+```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
+```sh
+bun add -d @thunder-so/thunder
+```
+  </TabItem>
+</Tabs>
 
-## Workspaces
+### Bootstrap AWS
 
-Thunder console will prompt you to create a workspace after you sign up. Your workspace is the wrapper for your applications, AWS accounts and billing.
+If you haven't bootstrapped your AWS environment yet:
 
-## AWS Accounts
+```sh
+cdk bootstrap aws://YOUR_ACCOUNT_ID/us-east-1
+```
 
-Thunder allows connecting multiple AWS account with ease. Thunder creates an IAM role in your AWS account which grants us the permission to provision cloud infrastructure on your behalf.
+### Create a Stack
 
-Learn how to [Add an AWS Account](/docs/aws).
+Create a stack file (e.g. `stack/index.ts`) and pick the construct that matches your app:
 
-## Import Repositories
+<Tabs syncKey="pattern">
+  <TabItem label="Static / SPA">
+```ts title="stack/index.ts"
+import { Cdk, Static, type StaticProps } from '@thunder-so/thunder';
 
-When your workspace is set up with an AWS account, you are ready to [import your projects from Github](/docs/import-repository).
+const config: StaticProps = {
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'web',
+  environment: 'prod',
+  rootDir: '.',
+  outputDir: 'dist',
+};
 
-[Install the Thunder Github App](/docs/github) on your account to give Thunder access to your repositories. You can import repositories from your personal accounts and Github Organizations accounts.
+new Static(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
+```
+  </TabItem>
+  <TabItem label="Serverless SSR">
+```ts title="stack/index.ts"
+import { Cdk, Nuxt, type NuxtProps } from '@thunder-so/thunder';
+
+const config: NuxtProps = {
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'web',
+  environment: 'prod',
+  rootDir: '.',
+  serverProps: {
+    runtime: Cdk.aws_lambda.Runtime.NODEJS_22_X,
+    architecture: Cdk.aws_lambda.Architecture.ARM_64,
+    memorySize: 1792,
+    timeout: 10,
+    keepWarm: true,
+  },
+};
+
+new Nuxt(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
+```
+  </TabItem>
+  <TabItem label="Fargate Container">
+```ts title="stack/index.ts"
+import { Cdk, Fargate, type FargateProps } from '@thunder-so/thunder';
+
+const config: FargateProps = {
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'api',
+  environment: 'prod',
+  rootDir: '.',
+  serviceProps: {
+    port: 3000,
+    cpu: 512,
+    memorySize: 1024,
+    dockerFile: 'Dockerfile',
+  },
+};
+
+new Fargate(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
+```
+  </TabItem>
+  <TabItem label="Lambda Function">
+```ts title="stack/index.ts"
+import { Cdk, Lambda, type LambdaProps } from '@thunder-so/thunder';
+
+const config: LambdaProps = {
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'api',
+  environment: 'prod',
+  rootDir: '.',
+  functionProps: {
+    runtime: Cdk.aws_lambda.Runtime.NODEJS_22_X,
+    architecture: Cdk.aws_lambda.Architecture.ARM_64,
+    codeDir: 'src',
+    handler: 'index.handler',
+    memorySize: 512,
+    timeout: 30,
+  },
+};
+
+new Lambda(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
+```
+  </TabItem>
+</Tabs>
+
+### Deploy
+
+```sh
+npx cdk deploy --all --app="npx tsx stack/index.ts" --profile default
+```
+
+After deployment you'll receive a CloudFront URL for your application.
+
+<Aside type="tip" title="Tip">
+  Use `npx th init` to scaffold a new project interactively with the Thunder CLI.
+</Aside>
+
+---
+
+## Framework Guides
+
+Pick your framework for a step-by-step deployment guide.
+
+<div class="not-content grid grid-cols-3 sm:grid-cols-4 gap-4 my-6">
+  {[
+    { name: "Next.js",        icon: "tabler:brand-nextjs",              href: '/docs/frameworks/nextjs' },
+    { name: "Nuxt",           icon: "vscode-icons:file-type-nuxt",      href: '/docs/frameworks/nuxt' },
+    { name: "Astro",          icon: "vscode-icons:file-type-astro",     href: '/docs/frameworks/astro' },
+    { name: "SvelteKit",      icon: null, logo: "/frameworks/Svelte.svg", href: '/docs/frameworks/sveltekit' },
+    { name: "TanStack Start", icon: null, logo: "https://tanstack.com/images/logos/logo-color-100.png", href: '/docs/frameworks/tanstack' },
+    { name: "Vite",           icon: "vscode-icons:file-type-vite",      href: '/docs/frameworks/vite' },
+    { name: "NestJS",         icon: "vscode-icons:file-type-nestjs",    href: '/docs/frameworks/nestjs' },
+    { name: "Hono",           icon: null, logo: "/frameworks/HonoJS.svg", href: '/docs/frameworks/hono' },
+    { name: "React Router v7",   icon: "vscode-icons:file-type-reactjs",   href: '/docs/frameworks/react-router' },
+    { name: "Solid Start",        icon: null, logo: "https://www.solidjs.com/img/logo/without-wordmark/logo.png", href: '/docs/frameworks/solidjs' },
+    { name: "AnalogJS",       icon: null, logo: "https://analogjs.org/img/logos/analog-logo.svg", href: '/docs/frameworks/analog' },
+    { name: "VitePress",      icon: "vscode-icons:file-type-vite",      href: '/docs/frameworks/vitepress' },
+  ].map((f) => (
+    <a
+      href={f.href}
+      class="flex flex-col items-center gap-2 rounded border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] p-4 text-center hover:border-[var(--sl-color-accent)] transition-colors !no-underline"
+    >
+      <div class="w-8 h-8 flex items-center justify-center">
+        {f.icon
+          ? <Icon name={f.icon} class="w-8 h-8" />
+          : <img src={f.logo} alt={f.name} class="w-8 h-8 object-contain" />
+        }
+      </div>
+      <span class="pt-1 text-sm font-medium no-underline text-[var(--sl-color-white)]">{f.name}</span>
+    </a>
+  ))}
+</div>
+
+---
+
+## Thunder Console
+
+Prefer a UI over writing CDK stacks? [Thunder Console](https://console.thunder.so) is a hosted dashboard that connects to your AWS account and manages deployments for you.
+
+<div class="not-content grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+  <div class="rounded border border-[var(--color-border,#e2e8f0)] p-4">
+    <p class="font-semibold mb-1">Connect your AWS account</p>
+    <p class="text-sm text-muted-foreground">Thunder creates a scoped IAM role in your account — you stay in control of your infrastructure.</p>
+  </div>
+  <div class="rounded border border-[var(--color-border,#e2e8f0)] p-4">
+    <p class="font-semibold mb-1">Import from GitHub</p>
+    <p class="text-sm text-muted-foreground">Install the Thunder GitHub App and import any repository. Automatic build detection included.</p>
+  </div>
+  <div class="rounded border border-[var(--color-border,#e2e8f0)] p-4">
+    <p class="font-semibold mb-1">Manage environments</p>
+    <p class="text-sm text-muted-foreground">Configure environment variables, custom domains, redirects, and response headers from the UI.</p>
+  </div>
+  <div class="rounded border border-[var(--color-border,#e2e8f0)] p-4">
+    <p class="font-semibold mb-1">Real-time build logs</p>
+    <p class="text-sm text-muted-foreground">Watch builds and deployments stream live. Get notified on success or failure via email or Slack.</p>
+  </div>
+</div>
+
+<div class="not-content flex gap-3 mt-6 mb-6 [&_a]:no-underline [&_a]:[text-decoration:none]">
+  <Button href="https://console.thunder.so" variant="hero">Open Console</Button>
+  <Button href="/docs/aws" variant="hero-outline">Connect AWS Account</Button>
+</div>
