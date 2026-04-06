@@ -43,9 +43,15 @@ export default defineConfig({
   integrations: [
     sitemap(), 
     astroExpressiveCode({
-      themes: ['material-theme-ocean', 'github-dark-default'],
+      themes: ['aurora-x'],
       styleOverrides: {
-        borderRadius: '0rem'
+        borderRadius: '0rem',
+        codeBackground: 'hsl(240, 10%, 4%)',
+        frames: {
+          frameBoxShadowCssValue: 'none',
+          editorTabBarBackground: 'hsl(240, 10%, 6%)',
+          terminalTitlebarBackground: 'hsl(240, 10%, 6%)',
+        },
       },
     }), 
     mdx(),

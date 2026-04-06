@@ -2,6 +2,7 @@
 import { ChevronDown, ChevronRight } from "lucide-astro";
 import { cn } from "@/lib/utils";
 import { sidebar } from '../../content.config';
+import { Icon } from 'astro-icon/components';
 
 interface Props {
   currentPage: string;
@@ -24,8 +25,28 @@ const sections = Object.entries(sidebar).map(([title, items]) => ({
 <nav class={cn("w-64 shrink-0 hidden lg:block sticky top-[65px]", className)}>
   <div class="h-[calc(100vh-65px)] overflow-y-auto pt-6 pr-5 border-r border-border">
     {sections.map((section) => {
-        // Check if any item in this section is active to set initial open state
         const isSectionActive = section.items.some(item => normalizePath(item.link) === currentPath);
+        const isTopLevel = section.items.length === 1 && section.title === 'Introduction';
+
+        if (isTopLevel) {
+            const item = section.items[0];
+            const isActive = normalizePath(item.link) === currentPath;
+            return (
+                <div class="mb-4">
+                    <a
+                        href={`/${item.link}`}
+                        class={cn(
+                            "flex-1 py-1.5 px-2 text-sm rounded-md transition-colors block",
+                            isActive
+                                ? "bg-primary/10 text-primary"
+                                : "text-foreground hover:text-foreground hover:bg-muted"
+                        )}
+                    >
+                        {item.text}
+                    </a>
+                </div>
+            );
+        }
         
         return (
             <div class="mb-6 sidebar-section" data-active={isSectionActive}>
@@ -45,14 +66,17 @@ const sections = Object.entries(sidebar).map(([title, items]) => ({
                                     <a
                                         href={`/${item.link}`}
                                         class={cn(
-                                            "flex-1 py-1.5 px-2 text-sm rounded-md transition-colors",
+                                            "flex-1 py-1.5 px-2 text-sm rounded-md transition-colors flex items-center gap-2",
                                             isActive
                                                 ? "bg-primary/10 text-primary font-medium"
                                                 : "text-muted-foreground hover:text-foreground hover:bg-muted"
                                         )}
                                     >
-                                        <div class="">{item.text}</div>
-                                        {item.description && <div class="text-xs pt-1 font-mono text-muted-foreground">{item.description}</div>}
+                                        {item.icon && <Icon name={item.icon} class={cn("h-4 w-4 shrink-0", item.iconColor)} />}
+                                        <div>
+                                            <div class="">{item.text}</div>
+                                            {item.description && <div class="text-xs pt-1 font-mono text-muted-foreground">{item.description}</div>}
+                                        </div>
                                     </a>
                                 </div>
                             </li>

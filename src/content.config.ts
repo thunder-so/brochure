@@ -39,7 +39,7 @@ const blog = defineCollection({
 
 export const collections = { docs, legal, blog }
 
-export type Sidebar = Record<string, { text: string; link: string, description?: string }[]>;
+export type Sidebar = Record<string, { text: string; link: string, description?: string, icon?: string, iconColor?: string }[]>;
 
 export const sidebar: Sidebar = {
   'Introduction': [
@@ -47,9 +47,10 @@ export const sidebar: Sidebar = {
   ],
   'Patterns': [
     { text: 'Overview', link: 'docs/patterns' },
-    { text: 'Static', link: 'docs/patterns/static', description: "S3 + CloudFront" },
-    { text: 'Lambda', link: 'docs/patterns/lambda', description: "Lambda + API Gateway" },
-    { text: 'Fargate', link: 'docs/patterns/fargate', description: "Fargate + ALB" }
+    { text: 'Static', link: 'docs/patterns/static', description: "S3 + CloudFront", icon: 'tabler:file', iconColor: 'text-blue-400' },
+    { text: 'Lambda', link: 'docs/patterns/lambda', description: "Lambda + API Gateway", icon: 'tabler:lambda', iconColor: 'text-emerald-400' },
+    { text: 'Fargate', link: 'docs/patterns/fargate', description: "Fargate + ALB", icon: 'tabler:server', iconColor: 'text-purple-400' },
+    { text: 'Serverless', link: 'docs/patterns/serverless', description: "Lambda + S3 + CloudFront", icon: 'tabler:cloud-bolt', iconColor: 'text-orange-400' }
   ],
   'Frameworks': [
     { text: 'Overview', link: 'docs/frameworks' },

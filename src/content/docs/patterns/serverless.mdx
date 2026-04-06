@@ -1,0 +1,227 @@
+---
+title: Serverless
+description: Deploy full-stack SSR frameworks using Lambda, S3, and CloudFront
+---
+import { Icon } from 'astro-icon/components';
+
+Deploy full-stack server-side rendered applications on AWS using Lambda for SSR, S3 for static assets, and CloudFront as the global CDN.
+
+Thunder provides the [@thunder-so/thunder](https://github.com/thunder-so/thunder) package with framework-specific constructs (`Nuxt`, `Astro`, `SvelteKit`, `TanStack Start`, `SolidStart`, `AnalogJS`) as well as a generic `Serverless` construct for any Nitro or Vite-based framework.
+
+## Supported Frameworks
+
+- [Nuxt](https://nuxt.com/)
+- [Astro](https://astro.build/)
+- [TanStack Start](https://tanstack.com/start/latest)
+- [SvelteKit](https://kit.svelte.dev/)
+- [Solid Start](https://start.solidjs.com/)
+- [AnalogJS](https://analogjs.org/)
+- Any Nitro or Vite-based SSR framework via the generic `Serverless` construct
+
+## Serverless SSR Architecture
+
+<section class="max-w-full bg-card border border-border rounded-lg p-6 mb-6">
+  <svg viewBox="0 0 720 120" class="w-full h-auto">
+    <line x1="120" y1="60" x2="200" y2="60" stroke="currentColor" class="text-border" />
+    <line x1="320" y1="60" x2="400" y2="60" stroke="currentColor" class="text-border" />
+    <line x1="520" y1="60" x2="600" y2="60" stroke="currentColor" class="text-border" />
+
+    <foreignObject x="0" y="30" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-8 h-8">
+          <Icon name="tabler:users" class="text-muted-foreground w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">Users</span>
+      </div>
+    </foreignObject>
+
+    <foreignObject x="200" y="20" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-12 h-12">
+          <Icon name="logos:aws-cloudfront" class="w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">CloudFront</span>
+      </div>
+    </foreignObject>
+
+    <foreignObject x="400" y="20" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-12 h-12">
+          <Icon name="logos:aws-lambda" class="w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">Lambda (SSR)</span>
+      </div>
+    </foreignObject>
+
+    <foreignObject x="600" y="20" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-12 h-12">
+          <Icon name="logos:aws-s3" class="w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">S3 (Assets)</span>
+      </div>
+    </foreignObject>
+  </svg>
+</section>
+
+**CloudFront** routes requests at the edge — static assets are served directly from **S3** while dynamic SSR requests are forwarded to **Lambda**, which renders pages on-demand with pay-per-request pricing and automatic scaling.
+
+## Quick Start
+
+### Installation
+
+```bash
+bun add -D tsx @thunder-so/thunder
+```
+
+### Basic Setup
+
+```bash
+mkdir stack && touch stack/index.ts
+```
+
+### Configuration
+
+Use the framework-specific construct for best defaults, or `Serverless` for any other framework:
+
+```ts
+// stack/index.ts
+import { Cdk, Nuxt, type NuxtProps } from '@thunder-so/thunder';
+
+const config: NuxtProps = {
+  env: {
+    account: 'your-account-id',
+    region: 'us-east-1',
+  },
+  application: 'my-app',
+  service: 'web',
+  environment: 'production',
+  rootDir: '',
+  serverProps: {
+    runtime: Cdk.aws_lambda.Runtime.NODEJS_22_X,
+    architecture: Cdk.aws_lambda.Architecture.ARM_64,
+    memorySize: 1792,
+    timeout: 10,
+    keepWarm: true,
+  },
+};
+
+new Nuxt(
+  new Cdk.App(),
+  `${config.application}-${config.service}-${config.environment}-stack`,
+  config
+);
+```
+
+### Deploy
+
+```bash
+bunx cdk deploy --all --app="bunx tsx stack/index.ts"
+```
+
+## Custom Domain Setup
+
+```ts
+const config: NuxtProps = {
+  // ... other props
+  domain: 'app.example.com',
+  hostedZoneId: 'Z1D633PJN98FT9',
+  globalCertificateArn: 'arn:aws:acm:us-east-1:123456789012:certificate/abcd1234-abcd-1234-abcd-1234abcd1234',
+};
+```
+
+## Advanced Configuration
+
+### Server Runtime
+
+Fine-tune Lambda performance with memory, timeout, and warm-up settings:
+
+```ts
+const config: NuxtProps = {
+  // ... other props
+  serverProps: {
+    runtime: Cdk.aws_lambda.Runtime.NODEJS_22_X,
+    architecture: Cdk.aws_lambda.Architecture.ARM_64,
+    memorySize: 1792,
+    timeout: 10,
+    keepWarm: true,
+    streaming: true, // enable response streaming (Nuxt/Nitro)
+    variables: [
+      { NODE_ENV: 'production' },
+    ],
+    secrets: [
+      { key: 'DATABASE_URL', resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:db-url-abc123' },
+    ],
+  },
+};
+```
+
+## CI/CD Pipeline Architecture
+
+### AWS CodePipeline Integration
+
+<section class="max-w-full bg-card border border-border rounded-lg p-6 mb-6">
+  <svg viewBox="0 0 720 120" class="w-full h-auto">
+    <line x1="120" y1="60" x2="200" y2="60" stroke="currentColor" class="text-border" />
+    <line x1="320" y1="60" x2="400" y2="60" stroke="currentColor" class="text-border" />
+    <line x1="520" y1="60" x2="600" y2="60" stroke="currentColor" class="text-border" />
+
+    <foreignObject x="0" y="30" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-8 h-8">
+          <Icon name="tabler:brand-github" class="text-muted-foreground w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">GitHub</span>
+      </div>
+    </foreignObject>
+
+    <foreignObject x="200" y="20" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-12 h-12">
+          <Icon name="logos:aws-codepipeline" class="w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">CodePipeline</span>
+      </div>
+    </foreignObject>
+
+    <foreignObject x="400" y="20" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-12 h-12">
+          <Icon name="logos:aws-codebuild" class="w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">CodeBuild</span>
+      </div>
+    </foreignObject>
+
+    <foreignObject x="600" y="20" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-12 h-12">
+          <Icon name="logos:aws-lambda" class="w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">Lambda</span>
+      </div>
+    </foreignObject>
+  </svg>
+</section>
+
+**GitHub** triggers the pipeline on code changes. **CodeBuild** builds the framework and packages the SSR server for **Lambda** while uploading static assets to S3.
+
+### Configuration
+
+```ts
+const config: NuxtProps = {
+  // ... other props
+  accessTokenSecretArn: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:github-token-XXXXXX',
+  sourceProps: {
+    owner: 'your-username',
+    repo: 'your-repo',
+    branchOrRef: 'main',
+  },
+  buildProps: {
+    runtime: 'nodejs',
+    runtime_version: '22',
+    installcmd: 'bun install',
+    buildcmd: 'bun run build',
+  },
+};
+```
