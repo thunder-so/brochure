@@ -1,24 +1,18 @@
 ---
 export const prerender = true;
 
-import { type CollectionEntry, getCollection, render } from 'astro:content'
+import { getCollection, render } from 'astro:content'
 import DocsLayout from '../../layouts/DocsLayout.astro'
 import fs from 'fs'
 import path from 'path'
 
 export async function getStaticPaths() {
   const docs = await getCollection('docs')
-  const paths = [] as any[]
+  const paths: any[] = []
   
   docs.forEach((entry) => {
-    paths.push({
-      params: { slug: entry.id },
-      props: { entry, isMarkdown: false }
-    })
-    paths.push({
-      params: { slug: `${entry.id}.md` },
-      props: { entry, isMarkdown: true }
-    })
+    paths.push({ params: { slug: entry.id }, props: { entry, isMarkdown: false } })
+    paths.push({ params: { slug: `${entry.id}.md` }, props: { entry, isMarkdown: true } })
   })
   
   return paths
@@ -27,30 +21,27 @@ export async function getStaticPaths() {
 const { entry, isMarkdown } = Astro.props
 
 if (isMarkdown) {
-  const filePath = path.join(process.cwd(), 'src/content/docs', `${entry.id}.mdx`)
-  let rawContent = ''
-  try {
-    rawContent = fs.readFileSync(filePath, 'utf-8')
-  } catch (e) {
-    rawContent = 'File not found'
+  // Try .mdx first, then .md
+  const base = path.join(process.cwd(), 'src/content/docs', entry.id)
+  let rawContent = 'Not Found'
+  for (const ext of ['.mdx', '.md']) {
+    try { rawContent = fs.readFileSync(base + ext, 'utf-8'); break } catch {}
   }
-  
-  const canonicalUrl = entry.id === 'index' 
-    ? `https://www.thunder.so/docs`
+
+  const canonicalUrl = entry.id === 'index'
+    ? 'https://www.thunder.so/docs'
     : `https://www.thunder.so/docs/${entry.id}`
-  
+
   return new Response(rawContent, {
-    headers: { 
+    headers: {
       'Content-Type': 'text/plain; charset=utf-8',
-      'X-Meta-Description': entry.data.description || '',
-      'Link': `<${canonicalUrl}>; rel="canonical"`
-    }
+      'Link': `<${canonicalUrl}>; rel="canonical"`,
+    },
   })
 }
 
 const { Content, headings } = await render(entry)
 ---
-
 <DocsLayout headings={headings} {...entry.data}>
   <Content />
 </DocsLayout>

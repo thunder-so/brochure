@@ -1,5 +1,6 @@
 ---
 import type { MarkdownHeading } from 'astro'
+// @ts-ignore no exported types
 import { SEO } from "astro-seo";
 import Snippets from "../components/Snippets.astro";
 import Header from '../components/layout/Header.astro';
@@ -84,7 +85,7 @@ const resolvedImageWithDomain = new URL(
                     <Sidebar currentPage={currentPage} />
 
                     {/* Main content */}
-                    <article class="flex-1 min-w-0 max-w-2xl pt-4 pb-4 mx-auto docs-content">                    
+                    <article class="flex-1 min-w-0 max-w-2xl pt-6 pb-4 mx-auto docs-content">                    
                         <div class="flex items-center justify-between mb-8">
 	                        <Breadcrumb currentPage={currentPage} />
 
@@ -99,7 +100,7 @@ const resolvedImageWithDomain = new URL(
                     </article>
 
                     {/* Table of Contents */}
-                    <div class="w-64 flex-shrink-0 sticky top-24">
+                    <div class="w-64 flex-shrink-0 sticky top-[65px] pt-6 pb-6 max-h-[calc(100vh-65px)] overflow-y-auto">
                         <TableOfContents headings={headings} />
                     </div>
                 </div>
