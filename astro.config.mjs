@@ -8,7 +8,7 @@ import astroExpressiveCode from 'astro-expressive-code';
 // import node from "@astrojs/node";
 import vercelServerless from '@astrojs/vercel';
 // @ts-ignore - no type declarations available
-import astroAws from "@astro-aws/adapter"
+// import astroAws from "@astro-aws/adapter"
 
 import tailwindcss from "@tailwindcss/vite";
 

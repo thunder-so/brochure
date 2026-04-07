@@ -91,9 +91,9 @@ const { frameworks, patterns } = frameworksData;
     const filterBtns = container.querySelectorAll('.filter-btn');
     const clearBtn = container.querySelector('.clear-btn');
     const cards = container.querySelectorAll('.framework-card');
-    let activeFilter = null;
+    let activeFilter: string | null = null;
     
-    function updateFilter(pattern) {
+    function updateFilter(pattern: string | null) {
       activeFilter = pattern;
       
       filterBtns.forEach(btn => {
@@ -101,12 +101,12 @@ const { frameworks, patterns } = frameworksData;
       });
       
       if (clearBtn) {
-        clearBtn.classList.toggle('hidden', !pattern);
+        clearBtn.classList.toggle('hidden', pattern === null);
       }
       
       cards.forEach(card => {
         const cardPatterns = (card.getAttribute('data-patterns') || '').split(',');
-        card.classList.toggle('hidden', !(!pattern || cardPatterns.includes(pattern)));
+        card.classList.toggle('hidden', pattern !== null && !cardPatterns.includes(pattern));
       });
     }
     
