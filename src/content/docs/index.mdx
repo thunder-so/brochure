@@ -6,6 +6,7 @@ description: Get started with Thunder, the open source platform-as-a-service for
 import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
 import { Icon } from 'astro-icon/components';
 import Button from '../../components/Button.astro';
+import FrameworksGrid from '../../components/docs/FrameworksGrid.astro';
 
 Thunder is an open-source CDK library and CLI for deploying modern web applications on your own AWS account — no vendor lock-in, no black boxes.
 
@@ -46,7 +47,7 @@ cdk bootstrap aws://YOUR_ACCOUNT_ID/us-east-1
 Create a stack file (e.g. `stack/index.ts`) and pick the construct that matches your app:
 
 <Tabs syncKey="pattern">
-  <TabItem label="Static / SPA">
+  <TabItem label="Static">
 ```ts title="stack/index.ts"
 import { Cdk, Static, type StaticProps } from '@thunder-so/thunder';
 
@@ -62,7 +63,7 @@ const config: StaticProps = {
 new Static(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
 ```
   </TabItem>
-  <TabItem label="Serverless SSR">
+  <TabItem label="Serverless">
 ```ts title="stack/index.ts"
 import { Cdk, Nuxt, type NuxtProps } from '@thunder-so/thunder';
 
@@ -84,7 +85,7 @@ const config: NuxtProps = {
 new Nuxt(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
 ```
   </TabItem>
-  <TabItem label="Fargate Container">
+  <TabItem label="Fargate">
 ```ts title="stack/index.ts"
 import { Cdk, Fargate, type FargateProps } from '@thunder-so/thunder';
 
@@ -105,7 +106,7 @@ const config: FargateProps = {
 new Fargate(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
 ```
   </TabItem>
-  <TabItem label="Lambda Function">
+  <TabItem label="Lambda">
 ```ts title="stack/index.ts"
 import { Cdk, Lambda, type LambdaProps } from '@thunder-so/thunder';
 
@@ -148,35 +149,7 @@ After deployment you'll receive a CloudFront URL for your application.
 
 Pick your framework for a step-by-step deployment guide.
 
-<div class="not-content grid grid-cols-3 sm:grid-cols-4 gap-4 my-6">
-  {[
-    { name: "Next.js",        icon: "tabler:brand-nextjs",              href: '/docs/frameworks/nextjs' },
-    { name: "Nuxt",           icon: "vscode-icons:file-type-nuxt",      href: '/docs/frameworks/nuxt' },
-    { name: "Astro",          icon: "vscode-icons:file-type-astro",     href: '/docs/frameworks/astro' },
-    { name: "SvelteKit",      icon: null, logo: "/frameworks/Svelte.svg", href: '/docs/frameworks/sveltekit' },
-    { name: "TanStack Start", icon: null, logo: "https://tanstack.com/images/logos/logo-color-100.png", href: '/docs/frameworks/tanstack' },
-    { name: "Vite",           icon: "vscode-icons:file-type-vite",      href: '/docs/frameworks/vite' },
-    { name: "NestJS",         icon: "vscode-icons:file-type-nestjs",    href: '/docs/frameworks/nestjs' },
-    { name: "Hono",           icon: null, logo: "/frameworks/HonoJS.svg", href: '/docs/frameworks/hono' },
-    { name: "React Router v7",   icon: "vscode-icons:file-type-reactjs",   href: '/docs/frameworks/react-router' },
-    { name: "Solid Start",        icon: null, logo: "https://www.solidjs.com/img/logo/without-wordmark/logo.png", href: '/docs/frameworks/solidjs' },
-    { name: "AnalogJS",       icon: null, logo: "https://analogjs.org/img/logos/analog-logo.svg", href: '/docs/frameworks/analog' },
-    { name: "VitePress",      icon: "vscode-icons:file-type-vite",      href: '/docs/frameworks/vitepress' },
-  ].map((f) => (
-    <a
-      href={f.href}
-      class="flex flex-col items-center gap-2 rounded border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] p-4 text-center hover:border-[var(--sl-color-accent)] transition-colors !no-underline"
-    >
-      <div class="w-8 h-8 flex items-center justify-center">
-        {f.icon
-          ? <Icon name={f.icon} class="w-8 h-8" />
-          : <img src={f.logo} alt={f.name} class="w-8 h-8 object-contain" />
-        }
-      </div>
-      <span class="pt-1 text-sm font-medium no-underline text-[var(--sl-color-white)]">{f.name}</span>
-    </a>
-  ))}
-</div>
+<FrameworksGrid />
 
 ---
 

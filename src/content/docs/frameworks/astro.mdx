@@ -4,14 +4,13 @@ description: 'Deploy Astro applications on AWS using static hosting with S3 and 
 ---
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
+import PatternList from '../../../components/docs/PatternList.astro';
 
 Deploy your [Astro](https://astro.build/) applications to AWS using Thunder patterns. This guide covers static site deployment, serverless SSR, and containerized deployments.
 
 There are three deployment patterns available for Astro on AWS:
 
-1. **Static Site** — Deploy static Astro sites using S3 and CloudFront with the `Static` construct
-2. **Serverless SSR** — Deploy SSR Astro applications using Lambda, S3, and CloudFront with the `Astro` construct
-3. **Containerized SSR** — Deploy SSR Astro applications using ECS Fargate with the `Fargate` construct
+<PatternList patterns={["static", "serverless", "fargate"]} />
 
 <Aside type="note" title="Requirements">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`

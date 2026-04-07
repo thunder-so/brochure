@@ -1,0 +1,43 @@
+---
+import { Icon } from 'astro-icon/components';
+import frameworksData from '@/data/frameworks.json';
+
+interface Props {
+  patterns: string[];
+}
+
+const { patterns: patternKeys } = Astro.props;
+const { patterns } = frameworksData;
+
+const patternMeta: Record<string, { label: string; description: string; services: string; href: string; hoverColor: string }> = {
+  static:     { label: 'Static',     services: 'S3 + CloudFront',          description: 'Perfect for SPAs and static sites. Global CDN with edge caching.',                    href: '/docs/patterns/static',     hoverColor: 'rgb(96 165 250)' },
+  serverless: { label: 'Serverless', services: 'Lambda + S3 + CloudFront', description: 'Full-stack SSR frameworks. Server-side rendering with pay-per-request pricing.',      href: '/docs/patterns/serverless', hoverColor: 'rgb(251 146 60)' },
+  fargate:    { label: 'Fargate',    services: 'Fargate + ALB',            description: 'Containerized applications. Full control over runtime and resources.',                href: '/docs/patterns/fargate',    hoverColor: 'rgb(192 132 252)' },
+  lambda:     { label: 'Lambda',     services: 'Lambda + API Gateway',     description: 'Serverless APIs and backends. Scale to zero, pay for what you use.',                  href: '/docs/patterns/lambda',     hoverColor: 'rgb(52 211 153)' },
+};
+---
+
+<div class="not-content grid grid-cols-2 sm:grid-cols-3 gap-3 my-6">
+  {patternKeys.map((key) => {
+    const config = patterns[key as keyof typeof patterns];
+    const meta = patternMeta[key];
+    return (
+      <a
+        href={meta.href}
+        class={`pattern-pill rounded border px-4 py-3 !no-underline transition-all duration-300 ${config.bgColor} ${config.borderColor}`}
+        style={`--hover-color: ${meta.hoverColor};`}
+      >
+        <Icon name={config.icon} class={`w-5 h-5 ${config.color} mb-2`} />
+        <p class={`text-sm font-bold !mt-0 !mb-0.5 ${config.color}`}>{meta.label}</p>
+        <p class="text-xs font-mono !mt-0 !mb-0.5 text-[var(--sl-color-gray-3)]">{meta.services}</p>
+      </a>
+    );
+  })}
+</div>
+
+<style>
+  .pattern-pill:hover {
+    border-color: var(--hover-color);
+  }
+</style>
+

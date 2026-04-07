@@ -4,14 +4,13 @@ description: 'Deploy TanStack Start applications on AWS using static site genera
 ---
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
+import PatternList from '../../../components/docs/PatternList.astro';
 
 Deploy your [TanStack Start](https://tanstack.com/start) applications to AWS using Thunder patterns. This guide covers static site generation, serverless SSR, and containerized deployments.
 
 There are three deployment patterns available for TanStack Start on AWS:
 
-1. **Static Site Generation (SSG)** — Deploy static TanStack Start sites using S3 and CloudFront with the `Static` construct
-2. **Serverless SSR** — Deploy SSR TanStack Start applications using Lambda, S3, and CloudFront with the `TanStackStart` construct
-3. **Containerized SSR** — Deploy SSR TanStack Start applications using ECS Fargate with the `Fargate` construct
+<PatternList patterns={["static", "serverless", "fargate"]} />
 
 <Aside type="note" title="Requirements">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`

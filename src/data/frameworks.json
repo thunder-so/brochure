@@ -1,0 +1,111 @@
+{
+  "frameworks": [
+    {
+      "name": "Next.js",
+      "icon": "tabler:brand-nextjs",
+      "href": "/docs/frameworks/nextjs",
+      "patterns": ["static", "fargate"]
+    },
+    {
+      "name": "Nuxt",
+      "icon": "vscode-icons:file-type-nuxt",
+      "href": "/docs/frameworks/nuxt",
+      "patterns": ["static", "serverless", "fargate"]
+    },
+    {
+      "name": "Astro",
+      "icon": "vscode-icons:file-type-astro",
+      "href": "/docs/frameworks/astro",
+      "patterns": ["static", "serverless", "fargate"]
+    },
+    {
+      "name": "TanStack Start",
+      "icon": null,
+      "logo": "https://tanstack.com/images/logos/logo-color-100.png",
+      "href": "/docs/frameworks/tanstack",
+      "patterns": ["static", "serverless", "fargate"]
+    },
+    {
+      "name": "SvelteKit",
+      "icon": null,
+      "logo": "/frameworks/Svelte.svg",
+      "href": "/docs/frameworks/sveltekit",
+      "patterns": ["static", "serverless", "fargate"]
+    },
+    {
+      "name": "Solid Start",
+      "icon": null,
+      "logo": "https://www.solidjs.com/img/logo/without-wordmark/logo.png",
+      "href": "/docs/frameworks/solidjs",
+      "patterns": ["static", "serverless", "fargate"]
+    },
+    {
+      "name": "AnalogJS",
+      "icon": null,
+      "logo": "https://analogjs.org/img/logos/analog-logo.svg",
+      "href": "/docs/frameworks/analog",
+      "patterns": ["static", "serverless", "fargate"]
+    },
+    {
+      "name": "React Router",
+      "icon": "vscode-icons:file-type-reactjs",
+      "href": "/docs/frameworks/react-router",
+      "patterns": ["static", "fargate"]
+    },
+    {
+      "name": "NestJS",
+      "icon": "vscode-icons:file-type-nestjs",
+      "href": "/docs/frameworks/nestjs",
+      "patterns": ["lambda", "fargate"]
+    },
+    {
+      "name": "Hono",
+      "icon": null,
+      "logo": "/frameworks/HonoJS.svg",
+      "href": "/docs/frameworks/hono",
+      "patterns": ["lambda", "fargate"]
+    },
+    {
+      "name": "Vite",
+      "icon": "vscode-icons:file-type-vite",
+      "href": "/docs/frameworks/vite",
+      "patterns": ["static"]
+    },
+    {
+      "name": "VitePress",
+      "icon": "vscode-icons:file-type-vite",
+      "href": "/docs/frameworks/vitepress",
+      "patterns": ["static"]
+    }
+  ],
+  "patterns": {
+    "static": {
+      "label": "Static",
+      "icon": "tabler:file",
+      "color": "text-blue-400",
+      "bgColor": "bg-blue-400/10",
+      "borderColor": "border-blue-400/30"
+    },
+    "lambda": {
+      "label": "Lambda",
+      "icon": "tabler:lambda",
+      "color": "text-emerald-400",
+      "bgColor": "bg-emerald-400/10",
+      "borderColor": "border-emerald-400/30"
+    },
+    "fargate": {
+      "label": "Fargate",
+      "icon": "tabler:server",
+      "color": "text-purple-400",
+      "bgColor": "bg-purple-400/10",
+      "borderColor": "border-purple-400/30"
+    },
+    "serverless": {
+      "label": "Serverless",
+      "icon": "tabler:cloud-bolt",
+      "color": "text-orange-400",
+      "bgColor": "bg-orange-400/10",
+      "borderColor": "border-orange-400/30"
+    }
+  }
+}

@@ -4,13 +4,13 @@ description: 'Deploy Hono applications on AWS Lambda and API Gateway, or as cont
 ---
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
+import PatternList from '../../../components/docs/PatternList.astro';
 
 Deploy your [Hono](https://hono.dev/) applications to AWS using Thunder patterns. This guide covers both serverless Lambda deployment and containerized service options.
 
 There are two deployment patterns available for Hono on AWS:
 
-1. **Lambda** — Deploy Hono API endpoints using AWS Lambda and API Gateway with the `Lambda` construct
-2. **Containerized Service** — Deploy containerized Hono applications using ECS Fargate with the `Fargate` construct
+<PatternList patterns={["lambda", "fargate"]} />
 
 <Aside type="note" title="Requirements">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`

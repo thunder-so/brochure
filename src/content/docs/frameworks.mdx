@@ -1,4 +1,41 @@
 ---
-title: Supported Frameworks - Deploy Your Favorite Stack on AWS
-description: Supported frameworks and deployment patterns
+title: Supported Frameworks
+description: Supported frameworks for AWS deployment and suitable architecture
 ---
+
+import { Icon } from 'astro-icon/components';
+import FrameworksGrid from '@/components/docs/FrameworksGrid.astro';
+import PatternList from '@/components/docs/PatternList.astro';
+
+Thunder supports a wide range of modern web frameworks across four deployment patterns. Deploy your favorite framework on AWS.
+
+## Frameworks
+
+<FrameworksGrid />
+
+---
+
+## Pattern Reference
+
+<PatternList patterns={["static", "lambda", "serverless", "fargate"]} />
+
+---
+
+## Quick Reference
+
+| Framework | Static | Lambda | Serverless | Fargate |
+|-----------|--------|--------|------------|---------|
+| **Next.js** | ✓ | | | ✓ |
+| **Nuxt** | ✓ | | ✓ | ✓ |
+| **Astro** | ✓ | | ✓ | ✓ |
+| **TanStack Start** | ✓ | | ✓ | ✓ |
+| **SvelteKit** | ✓ | | ✓ | ✓ |
+| **Solid Start** | ✓ | | ✓ | ✓ |
+| **AnalogJS** | ✓ | | ✓ | ✓ |
+| **React Router** | ✓ | | | ✓ |
+| **NestJS** | | ✓ | | ✓ |
+| **Hono** | | ✓ | | ✓ |
+| **Vite** | ✓ | | | |
+| **VitePress** | ✓ | | | |
+
+Click on any framework name in the grid above to view its detailed deployment guide.

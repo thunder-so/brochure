@@ -4,14 +4,13 @@ description: 'Deploy SvelteKit applications on AWS using static site generation 
 ---
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
+import PatternList from '../../../components/docs/PatternList.astro';
 
 Deploy your [SvelteKit](https://svelte.dev/docs/kit) applications to AWS using Thunder patterns. This guide covers static deployments, serverless SSR, and containerized deployments.
 
 SvelteKit offers flexible rendering modes that can be deployed using three Thunder constructs:
 
-1. **Static Deployment** — Deploy Static site generation (SSG) or client-side rendered Single-page apps (SPAs) built with SvelteKit - using S3 and CloudFront with the `Static` construct
-2. **Serverless SSR** — Deploy server-rendered SvelteKit applications using Lambda, S3, and CloudFront with the `SvelteKit` construct
-3. **Containerized SSR** — Deploy server-rendered SvelteKit applications using ECS Fargate with the `Fargate` construct
+<PatternList patterns={["static", "serverless", "fargate"]} />
 
 <Aside type="note" title="Requirements">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`

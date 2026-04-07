@@ -58,13 +58,13 @@ export default defineConfig({
     icon({
       include: {
         tabler: [
-          "file", 
-          "lambda", 
-          "server", 
-          "brand-aws", 
-          "brand-github", 
-          "settings", 
-          "cloud-bolt", 
+          "file",
+          "lambda",
+          "server",
+          "brand-aws",
+          "brand-github",
+          "settings",
+          "cloud-bolt",
           "arrow-narrow-right",
           "users",
           "plus",

@@ -1,0 +1,132 @@
+---
+import { Icon } from 'astro-icon/components';
+import frameworksData from '@/data/frameworks.json';
+
+const { frameworks, patterns } = frameworksData;
+---
+
+<div class="frameworks-container">
+  <!-- Pattern Filter Buttons -->
+  <div class="filter-buttons not-content mb-6">
+    <ul role="tablist" style="display:flex; list-style:none; padding:0; margin:0;">
+      {Object.entries(patterns).map(([key, config]) => (
+        <li role="presentation" class="tab">
+          <button
+            role="tab"
+            class="filter-btn"
+            data-pattern={key}
+            aria-selected="false"
+          >
+            <Icon name={config.icon} class="w-4 h-4" />
+            <span>{config.label}</span>
+          </button>
+        </li>
+      ))}
+      <li role="presentation" class="tab">
+        <button class="clear-btn filter-btn hidden" style="--sl-tab-color-border: transparent;">
+          Show all
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Frameworks Grid -->
+  <div class="frameworks-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+    {frameworks.map((framework) => (
+      <a
+        href={framework.href}
+        class="framework-card flex flex-col items-center gap-2 rounded border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] p-4 text-center hover:border-[var(--sl-color-accent)] transition-colors !no-underline"
+        data-patterns={framework.patterns.join(',')}
+      >
+        <!-- Framework Icon -->
+        <div class="w-8 h-8 flex items-center justify-center">
+          {framework.icon ? (
+            <Icon name={framework.icon} class="w-8 h-8" />
+          ) : framework.logo ? (
+            <img src={framework.logo} alt={framework.name} class="w-8 h-8 object-contain" />
+          ) : null}
+        </div>
+        
+        <!-- Framework Name -->
+        <span class="pt-1 text-sm font-medium text-[var(--sl-color-white)]">{framework.name}</span>
+      </a>
+    ))}
+  </div>
+</div>
+
+<style>
+  .tab {
+    display: flex;
+  }
+  .filter-btn {
+    --sl-tab-color-border: var(--sl-color-gray-5);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    line-height: var(--sl-line-height-headings);
+    padding: 0.275rem 1.25rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 0 var(--sl-tab-color-border);
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-sm);
+    transition: color 0.2s;
+  }
+  .filter-btn[aria-selected='true'] {
+    --sl-tab-color-border: var(--sl-color-text-accent);
+    color: var(--sl-color-white);
+    font-weight: 600;
+  }
+  .framework-card.hidden {
+    display: none !important;
+  }
+</style>
+
+<script>
+  (function() {
+    const container = document.querySelector('.frameworks-container');
+    if (!container) return;
+    
+    const filterBtns = container.querySelectorAll('.filter-btn');
+    const clearBtn = container.querySelector('.clear-btn');
+    const cards = container.querySelectorAll('.framework-card');
+    let activeFilter = null;
+    
+    function updateFilter(pattern) {
+      activeFilter = pattern;
+      
+      filterBtns.forEach(btn => {
+        btn.setAttribute('aria-selected', btn.getAttribute('data-pattern') === pattern ? 'true' : 'false');
+      });
+      
+      if (clearBtn) {
+        clearBtn.classList.toggle('hidden', !pattern);
+      }
+      
+      cards.forEach(card => {
+        const cardPatterns = (card.getAttribute('data-patterns') || '').split(',');
+        card.classList.toggle('hidden', !(!pattern || cardPatterns.includes(pattern)));
+      });
+    }
+    
+    // Filter button clicks
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const pattern = btn.getAttribute('data-pattern');
+        if (pattern === activeFilter) {
+          updateFilter(null);
+        } else {
+          updateFilter(pattern);
+        }
+      });
+    });
+    
+    // Clear button click
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        updateFilter(null);
+      });
+    }
+  })();
+</script>

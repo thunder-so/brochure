@@ -4,13 +4,13 @@ description: 'Deploy Next.js applications on AWS using static export with S3 and
 ---
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
+import PatternList from '../../../components/docs/PatternList.astro';
 
 Deploy your [Next.js](https://nextjs.org/) applications to AWS using Thunder patterns. This guide covers both static export deployment and full-stack server-side rendering options.
 
 There are two deployment patterns available for Next.js on AWS:
 
-1. **Static Export (SPA)** — Deploy static Next.js sites using S3 and CloudFront with the `Static` construct
-2. **Full Stack** — Deploy SSR Next.js applications using ECS Fargate with the `Fargate` construct
+<PatternList patterns={["static", "fargate"]} />
 
 <Aside type="note" title="Requirements">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`

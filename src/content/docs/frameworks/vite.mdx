@@ -4,10 +4,13 @@ description: 'Deploy Vite-based single-page applications on AWS using S3 and Clo
 ---
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
+import PatternList from '../../../components/docs/PatternList.astro';
 
 Deploy your [Vite](https://vitejs.dev/) single-page applications (SPAs) to AWS using Thunder patterns. This guide covers static site deployment using S3 and CloudFront.
 
 Vite applications are deployed using the `Static` construct, which provides optimized static hosting with CDN distribution.
+
+<PatternList patterns={["static"]} />
 
 <Aside type="note" title="Requirements">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`

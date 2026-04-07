@@ -4,13 +4,13 @@ description: 'Deploy React Router applications on AWS using CSR/static pre-rende
 ---
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
+import PatternList from '../../../components/docs/PatternList.astro';
 
 Deploy your [React Router](https://reactrouter.com/) applications to AWS using Thunder patterns. This guide covers client-side rendering (CSR), static pre-rendering, and full-stack server-side rendering options.
 
 There are two deployment patterns available for React Router on AWS:
 
-1. **Single Page Application (SPA)** — Deploy client-side or static pre-rendered React Router sites using S3 and CloudFront with the `Static` construct
-2. **Full Stack** — Deploy SSR React Router applications using ECS Fargate with the `Fargate` construct
+<PatternList patterns={["static", "fargate"]} />
 
 <Aside type="note" title="Requirements">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
