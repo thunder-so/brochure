@@ -21,7 +21,7 @@
     {
       "name": "TanStack Start",
       "icon": null,
-      "logo": "https://tanstack.com/images/logos/logo-color-100.png",
+      "logo": "/frameworks/tanstack.png",
       "href": "/docs/frameworks/tanstack",
       "patterns": ["static", "serverless", "fargate"]
     },
@@ -35,14 +35,14 @@
     {
       "name": "Solid Start",
       "icon": null,
-      "logo": "https://www.solidjs.com/img/logo/without-wordmark/logo.png",
+      "logo": "/frameworks/solidjs.png",
       "href": "/docs/frameworks/solidjs",
       "patterns": ["static", "serverless", "fargate"]
     },
     {
       "name": "AnalogJS",
       "icon": null,
-      "logo": "https://analogjs.org/img/logos/analog-logo.svg",
+      "logo": "/frameworks/analogjs.svg",
       "href": "/docs/frameworks/analog",
       "patterns": ["static", "serverless", "fargate"]
     },
