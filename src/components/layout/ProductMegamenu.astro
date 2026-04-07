@@ -1,6 +1,9 @@
 ---
 import { Box, Layout, Zap, Package } from "lucide-astro";
 import { Icon } from 'astro-icon/components';
+import frameworksData from '@/data/frameworks.json';
+
+const patternConfig = frameworksData.patterns;
 
 interface Framework {
   name: string;
@@ -23,40 +26,40 @@ const { isMobile = false } = Astro.props;
 
 const frameworks = [
   {
-    name: "Next.js",
-    icon: "tabler:brand-nextjs",
-    description: "Full-stack React framework",
-    href: '/docs/frameworks/nextjs',
-  },
-  {
     name: "Nuxt",
     icon: "vscode-icons:file-type-nuxt",
-    description: "Vue.js framework",
     href: '/docs/frameworks/nuxt',
-  },
-  {
-    name: "Astro",
-    icon: "vscode-icons:file-type-astro",
-    description: "Content-focused framework",
-    href: '/docs/frameworks/astro',
   },
   {
     name: "TanStack Start",
     logo: "/frameworks/TanStack.svg",
-    description: "Full-stack React framework",
     href: '/docs/frameworks/tanstack',
+  },
+  {
+    name: "Astro",
+    icon: "vscode-icons:file-type-astro",
+    href: '/docs/frameworks/astro',
+  },
+  {
+    name: "SvelteKit",
+    logo: "/frameworks/Svelte.svg",
+    href: '/docs/frameworks/sveltekit',
+  },
+  {
+    name: "SolidStart",
+    logo: "/frameworks/solidjs.png",
+    href: '/docs/frameworks/solidjs',
+  },
+  {
+    name: "AnalogJS",
+    logo: "/frameworks/analogjs.svg",
+    href: '/docs/frameworks/analog',
   },
   {
     name: "Vite",
     icon: "vscode-icons:file-type-vite",
     description: "Next-gen frontend tooling",
     href: '/docs/frameworks/vite',
-  },
-  {
-    name: "NestJS",
-    icon: "vscode-icons:file-type-nestjs",
-    description: "Node.js framework",
-    href: '/docs/frameworks/nestjs',
   },
 ];
 
@@ -77,24 +80,28 @@ const comparisons = [
 
 const patterns = [
   { 
+    key: "static",
     name: "Static", 
     icon: 'tabler:file', 
     href: "/docs/patterns/static", 
     description: "S3 + CloudFront" 
   },
   { 
+    key: "lambda",
     name: "Lambda", 
     icon: 'tabler:lambda', 
     href: "/docs/patterns/lambda", 
     description: "Lambda + API Gateway" 
   },
   { 
+    key: "fargate",
     name: "Fargate", 
     icon: 'tabler:server', 
     href: "/docs/patterns/fargate", 
     description: "Fargate + ALB" 
   },
   { 
+    key: "serverless",
     name: "Serverless", 
     icon: 'tabler:cloud-bolt', 
     href: "/docs/patterns/serverless", 
@@ -184,7 +191,7 @@ const patterns = [
                   <span class="text-lg">
                     {framework.icon
                       ? <Icon name={framework.icon} class="w-5 h-5 opacity-70" />
-                      : <img src={framework.logo} alt={framework.name} class="w-5 h-5 object-contain filter brightness-0 invert opacity-70 group-hover:opacity-100 transition-opacity" />
+                      : <img src={framework.logo} alt={framework.name} class="w-5 h-5 object-contain opacity-70" />
                     }
                   </span>
                   <span>{framework.name}</span>
@@ -199,11 +206,11 @@ const patterns = [
           <h3 class="font-semibold text-sm text-foreground mb-3">Patterns</h3>
           <ul class="space-y-2">
             {patterns.map((pattern) => {
+              const cfg = patternConfig[pattern.key as keyof typeof patternConfig];
               return (
                 <li>
                   <a href={pattern.href} class="flex items-center gap-3 rounded px-3 py-2 hover:bg-secondary transition-colors">
-                    <Icon name={pattern.icon} class="text-primary" />
-                    <div>
+                    <Icon name={pattern.icon} class={`w-4 h-4 ${cfg.color}`} />                    <div>
                       <div class="text-sm font-medium text-foreground">{pattern.name}</div>
                       <div class="text-xs pt-1 font-mono text-muted-foreground">{pattern.description}</div>
                     </div>

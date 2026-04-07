@@ -1,0 +1,87 @@
+---
+title: Claude Code Skill
+description: Deploy any web app to AWS by asking Claude. The /aws-deploy skill auto-installs with Thunder and guides Claude through framework detection, cost estimation, and stack generation.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+The `aws-deploy` skill is a [Claude Code](https://claude.ai/code) skill that ships with Thunder. When you add `@thunder-so/thunder` to your project, the skill is automatically registered — no manual setup required. From that point on, you can ask Claude to deploy your app to AWS and it will handle the rest.
+
+## How It Works
+
+When you invoke `/aws-deploy` (or simply ask Claude to deploy), the skill runs a structured 5-step workflow:
+
+1. **Scans your project** — reads `package.json`, framework config files (`next.config.ts`, `nuxt.config.ts`, `astro.config.mjs`, `svelte.config.js`, `app.config.ts`, `vite.config.ts`, `Dockerfile`, etc.) without asking you first
+2. **Detects your framework** — identifies the framework, adapter, and output mode from the scanned files
+3. **Asks clarifying questions** — at most 2, only when something is genuinely ambiguous (e.g. monorepo root, SSR vs static, WebSocket requirement)
+4. **Presents a recommendation** — the right Thunder construct with a cost estimate and explanation
+5. **Generates everything** — a complete `stack/dev.ts` file, a Dockerfile if needed, and deploy scripts in `package.json`
+
+## Installation
+
+Thunder uses a `postinstall` script to register the skill. Bun blocks postinstall scripts by default — run this once to allow it:
+
+```bash
+bun pm untrusted
+```
+
+Then install Thunder:
+
+```bash
+bun add @thunder-so/thunder --development
+```
+
+The skill is now available in any Claude Code session inside your project. Invoke it with:
+
+```
+/aws-deploy
+```
+
+Or just tell Claude: _"Deploy this to AWS"_.
+
+<Aside type="note" title="What Claude generates">
+After you confirm the recommendation, Claude writes a complete `stack/dev.ts` CDK stack file, adds `deploy:dev` and `destroy:dev` scripts to your `package.json`, and creates a Dockerfile if your chosen pattern requires one. All placeholder values use `YOUR_ACCOUNT_ID` so you can grep for them.
+</Aside>
+
+## What Gets Detected
+
+The skill uses a decision matrix to map your project to the right [Thunder construct](/docs/patterns):
+
+| Framework | Possible constructs |
+| --- | --- |
+| Next.js (`output: 'export'`) | `Static` |
+| Next.js (`output: 'standalone'`) | `Fargate` |
+| Nuxt, Astro, SvelteKit, TanStack Start, Solid Start, AnalogJS | `Static`, `Serverless`, or `Fargate` |
+| Hono, Express, Fastify | `Lambda` or `Fargate` |
+| Any app with a Dockerfile | `Fargate` |
+| Pure Vite SPA | `Static` |
+
+When multiple patterns are valid, Claude presents the tradeoffs and asks which you prefer.
+
+## AWS MCP Servers
+
+The skill integrates with [AWS MCP servers](https://awslabs.github.io/mcp/) when they are connected to your Claude Code session. These are optional but unlock real-time data that makes the skill significantly more useful.
+
+### AWS Pricing MCP Server
+
+Used during the recommendation step to fetch live pricing data for Lambda, Fargate, CloudFront, S3, and API Gateway — instead of relying on static estimates.
+
+- Docs: [awslabs.github.io/mcp/servers/aws-pricing-mcp-server](https://awslabs.github.io/mcp/servers/aws-pricing-mcp-server)
+- Source: [github.com/awslabs/mcp — aws-pricing-mcp-server](https://github.com/awslabs/mcp/tree/main/src/aws-pricing-mcp-server)
+
+### AWS Billing and Cost Management MCP Server
+
+Gives Claude visibility into your actual AWS spend and budget alerts. Useful for reviewing costs after deployment or setting up budget guardrails.
+
+- Source: [github.com/awslabs/mcp — billing-cost-management-mcp-server](https://github.com/awslabs/mcp/tree/main/src/billing-cost-management-mcp-server)
+
+### CloudWatch MCP Server
+
+Used after deployment to help Claude debug issues — querying [CloudWatch Logs](https://aws.amazon.com/cloudwatch/), reading Lambda error traces, and checking ECS task health without leaving your editor.
+
+- Docs: [awslabs.github.io/mcp/servers/cloudwatch-mcp-server](https://awslabs.github.io/mcp/servers/cloudwatch-mcp-server)
+- Source: [github.com/awslabs/mcp — cloudwatch-mcp-server](https://github.com/awslabs/mcp/tree/main/src/cloudwatch-mcp-server)
+
+<Aside type="tip" title="Installing MCP servers">
+Add MCP servers to Claude Code via `claude mcp add`. See the [Claude Code MCP docs](https://docs.anthropic.com/en/docs/claude-code/mcp) for setup instructions. Once connected, the skill uses them automatically — no changes to your workflow needed.
+</Aside>

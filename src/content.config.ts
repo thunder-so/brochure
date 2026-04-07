@@ -44,6 +44,7 @@ export type Sidebar = Record<string, { text: string; link: string, description?:
 export const sidebar: Sidebar = {
   'Introduction': [
     { text: 'Getting Started', link: 'docs' },
+    { text: 'Claude Code', link: 'docs/claude-code' },
   ],
   'Patterns': [
     { text: 'Overview', link: 'docs/patterns' },

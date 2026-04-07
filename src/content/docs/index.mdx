@@ -10,13 +10,18 @@ import FrameworksGrid from '../../components/docs/FrameworksGrid.astro';
 
 Thunder is an open-source CDK library and CLI for deploying modern web applications on your own AWS account — no vendor lock-in, no black boxes.
 
-## The Library — `@thunder-so/thunder`
+## The Thunder Library
 
 The `@thunder-so/thunder` package provides CDK constructs for every deployment pattern: static sites, serverless functions, containers on Fargate, and full-stack SSR frameworks.
 
 ### Install
 
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun add -d @thunder-so/thunder
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm install @thunder-so/thunder --save-dev
@@ -25,11 +30,6 @@ npm install @thunder-so/thunder --save-dev
   <TabItem label="pnpm" icon="pnpm">
 ```sh
 pnpm add -D @thunder-so/thunder
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add -d @thunder-so/thunder
 ```
   </TabItem>
 </Tabs>
@@ -44,11 +44,11 @@ cdk bootstrap aws://YOUR_ACCOUNT_ID/us-east-1
 
 ### Create a Stack
 
-Create a stack file (e.g. `stack/index.ts`) and pick the construct that matches your app:
+Create a stack file (e.g. `stack/dev.ts`) and pick the construct that matches your app:
 
 <Tabs syncKey="pattern">
   <TabItem label="Static">
-```ts title="stack/index.ts"
+```ts title="stack/dev.ts"
 import { Cdk, Static, type StaticProps } from '@thunder-so/thunder';
 
 const config: StaticProps = {
@@ -64,7 +64,7 @@ new Static(new Cdk.App(), `${config.application}-${config.service}-${config.envi
 ```
   </TabItem>
   <TabItem label="Lambda">
-```ts title="stack/index.ts"
+```ts title="stack/dev.ts"
 import { Cdk, Lambda, type LambdaProps } from '@thunder-so/thunder';
 
 const config: LambdaProps = {
@@ -87,7 +87,7 @@ new Lambda(new Cdk.App(), `${config.application}-${config.service}-${config.envi
 ```
   </TabItem>
   <TabItem label="Fargate">
-```ts title="stack/index.ts"
+```ts title="stack/dev.ts"
 import { Cdk, Fargate, type FargateProps } from '@thunder-so/thunder';
 
 const config: FargateProps = {
@@ -108,7 +108,7 @@ new Fargate(new Cdk.App(), `${config.application}-${config.service}-${config.env
 ```
   </TabItem>
   <TabItem label="Serverless">
-```ts title="stack/index.ts"
+```ts title="stack/dev.ts"
 import { Cdk, Nuxt, type NuxtProps } from '@thunder-so/thunder';
 
 const config: NuxtProps = {
@@ -134,14 +134,10 @@ new Nuxt(new Cdk.App(), `${config.application}-${config.service}-${config.enviro
 ### Deploy
 
 ```sh
-npx cdk deploy --all --app="npx tsx stack/index.ts" --profile default
+npx cdk deploy --app="npx tsx stack/dev.ts" --profile default
 ```
 
 After deployment you'll receive a CloudFront URL for your application.
-
-<Aside type="tip" title="Tip">
-  Use `npx th init` to scaffold a new project interactively with the Thunder CLI.
-</Aside>
 
 ---
 

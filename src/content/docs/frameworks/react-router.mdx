@@ -5,7 +5,9 @@ description: 'Deploy React Router applications on AWS using CSR/static pre-rende
 
 import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
 import PatternList from '../../../components/docs/PatternList.astro';
+import FrameworkHero from '../../../components/docs/FrameworkHero.astro';
 
+<FrameworkHero name="React Router" title={frontmatter.title} />
 Deploy your [React Router](https://reactrouter.com/) applications to AWS using Thunder patterns. This guide covers client-side rendering (CSR), static pre-rendering, and full-stack server-side rendering options.
 
 There are two deployment patterns available for React Router on AWS:
@@ -46,7 +48,6 @@ bun add react-router-dom@7
 ```
   </TabItem>
 </Tabs>
-
 
 ## Single Page Application (SPA) Deployment
 ---

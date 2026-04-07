@@ -6,7 +6,7 @@ import icon from "astro-icon";
 import astroExpressiveCode from 'astro-expressive-code';
 // import awsAmplify from 'astro-aws-amplify';
 // import node from "@astrojs/node";
-// import vercelServerless from '@astrojs/vercel';
+import vercelServerless from '@astrojs/vercel';
 // @ts-ignore - no type declarations available
 import astroAws from "@astro-aws/adapter"
 
@@ -20,10 +20,10 @@ export default defineConfig({
   // adapter: node({
   //   mode: "standalone"
   // }),
-  // adapter: vercelServerless(),
-  adapter: astroAws({
-    mode: "ssr",
-  }),
+  adapter: vercelServerless(),
+  // adapter: astroAws({
+  //   mode: "ssr",
+  // }),
 
   env: {
     schema: {
@@ -49,8 +49,8 @@ export default defineConfig({
         codeBackground: 'hsl(240, 10%, 4%)',
         frames: {
           frameBoxShadowCssValue: 'none',
-          editorTabBarBackground: 'hsl(240, 10%, 6%)',
-          terminalTitlebarBackground: 'hsl(240, 10%, 6%)',
+          editorTabBarBackground: 'hsl(240, 10%, 4%)',
+          terminalTitlebarBackground: 'hsl(240, 10%, 4%)',
         },
       },
     }), 
@@ -72,7 +72,8 @@ export default defineConfig({
           "brand-nextjs",
           "brand-x",
           "brand-discord",
-          "brand-typescript"
+          "brand-typescript",
+          "external-link"
         ],
         logos: [
           "aws-s3",

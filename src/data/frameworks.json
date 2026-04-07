@@ -2,31 +2,41 @@
   "frameworks": [
     {
       "name": "Next.js",
+      "description": "The React framework for the web. Built by Vercel.",
+      "site": "https://nextjs.org",
       "icon": "tabler:brand-nextjs",
       "href": "/docs/frameworks/nextjs",
       "patterns": ["static", "fargate"]
     },
     {
       "name": "Nuxt",
+      "description": "The intuitive Vue framework for building full-stack web applications.",
+      "site": "https://nuxt.com",
       "icon": "vscode-icons:file-type-nuxt",
       "href": "/docs/frameworks/nuxt",
       "patterns": ["static", "serverless", "fargate"]
     },
     {
-      "name": "Astro",
-      "icon": "vscode-icons:file-type-astro",
-      "href": "/docs/frameworks/astro",
-      "patterns": ["static", "serverless", "fargate"]
-    },
-    {
       "name": "TanStack Start",
+      "description": "Full-stack React framework with type-safe routing and server functions.",
+      "site": "https://tanstack.com/start",
       "icon": null,
       "logo": "/frameworks/tanstack.png",
       "href": "/docs/frameworks/tanstack",
       "patterns": ["static", "serverless", "fargate"]
     },
     {
+      "name": "Astro",
+      "description": "The web framework for content-driven websites with islands architecture.",
+      "site": "https://astro.build",
+      "icon": "vscode-icons:file-type-astro",
+      "href": "/docs/frameworks/astro",
+      "patterns": ["static", "serverless", "fargate"]
+    },
+    {
       "name": "SvelteKit",
+      "description": "The fastest way to build Svelte apps with file-based routing and SSR.",
+      "site": "https://svelte.dev/docs/kit",
       "icon": null,
       "logo": "/frameworks/Svelte.svg",
       "href": "/docs/frameworks/sveltekit",
@@ -34,6 +44,8 @@
     },
     {
       "name": "Solid Start",
+      "description": "The SolidJS meta-framework for building full-stack web applications.",
+      "site": "https://start.solidjs.com",
       "icon": null,
       "logo": "/frameworks/solidjs.png",
       "href": "/docs/frameworks/solidjs",
@@ -41,6 +53,8 @@
     },
     {
       "name": "AnalogJS",
+      "description": "The fullstack Angular meta-framework powered by Vite and Nitro.",
+      "site": "https://analogjs.org",
       "icon": null,
       "logo": "/frameworks/analogjs.svg",
       "href": "/docs/frameworks/analog",
@@ -48,18 +62,24 @@
     },
     {
       "name": "React Router",
+      "description": "Declarative routing for React with support for SSR and static exports.",
+      "site": "https://reactrouter.com",
       "icon": "vscode-icons:file-type-reactjs",
       "href": "/docs/frameworks/react-router",
       "patterns": ["static", "fargate"]
     },
     {
       "name": "NestJS",
+      "description": "A progressive Node.js framework for building efficient server-side applications.",
+      "site": "https://nestjs.com",
       "icon": "vscode-icons:file-type-nestjs",
       "href": "/docs/frameworks/nestjs",
       "patterns": ["lambda", "fargate"]
     },
     {
       "name": "Hono",
+      "description": "Ultrafast web framework for the Edge, built on Web Standards.",
+      "site": "https://hono.dev",
       "icon": null,
       "logo": "/frameworks/HonoJS.svg",
       "href": "/docs/frameworks/hono",
@@ -67,13 +87,18 @@
     },
     {
       "name": "Vite",
+      "description": "Next generation frontend tooling. Fast dev server and optimized builds.",
+      "site": "https://vite.dev",
       "icon": "vscode-icons:file-type-vite",
       "href": "/docs/frameworks/vite",
       "patterns": ["static"]
     },
     {
       "name": "VitePress",
-      "icon": "vscode-icons:file-type-vite",
+      "description": "Vite & Vue powered static site generator for documentation sites.",
+      "site": "https://vitepress.dev",
+      "icon": null,
+      "logo": "/frameworks/vitepress.svg",
       "href": "/docs/frameworks/vitepress",
       "patterns": ["static"]
     }

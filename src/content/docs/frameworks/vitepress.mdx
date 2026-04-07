@@ -5,7 +5,9 @@ description: 'Deploy VitePress documentation sites on AWS using S3 and CloudFron
 
 import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
 import PatternList from '../../../components/docs/PatternList.astro';
+import FrameworkHero from '../../../components/docs/FrameworkHero.astro';
 
+<FrameworkHero name="VitePress" title={frontmatter.title} />
 Deploy your [VitePress](https://vitepress.dev/) documentation sites to AWS using Thunder. VitePress generates a fully static site at build time, making [S3](https://aws.amazon.com/s3/) and [CloudFront](https://aws.amazon.com/cloudfront/) the ideal hosting target.
 
 ## Available Patterns

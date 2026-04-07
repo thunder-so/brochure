@@ -72,7 +72,7 @@ const sections = Object.entries(sidebar).map(([title, items]) => ({
                                                 : "text-muted-foreground hover:text-foreground hover:bg-muted"
                                         )}
                                     >
-                                        {item.icon && <Icon name={item.icon} class={cn("h-4 w-4 shrink-0", item.iconColor)} />}
+                                        {item.icon && <div class="mr-1"><Icon name={item.icon} class={cn("h-4 w-4 shrink-0", item.iconColor)} /></div>}
                                         <div>
                                             <div class="">{item.text}</div>
                                             {item.description && <div class="text-xs pt-1 font-mono text-muted-foreground">{item.description}</div>}

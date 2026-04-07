@@ -5,7 +5,9 @@ description: 'Deploy Vite-based single-page applications on AWS using S3 and Clo
 
 import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
 import PatternList from '../../../components/docs/PatternList.astro';
+import FrameworkHero from '../../../components/docs/FrameworkHero.astro';
 
+<FrameworkHero name="Vite" title={frontmatter.title} />
 Deploy your [Vite](https://vitejs.dev/) single-page applications to AWS using Thunder. Vite apps are fully client-rendered at runtime, making static hosting on [S3](https://aws.amazon.com/s3/) and [CloudFront](https://aws.amazon.com/cloudfront/) the natural fit.
 
 ## Available Patterns
