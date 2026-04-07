@@ -1,32 +1,39 @@
 ---
-title: 'Deploy Next.js on AWS with Thunder'
+title: 'Deploy Next.js on AWS'
 description: 'Deploy Next.js applications on AWS using static export with S3 and CloudFront, or full-stack SSR with ECS Fargate and Application Load Balancer.'
 ---
 
-import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
+import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
 import PatternList from '../../../components/docs/PatternList.astro';
 
-Deploy your [Next.js](https://nextjs.org/) applications to AWS using Thunder patterns. This guide covers both static export deployment and full-stack server-side rendering options.
+Deploy your [Next.js](https://nextjs.org/) applications to AWS using Thunder. Choose the pattern that fits your app's needs.
 
-There are two deployment patterns available for Next.js on AWS:
+## Available Patterns
 
 <PatternList patterns={["static", "fargate"]} />
 
-<Aside type="note" title="Requirements">
+## Prerequisites
+
+<Aside type="note" title="Before you begin">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
-- Node.js version 20 or higher
+- Node.js 20 or higher
 - [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured
-- AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
+- AWS environment bootstrapped: `cdk bootstrap aws://YOUR_ACCOUNT_ID/us-east-1`
 </Aside>
 
-## Static Export (SPA) Deployment
----
-
-Deploy Next.js static export applications to S3 and CloudFront using the `Static` construct. This pattern is ideal for static sites, blogs, and client-side applications.
+## Getting Started
 
 ### Create Project
 
+Scaffold a new Next.js project using your preferred package manager. This sets up the project structure, installs dependencies, and prepares you for development.
+
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bunx create-next-app@latest my-nextjs-app
+cd my-nextjs-app
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm create next-app@latest my-nextjs-app
@@ -39,240 +46,197 @@ pnpm create next-app my-nextjs-app
 cd my-nextjs-app
 ```
   </TabItem>
+</Tabs>
+
+### Install Thunder
+
+Add Thunder as a development dependency. It provides the CDK constructs you'll use to define your AWS infrastructure.
+
+<Tabs syncKey="package-manager">
   <TabItem label="bun" icon="bun">
 ```sh
-bun create next-app my-nextjs-app
-cd my-nextjs-app
+bun add @thunder-so/thunder --development
+```
+  </TabItem>
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm install @thunder-so/thunder --save-dev
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add -D @thunder-so/thunder
 ```
   </TabItem>
 </Tabs>
 
-### Configure Next.js for Static Export
+---
 
-```ts title="next.config.mjs"
-import type { NextConfig } from "next";
+## Next.js Static Export Deployment
+
+Deploy Next.js as a fully static site to [S3](https://aws.amazon.com/s3/) with [CloudFront](https://aws.amazon.com/cloudfront/) as the CDN. In [static export mode](https://nextjs.org/docs/pages/guides/static-exports), Next.js pre-renders all pages at build time and outputs plain HTML, CSS, and JavaScript — no server required.
+
+<Aside type="caution" title="Static export limitations">
+Static export does not support server-side rendering, API routes, image optimization, or Incremental Static Regeneration (ISR). For those features, use the Fargate pattern below.
+</Aside>
+
+### Configure
+
+Set `output: 'export'` in your Next.js config to enable static export mode. Setting `distDir` to `dist` keeps the output directory consistent with other frameworks.
+
+```ts title="next.config.ts"
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  output: "export", // Enable static export
+  output: 'export',
+  distDir: 'dist',
 };
 
 export default nextConfig;
 ```
 
-In your `tsconfig.json`, ensure the `stack` directory is excluded:
+### Stack
 
-```json title="tsconfig.json"
-{
-  "compilerOptions": {
-    // ... other options
-  },
-  "exclude": ["node_modules", "stack"]
-}
-```
+The `Static` construct provisions an S3 bucket, a CloudFront distribution, and optionally a Route53 DNS record.
 
-### Install Dependencies and Setup Stack
+```ts title="stack/prod.ts"
+import { Cdk, Static, type StaticProps } from '@thunder-so/thunder';
 
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm i tsx @thunder-so/thunder --save-dev
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm add -D tsx @thunder-so/thunder
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add -d tsx @thunder-so/thunder
-```
-  </TabItem>
-</Tabs>
-
-```ts title="stack/index.ts"
-import { Cdk, Static, type StaticProps } from "@thunder-so/thunder";
-
-const myApp: StaticProps = {
-  env: {
-    account: 'your-account-id',
-    region: 'us-east-1'
-  },
-  application: 'your-application-id',
-  service: 'your-service-id',
-  environment: 'production',
-
-  rootDir: '', // e.g. 'frontend' for monorepos
-  outputDir: 'out',
+const config: StaticProps = {
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'web',
+  environment: 'prod',
+  rootDir: '.',
+  outputDir: 'dist',
 };
 
-new Static(
-  new Cdk.App(), 
-  `${myApp.application}-${myApp.service}-${myApp.environment}-stack`, 
-  myApp
-);
+new Static(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
 ```
 
 ### Deploy
 
-Build and deploy your static site:
+Build your Next.js app first to generate the static export, then deploy with CDK. CDK uploads the files to S3 and provisions the CloudFront distribution.
 
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+npx cdk deploy --app "bunx tsx stack/prod.ts" --profile default
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm run build
-npx cdk deploy --all --app="npx tsx stack/index.ts"
+npx cdk deploy --app "npx tsx stack/prod.ts" --profile default
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
 pnpm run build
-pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun run build
-npx cdk deploy --all --app="bunx tsx stack/index.ts"
+pnpm exec cdk deploy --app "pnpm exec tsx stack/prod.ts" --profile default
 ```
   </TabItem>
 </Tabs>
 
-After deployment, you'll receive a **CloudFront URL** to access your static site.
+After deployment, CDK outputs a **CloudFront URL** where your static site is live.
 
-## Full Stack Deployment
 ---
 
-Deploy server-side rendered Next.js applications using ECS Fargate and Application Load Balancer with the `Fargate` construct.
+## Next.js Containerized Deployment with Fargate
 
-### Configure Next.js for SSR
+Run your Next.js app as a Node.js server inside a Docker container on [ECS Fargate](https://aws.amazon.com/fargate/). Traffic is routed through an [Application Load Balancer](https://aws.amazon.com/elasticloadbalancing/application-load-balancer/). This pattern supports full SSR, API routes, image optimization, and all Next.js features.
 
-```ts title="next.config.mjs"
-import type { NextConfig } from "next";
+### Configure for Node Server
+
+Set `output: 'standalone'` in your Next.js config. This tells Next.js to produce a minimal, self-contained server bundle in `.next/standalone/` that includes only the files needed to run the app — ideal for Docker.
+
+```ts title="next.config.ts"
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  // Next.js defaults to SSR, no configuration needed
+  output: 'standalone',
 };
 
 export default nextConfig;
 ```
 
-### Install Dependencies and Setup Stack
+### Stack
 
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm i tsx @thunder-so/thunder --save-dev
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm add -D tsx @thunder-so/thunder
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add -d tsx @thunder-so/thunder
-```
-  </TabItem>
-</Tabs>
+The `Fargate` construct creates an ECS cluster, a Fargate task definition, and an Application Load Balancer.
 
-```ts title="stack/index.ts"
-import { Cdk, Fargate, type FargateProps } from "@thunder-so/thunder";
+```ts title="stack/prod.ts"
+import { Cdk, Fargate, type FargateProps } from '@thunder-so/thunder';
 
-const svcProps: FargateProps = {
-  env: {
-    account: 'your-account-id',
-    region: 'us-west-2'
-  },
-  application: 'your-application-id',
-  service: 'your-service-id',
-  environment: 'production',
-
-  rootDir: '', // e.g. 'app' for monorepos
-};
-
-new Fargate(
-  new Cdk.App(), 
-  `${svcProps.application}-${svcProps.service}-${svcProps.environment}-stack`, 
-  svcProps
-);
-```
-
-### Build Settings Using Nixpacks
-
-Configure automatic containerization with Nixpacks:
-
-```ts title="stack/index.ts"
-const svcProps: FargateProps = {
-  // ... other props
-  
-  buildProps: {
-    buildSystem: 'Nixpacks',
-    installcmd: 'npm install',
-    buildcmd: 'npm run build',
-    startcmd: 'npm start',
+const config: FargateProps = {
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'web',
+  environment: 'prod',
+  rootDir: '.',
+  serviceProps: {
+    dockerFile: 'Dockerfile',
+    architecture: Cdk.aws_ecs.CpuArchitecture.ARM64,
+    cpu: 512,
+    memorySize: 1024,
+    port: 3000,
+    desiredCount: 1,
+    healthCheckPath: '/',
   },
 };
+
+new Fargate(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
 ```
 
-### Build Settings Using Docker Container
+### Dockerfile
 
-Alternatively, use a custom Dockerfile:
+Create a `Dockerfile` in your project root. The multi-stage build uses Bun to install dependencies and build the app, then copies only the standalone output into a minimal Node.js runtime image.
 
 ```dockerfile title="Dockerfile"
-FROM public.ecr.aws/docker/library/node:20-alpine AS base
-
-FROM base AS builder
+FROM public.ecr.aws/docker/library/node:22-alpine AS builder
 WORKDIR /app
-
-COPY package*.json ./
-RUN npm ci
-
+COPY package.json bun.lockb ./
+RUN curl -fsSL https://bun.sh/install | bash && export PATH="$HOME/.bun/bin:$PATH"
+RUN bun install --frozen-lockfile
 COPY . .
-RUN npm run build
+RUN bun run build
 
-FROM base AS runner
+FROM public.ecr.aws/docker/library/node:22-alpine AS runner
 WORKDIR /app
-
 ENV NODE_ENV=production
-
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-
+ENV HOSTNAME=0.0.0.0
+ENV PORT=3000
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+USER nextjs
 EXPOSE 3000
-
 CMD ["node", "server.js"]
 ```
 
-```ts title="stack/index.ts"
-const svcProps: FargateProps = {
-  // ... other props
-  
+<Aside type="tip" title="No Dockerfile?">
+If you omit `dockerFile` from `serviceProps`, Thunder will use [Nixpacks](https://nixpacks.com/) to automatically generate a container image from your project. This is a good option for getting started quickly without writing a Dockerfile.
+</Aside>
+
+### Environment Variables and Secrets
+
+Runtime environment variables are injected into the Fargate task at deploy time. For sensitive values, store them in [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) and reference them by ARN — Thunder fetches and injects them automatically.
+
+```ts title="stack/prod.ts"
+const config: FargateProps = {
+  // ...
   serviceProps: {
-    dockerFile: 'Dockerfile',
-    port: 3000,
-  },
-};
-```
-
-### Environment Variables and Secrets for SSR
-
-Configure runtime environment variables and secrets:
-
-```ts title="stack/index.ts"
-const svcProps: FargateProps = {
-  // ... other props
-  
-  serviceProps: {
+    // ...
     variables: [
       { NODE_ENV: 'production' },
-      { NEXT_PUBLIC_API_URL: 'https://api.example.com' }
+      { NEXT_PUBLIC_API_URL: 'https://api.example.com' },
     ],
     secrets: [
-      { 
-        key: 'DATABASE_URL', 
-        resource: 'arn:aws:secretsmanager:us-west-2:123456789012:secret:/my-app/DATABASE_URL-abc123' 
+      {
+        key: 'DATABASE_URL',
+        resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:/myapp/DATABASE_URL-abc123',
       },
     ],
   },
@@ -281,27 +245,24 @@ const svcProps: FargateProps = {
 
 ### Deploy
 
-Build and deploy your containerized application:
+CDK builds the Docker image, pushes it to [ECR](https://aws.amazon.com/ecr/), and deploys it to Fargate. No manual Docker commands needed.
 
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+npx cdk deploy --app "bunx tsx stack/prod.ts" --profile default
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm run build
-npx cdk deploy --all --app="npx tsx stack/index.ts"
+npx cdk deploy --app "npx tsx stack/prod.ts" --profile default
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm run build
-pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun run build
-npx cdk deploy --all --app="bunx tsx stack/index.ts"
+pnpm exec cdk deploy --app "pnpm exec tsx stack/prod.ts" --profile default
 ```
   </TabItem>
 </Tabs>
 
-After deployment, you'll receive an **Application Load Balancer URL** to access your SSR application.
+After deployment, CDK outputs the **Load Balancer DNS** for your application.

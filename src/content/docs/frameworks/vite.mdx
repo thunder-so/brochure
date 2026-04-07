@@ -3,30 +3,38 @@ title: 'Deploy Vite on AWS'
 description: 'Deploy Vite-based single-page applications on AWS using S3 and CloudFront.'
 ---
 
-import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
+import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
 import PatternList from '../../../components/docs/PatternList.astro';
 
-Deploy your [Vite](https://vitejs.dev/) single-page applications (SPAs) to AWS using Thunder patterns. This guide covers static site deployment using S3 and CloudFront.
+Deploy your [Vite](https://vitejs.dev/) single-page applications to AWS using Thunder. Vite apps are fully client-rendered at runtime, making static hosting on [S3](https://aws.amazon.com/s3/) and [CloudFront](https://aws.amazon.com/cloudfront/) the natural fit.
 
-Vite applications are deployed using the `Static` construct, which provides optimized static hosting with CDN distribution.
+## Available Patterns
 
 <PatternList patterns={["static"]} />
 
-<Aside type="note" title="Requirements">
+## Prerequisites
+
+<Aside type="note" title="Before you begin">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
-- Node.js version 20 or higher
+- Node.js 20 or higher
 - [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured
-- AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
+- AWS environment bootstrapped: `cdk bootstrap aws://YOUR_ACCOUNT_ID/us-east-1`
 </Aside>
 
-## Static Deployment
----
-
-Deploy Vite SPAs to S3 and CloudFront using the `Static` construct.
+## Getting Started
 
 ### Create Project
 
+Scaffold a new Vite project using your preferred package manager. This sets up the project structure, installs dependencies, and prepares you for development.
+
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun create vite my-vite-app --template vanilla-ts
+cd my-vite-app
+bun install
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm create vite@latest my-vite-app -- --template vanilla-ts
@@ -41,81 +49,78 @@ cd my-vite-app
 pnpm install
 ```
   </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun create vite my-vite-app --template vanilla-ts
-cd my-vite-app
-bun install
-```
-  </TabItem>
 </Tabs>
 
-### Install Dependencies and Setup Stack
+### Install Thunder
+
+Add Thunder as a development dependency. It provides the CDK constructs you'll use to define your AWS infrastructure.
 
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun add @thunder-so/thunder --development
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm i tsx @thunder-so/thunder --save-dev
+npm install @thunder-so/thunder --save-dev
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm add -D tsx @thunder-so/thunder
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add -d tsx @thunder-so/thunder
+pnpm add -D @thunder-so/thunder
 ```
   </TabItem>
 </Tabs>
 
-```ts title="stack/index.ts"
-import { Cdk, Static, type StaticProps } from "@thunder-so/thunder";
+---
 
-const myApp: StaticProps = {
-  env: {
-    account: 'your-account-id',
-    region: 'us-east-1'
-  },
-  application: 'your-application-id',
-  service: 'your-service-id',
-  environment: 'production',
+## Vite Static Site Deployment
 
-  rootDir: '', // e.g. 'frontend' for monorepos
+Deploy your Vite SPA to [S3](https://aws.amazon.com/s3/) with [CloudFront](https://aws.amazon.com/cloudfront/) as the CDN. Vite outputs all compiled assets to `dist/` by default — Thunder uploads these directly to S3 and provisions the CloudFront distribution in front of them.
+
+### Stack
+
+The `Static` construct provisions an S3 bucket, a CloudFront distribution, and optionally a Route53 DNS record.
+
+```ts title="stack/prod.ts"
+import { Cdk, Static, type StaticProps } from '@thunder-so/thunder';
+
+const config: StaticProps = {
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'web',
+  environment: 'prod',
+  rootDir: '.', // e.g. 'frontend' for monorepos
   outputDir: 'dist',
 };
 
-new Static(
-  new Cdk.App(), 
-  `${myApp.application}-${myApp.service}-${myApp.environment}-stack`, 
-  myApp
-);
+new Static(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
 ```
 
 ### Deploy
 
-Build and deploy your Vite SPA:
+Build your Vite app first to compile and bundle all assets into `dist/`, then deploy with CDK. CDK uploads the files to S3 and provisions the CloudFront distribution.
 
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+npx cdk deploy --app "bunx tsx stack/prod.ts" --profile default
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm run build
-npx cdk deploy --all --app="npx tsx stack/index.ts"
+npx cdk deploy --app "npx tsx stack/prod.ts" --profile default
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
 pnpm run build
-pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun run build
-npx cdk deploy --all --app="bunx tsx stack/index.ts"
+pnpm exec cdk deploy --app "pnpm exec tsx stack/prod.ts" --profile default
 ```
   </TabItem>
 </Tabs>
 
-After deployment, you'll receive a **CloudFront URL** to access your static site.
+After deployment, CDK outputs a **CloudFront URL** where your app is live.

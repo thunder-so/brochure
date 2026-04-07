@@ -3,33 +3,40 @@ title: 'Deploy Hono on AWS'
 description: 'Deploy Hono applications on AWS Lambda and API Gateway, or as containerized services with ECS Fargate and Application Load Balancer.'
 ---
 
-import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
+import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
 import PatternList from '../../../components/docs/PatternList.astro';
 
-Deploy your [Hono](https://hono.dev/) applications to AWS using Thunder patterns. This guide covers both serverless Lambda deployment and containerized service options.
+Deploy your [Hono](https://hono.dev/) applications to AWS using Thunder. Choose the pattern that fits your app's needs.
 
-There are two deployment patterns available for Hono on AWS:
+## Available Patterns
 
 <PatternList patterns={["lambda", "fargate"]} />
 
-<Aside type="note" title="Requirements">
+## Prerequisites
+
+<Aside type="note" title="Before you begin">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
-- Node.js version 20 or higher
+- Node.js 20 or higher
 - [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured
-- AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
+- AWS environment bootstrapped: `cdk bootstrap aws://YOUR_ACCOUNT_ID/us-east-1`
 </Aside>
 
-## Lambda Deployment
----
-
-Deploy Hono applications to AWS Lambda and API Gateway using the `Lambda` construct. This pattern is ideal for API endpoints, serverless functions, and event-driven architectures.
+## Getting Started
 
 ### Create Project
 
+Scaffold a new Hono project using your preferred package manager. This sets up the project structure, installs dependencies, and prepares you for development.
+
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun create hono my-hono-app
+cd my-hono-app
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm create hono@latest my-hono-app  
+npm create hono@latest my-hono-app
 cd my-hono-app
 ```
   </TabItem>
@@ -39,228 +46,141 @@ pnpm create hono my-hono-app
 cd my-hono-app
 ```
   </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun create hono my-hono-app
-cd my-hono-app
-```
-  </TabItem>
 </Tabs>
 
-### Install Dependencies and Setup Stack
+### Install Thunder
+
+Add Thunder as a development dependency. It provides the CDK constructs you'll use to define your AWS infrastructure.
 
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun add @thunder-so/thunder --development
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm i tsx @thunder-so/thunder --save-dev
+npm install @thunder-so/thunder --save-dev
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm add -D tsx @thunder-so/thunder
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add -d tsx @thunder-so/thunder
+pnpm add -D @thunder-so/thunder
 ```
   </TabItem>
 </Tabs>
 
-```ts title="stack/index.ts"
-import { Cdk, Lambda, type LambdaProps } from "@thunder-so/thunder";
-
-const fnProps: LambdaProps = {
-  env: {
-    account: 'your-account-id',
-    region: 'us-east-1'
-  },
-  application: 'your-application-id',
-  service: 'your-service-id',
-  environment: 'production',
-
-  functionProps: {
-    codeDir: 'dist',
-    handler: 'index.handler',
-  },
-};
-
-new Lambda(
-  new Cdk.App(), 
-  `${fnProps.application}-${fnProps.service}-${fnProps.environment}-stack`, 
-  fnProps
-);
-```
-
-### Deploy
-
-Before you deploy, run your build script to generate artifacts in the `dist` directory.
-
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm run build
-npx cdk deploy --all --app="npx tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm run build
-pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun run build
-npx cdk deploy --all --app="bunx tsx stack/index.ts"
-```
-  </TabItem>
-</Tabs>
-
-When the deployment is complete, you will see the API Gateway URL in the output. You can access your Hono app at that URL.
-
-## Containerized Service Deployment
 ---
 
-Deploy containerized Hono applications using ECS Fargate and Application Load Balancer with the `Fargate` construct. This pattern is ideal for long-running services, full-stack applications, and when you need persistent connections.
+## Hono Lambda Deployment
 
-### Configure Hono for Node.js Server
+Deploy your Hono API to [AWS Lambda](https://aws.amazon.com/lambda/) with [API Gateway](https://aws.amazon.com/api-gateway/) as the public HTTP endpoint. Hono has first-class support for Lambda via its `hono/aws-lambda` adapter — no additional packages needed.
 
-Update your entry point to use the Node.js server:
+### Configure Hono for AWS Lambda
+
+Hono's `handle()` adapter wraps your app in the [Lambda handler signature](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-handler.html) expected by API Gateway. Export it as `handler` and your function is ready to deploy.
 
 ```ts title="src/index.ts"
-import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
+import { handle } from 'hono/aws-lambda'
 
 const app = new Hono()
 
-app.get('/', (c) => c.text('Hello Hono!'))
+app.get('/', (c) => c.json({ message: 'Hello from Hono!' }))
 
-const port = process.env.PORT || 3000
-
-serve({
-  fetch: app.fetch,
-  port: Number(port),
-})
+export const handler = handle(app)
 ```
 
-### Install Dependencies and Setup Stack
+Hono on Lambda works best bundled to a single file with esbuild. Add a build script to `package.json`:
 
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm i tsx @thunder-so/thunder --save-dev
+```json title="package.json"
+{
+  "scripts": {
+    "build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node22 ./src/index.ts"
+  }
+}
 ```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm add -D tsx @thunder-so/thunder
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add -d tsx @thunder-so/thunder
-```
-  </TabItem>
-</Tabs>
 
-```ts title="stack/index.ts"
-import { Cdk, Fargate, type FargateProps } from "@thunder-so/thunder";
+Running the build produces `dist/index.js` — the file Lambda will execute.
 
-const svcProps: FargateProps = {
-  env: {
-    account: 'your-account-id',
-    region: 'us-west-2'
+### Stack (Zip mode)
+
+The `Lambda` construct provisions a Lambda function and an API Gateway HTTP API. The Zip mode packages `dist/` directly — no Docker required.
+
+```ts title="stack/prod.ts"
+import { Cdk, Lambda, type LambdaProps } from '@thunder-so/thunder';
+
+const config: LambdaProps = {
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'api',
+  environment: 'prod',
+  rootDir: '.',
+  functionProps: {
+    runtime: Cdk.aws_lambda.Runtime.NODEJS_22_X,
+    architecture: Cdk.aws_lambda.Architecture.ARM_64,
+    codeDir: 'dist',
+    handler: 'index.handler',
+    memorySize: 512,
+    timeout: 10,
+    keepWarm: true,
   },
-  application: 'your-application-id',
-  service: 'your-service-id',
-  environment: 'production',
-
-  rootDir: '', // e.g. 'app' for monorepos
 };
 
-new Fargate(
-  new Cdk.App(), 
-  `${svcProps.application}-${svcProps.service}-${svcProps.environment}-stack`, 
-  svcProps
-);
+new Lambda(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
 ```
 
-### Build Settings Using Nixpacks
+### Container Mode
 
-Configure automatic containerization with Nixpacks:
+Zip deployments have a 250 MB unzipped size limit. If your app has large dependencies, switch to container mode. Thunder builds a Docker image, pushes it to [ECR](https://aws.amazon.com/ecr/), and deploys it as a [container Lambda](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html), which supports up to 10 GB.
 
-```ts title="stack/index.ts"
-const svcProps: FargateProps = {
-  // ... other props
-  
-  buildProps: {
-    buildSystem: 'Nixpacks',
-    installcmd: 'npm install',
-    buildcmd: 'npm run build',
-    startcmd: 'npm start',
+#### Stack (Container mode)
+
+Add `dockerFile` to `functionProps` to enable container mode.
+
+```ts title="stack/prod.ts"
+const config: LambdaProps = {
+  // ...
+  functionProps: {
+    dockerFile: 'Dockerfile',
+    memorySize: 1792,
+    timeout: 10,
+    keepWarm: true,
   },
 };
 ```
 
-### Build Settings Using Docker Container
-
-Alternatively, use a custom Dockerfile:
+#### Dockerfile
 
 ```dockerfile title="Dockerfile"
-FROM public.ecr.aws/docker/library/node:20-alpine AS base
-
-FROM base AS builder
-WORKDIR /app
-
-COPY package*.json tsconfig.json ./
-RUN npm ci
-
-COPY src ./src
+FROM public.ecr.aws/lambda/nodejs:22 AS builder
+WORKDIR ${LAMBDA_TASK_ROOT}
+COPY . .
+RUN npm install
 RUN npm run build
 
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV=production
-
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY package.json ./
-
-EXPOSE 3000
-
-CMD ["node", "dist/index.js"]
-```
-
-```ts title="stack/index.ts"
-const svcProps: FargateProps = {
-  // ... other props
-  
-  serviceProps: {
-    dockerFile: 'Dockerfile',
-    port: 3000,
-  },
-};
+FROM public.ecr.aws/lambda/nodejs:22
+WORKDIR ${LAMBDA_TASK_ROOT}
+COPY --from=builder /var/task/dist/* ./
+COPY --from=builder /var/task/node_modules ./node_modules
+CMD ["index.handler"]
 ```
 
 ### Environment Variables and Secrets
 
-Configure runtime environment variables and secrets:
+Runtime environment variables are injected into the Lambda function at deploy time. For sensitive values, store them in [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) and reference them by ARN — Thunder fetches and injects them automatically.
 
-```ts title="stack/index.ts"
-const svcProps: FargateProps = {
-  // ... other props
-  
-  serviceProps: {
+```ts title="stack/prod.ts"
+const config: LambdaProps = {
+  // ...
+  functionProps: {
     variables: [
       { NODE_ENV: 'production' },
-      { API_URL: 'https://api.example.com' }
     ],
     secrets: [
-      { 
-        key: 'DATABASE_URL', 
-        resource: 'arn:aws:secretsmanager:us-west-2:123456789012:secret:/my-app/DATABASE_URL-abc123' 
+      {
+        key: 'DATABASE_URL',
+        resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:/myapp/DATABASE_URL-abc123',
       },
     ],
   },
@@ -269,27 +189,170 @@ const svcProps: FargateProps = {
 
 ### Deploy
 
-Build and deploy your containerized application:
+Build the handler first, then deploy with CDK. CDK outputs the API Gateway URL.
 
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+npx cdk deploy --app "bunx tsx stack/prod.ts" --profile default
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm run build
-npx cdk deploy --all --app="npx tsx stack/index.ts"
+npx cdk deploy --app "npx tsx stack/prod.ts" --profile default
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
 pnpm run build
-pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun run build
-npx cdk deploy --all --app="bunx tsx stack/index.ts"
+pnpm exec cdk deploy --app "pnpm exec tsx stack/prod.ts" --profile default
 ```
   </TabItem>
 </Tabs>
 
-After deployment, you'll receive an **Application Load Balancer URL** to access your containerized Hono application.
+After deployment, CDK outputs the **API Gateway URL** for your function.
+
+---
+
+## Hono Containerized Deployment with Fargate
+
+Run your Hono API as a Node.js server inside a Docker container on [ECS Fargate](https://aws.amazon.com/fargate/). Traffic is routed through an [Application Load Balancer](https://aws.amazon.com/elasticloadbalancing/application-load-balancer/). This pattern is ideal for long-running services, persistent connections, and workloads that exceed Lambda's limits.
+
+### Configure for Node Server
+
+Install `@hono/node-server` to run Hono as a standard HTTP server — the same code works locally and inside the container.
+
+<Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun add @hono/node-server
+```
+  </TabItem>
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm install @hono/node-server
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add @hono/node-server
+```
+  </TabItem>
+</Tabs>
+
+```ts title="src/index.ts"
+import { Hono } from 'hono'
+import { serve } from '@hono/node-server'
+
+const app = new Hono()
+
+app.get('/', (c) => c.json({ message: 'Hello from Hono!' }))
+
+serve({
+  fetch: app.fetch,
+  port: Number(process.env.PORT) || 3000,
+})
+```
+
+### Stack
+
+The `Fargate` construct creates an ECS cluster, a Fargate task definition, and an Application Load Balancer.
+
+```ts title="stack/prod.ts"
+import { Cdk, Fargate, type FargateProps } from '@thunder-so/thunder';
+
+const config: FargateProps = {
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'api',
+  environment: 'prod',
+  rootDir: '.',
+  serviceProps: {
+    dockerFile: 'Dockerfile',
+    architecture: Cdk.aws_ecs.CpuArchitecture.ARM64,
+    cpu: 512,
+    memorySize: 1024,
+    port: 3000,
+    desiredCount: 1,
+    healthCheckPath: '/',
+  },
+};
+
+new Fargate(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
+```
+
+### Dockerfile
+
+Create a `Dockerfile` in your project root. The multi-stage build keeps the final image lean by separating the build environment from the runtime.
+
+```dockerfile title="Dockerfile"
+FROM public.ecr.aws/docker/library/node:22-alpine AS builder
+WORKDIR /app
+COPY package.json bun.lockb tsconfig.json ./
+RUN curl -fsSL https://bun.sh/install | bash && export PATH="$HOME/.bun/bin:$PATH"
+RUN bun install --frozen-lockfile
+COPY src ./src
+RUN bun run build
+
+FROM public.ecr.aws/docker/library/node:22-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PORT=3000
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY package.json ./
+EXPOSE 3000
+CMD ["node", "dist/index.js"]
+```
+
+<Aside type="tip" title="No Dockerfile?">
+If you omit `dockerFile` from `serviceProps`, Thunder will use [Nixpacks](https://nixpacks.com/) to automatically generate a container image from your project. This is a good option for getting started quickly without writing a Dockerfile.
+</Aside>
+
+### Environment Variables and Secrets
+
+Runtime environment variables are injected into the Fargate task at deploy time. For sensitive values, store them in [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) and reference them by ARN — Thunder fetches and injects them automatically.
+
+```ts title="stack/prod.ts"
+const config: FargateProps = {
+  // ...
+  serviceProps: {
+    // ...
+    variables: [
+      { NODE_ENV: 'production' },
+    ],
+    secrets: [
+      {
+        key: 'DATABASE_URL',
+        resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:/myapp/DATABASE_URL-abc123',
+      },
+    ],
+  },
+};
+```
+
+### Deploy
+
+CDK builds the Docker image, pushes it to [ECR](https://aws.amazon.com/ecr/), and deploys it to Fargate. No manual Docker commands needed.
+
+<Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+npx cdk deploy --app "bunx tsx stack/prod.ts" --profile default
+```
+  </TabItem>
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npx cdk deploy --app "npx tsx stack/prod.ts" --profile default
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm exec cdk deploy --app "pnpm exec tsx stack/prod.ts" --profile default
+```
+  </TabItem>
+</Tabs>
+
+After deployment, CDK outputs the **Load Balancer DNS** for your application.

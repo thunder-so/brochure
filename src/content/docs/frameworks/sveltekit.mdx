@@ -3,52 +3,102 @@ title: 'Deploy SvelteKit on AWS'
 description: 'Deploy SvelteKit applications on AWS using static site generation with S3 and CloudFront, serverless SSR with Lambda, or containerized SSR with ECS Fargate.'
 ---
 
-import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
+import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
 import PatternList from '../../../components/docs/PatternList.astro';
 
-Deploy your [SvelteKit](https://svelte.dev/docs/kit) applications to AWS using Thunder patterns. This guide covers static deployments, serverless SSR, and containerized deployments.
+Deploy your [SvelteKit](https://svelte.dev/docs/kit) applications to AWS using Thunder. Choose the pattern that fits your app's needs.
 
-SvelteKit offers flexible rendering modes that can be deployed using three Thunder constructs:
+## Available Patterns
 
 <PatternList patterns={["static", "serverless", "fargate"]} />
 
-<Aside type="note" title="Requirements">
+## Prerequisites
+
+<Aside type="note" title="Before you begin">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
-- Node.js version 20 or higher
+- Node.js 20 or higher
 - [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured
-- AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
+- AWS environment bootstrapped: `cdk bootstrap aws://YOUR_ACCOUNT_ID/us-east-1`
 </Aside>
 
-## Static (SSG/SPA) Deployment
----
-
-Deploy static or client-side rendered SvelteKit applications to S3 and CloudFront using the `Static` construct. Choose the configuration that best fits your needs:
+## Getting Started
 
 ### Create Project
 
+Scaffold a new SvelteKit project using your preferred package manager. This sets up the project structure, installs dependencies, and prepares you for development.
+
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bunx sv create my-sveltekit-app
+cd my-sveltekit-app
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npx sv create
+npx sv create my-sveltekit-app
+cd my-sveltekit-app
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-npx sv create
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-npx sv create
+pnpm dlx sv create my-sveltekit-app
+cd my-sveltekit-app
 ```
   </TabItem>
 </Tabs>
 
-### Configure SvelteKit for SSG/SPA
+### Install Thunder
 
-Use `adapter-static` to prerender your entire site at build time:
+Add Thunder as a development dependency. It provides the CDK constructs you'll use to define your AWS infrastructure.
 
-```ts title="svelte.config.js"
+<Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun add @thunder-so/thunder --development
+```
+  </TabItem>
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm install @thunder-so/thunder --save-dev
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add -D @thunder-so/thunder
+```
+  </TabItem>
+</Tabs>
+
+---
+
+## SvelteKit Static Site Deployment
+
+Deploy a fully pre-rendered SvelteKit site to [S3](https://aws.amazon.com/s3/) with [CloudFront](https://aws.amazon.com/cloudfront/) as the CDN. This pattern supports both SSG (pre-rendered pages) and SPA mode (client-side routing with a single HTML shell). No server required.
+
+### Configure
+
+Install the static adapter and configure SvelteKit to use it. Then enable prerendering globally by setting `prerender = true` in your root layout.
+
+<Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun add -D @sveltejs/adapter-static
+```
+  </TabItem>
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm install -D @sveltejs/adapter-static
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add -D @sveltejs/adapter-static
+```
+  </TabItem>
+</Tabs>
+
+```js title="svelte.config.js"
 import adapter from '@sveltejs/adapter-static';
 
 export default {
@@ -58,272 +108,85 @@ export default {
 };
 ```
 
-Enable prerendering for all pages:
-
 ```ts title="src/routes/+layout.ts"
 export const prerender = true;
 ```
 
-Optionally, configure prerendering options:
+### Stack
 
-```ts title="svelte.config.js"
-import adapter from '@sveltejs/adapter-static';
+The `Static` construct provisions an S3 bucket, a CloudFront distribution, and optionally a Route53 DNS record. SvelteKit's static adapter outputs to `build/` by default.
 
-export default {
-  kit: {
-    adapter: adapter({
-      pages: 'build',
-      assets: 'build',
-      fallback: null,
-      compress: true,
-      strict: true
-    }),
-  },
-};
-```
+```ts title="stack/prod.ts"
+import { Cdk, Static, type StaticProps } from '@thunder-so/thunder';
 
-### Install Dependencies and Setup Stack
-
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm i tsx @thunder-so/thunder --save-dev
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm add -D tsx @thunder-so/thunder
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add -d tsx @thunder-so/thunder
-```
-  </TabItem>
-</Tabs>
-
-```ts title="stack/index.ts"
-import { Cdk, Static, type StaticProps } from "@thunder-so/thunder";
-
-const myApp: StaticProps = {
-  env: {
-    account: 'your-account-id',
-    region: 'us-east-1'
-  },
-  application: 'your-application-id',
-  service: 'your-service-id',
-  environment: 'production',
-
-  rootDir: '', // e.g. 'frontend' for monorepos
+const config: StaticProps = {
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'web',
+  environment: 'prod',
+  rootDir: '.',
   outputDir: 'build',
 };
 
-new Static(
-  new Cdk.App(), 
-  `${myApp.application}-${myApp.service}-${myApp.environment}-stack`, 
-  myApp
-);
+new Static(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
 ```
 
 ### Deploy
 
-Build and deploy your static SvelteKit site:
+Build your SvelteKit site first, then deploy with CDK. CDK uploads the static files to S3 and provisions the CloudFront distribution.
 
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+npx cdk deploy --app "bunx tsx stack/prod.ts" --profile default
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm run build
-npx cdk deploy --all --app="npx tsx stack/index.ts"
+npx cdk deploy --app "npx tsx stack/prod.ts" --profile default
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
 pnpm run build
-pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun run build
-npx cdk deploy --all --app="bunx tsx stack/index.ts"
+pnpm exec cdk deploy --app "pnpm exec tsx stack/prod.ts" --profile default
 ```
   </TabItem>
 </Tabs>
 
-After deployment, you'll receive a **CloudFront URL** to access your static site.
+After deployment, CDK outputs a **CloudFront URL** where your static site is live.
 
-
-## Serverless SSR Deployment
 ---
 
-Deploy server-side rendered SvelteKit applications using Lambda, S3, and CloudFront with the `SvelteKit` construct. This pattern provides auto-scaling SSR with pay-per-request pricing.
+## SvelteKit Containerized Deployment with Fargate
 
-### Create Project
+Run your SvelteKit app as a Node.js server inside a Docker container on [ECS Fargate](https://aws.amazon.com/fargate/). Traffic is routed through an [Application Load Balancer](https://aws.amazon.com/elasticloadbalancing/application-load-balancer/). This pattern supports full SSR, API routes, and any server-side logic.
+
+### Configure for Node Server
+
+Install the Node adapter and configure SvelteKit to use it. This produces a standard Node.js HTTP server in `build/` that can run inside a container.
 
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun add -D @sveltejs/adapter-node
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npx sv create
+npm install -D @sveltejs/adapter-node
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-npx sv create
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-npx sv create
+pnpm add -D @sveltejs/adapter-node
 ```
   </TabItem>
 </Tabs>
 
-### Configure SvelteKit for AWS Lambda
-
-Install the Lambda adapter:
-
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm install @foladayo/sveltekit-adapter-lambda
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm add @foladayo/sveltekit-adapter-lambda
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add @foladayo/sveltekit-adapter-lambda
-```
-  </TabItem>
-</Tabs>
-
-```javascript title="svelte.config.js"
-import adapter from '@foladayo/sveltekit-adapter-lambda';
-
-export default {
-  kit: {
-    adapter: adapter({
-      serveStatic: true
-    })
-  }
-};
-```
-
-### Install Dependencies and Setup Stack
-
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm i tsx @thunder-so/thunder --save-dev
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm add -D tsx @thunder-so/thunder
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add -d tsx @thunder-so/thunder
-```
-  </TabItem>
-</Tabs>
-
-```ts title="stack/index.ts"
-import { Cdk, SvelteKit, type SvelteKitProps } from "@thunder-so/thunder";
-
-const config: SvelteKitProps = {
-  env: {
-    account: 'your-account-id',
-    region: 'us-east-1'
-  },
-  application: 'your-application-id',
-  service: 'your-service-id',
-  environment: 'production',
-
-  rootDir: '',
-
-  serverProps: {
-    runtime: Cdk.aws_lambda.Runtime.NODEJS_22_X,
-    architecture: Cdk.aws_lambda.Architecture.ARM_64,
-    memorySize: 1024,
-    timeout: 10,
-    keepWarm: true,
-  },
-};
-
-new SvelteKit(
-  new Cdk.App(),
-  `${config.application}-${config.service}-${config.environment}-stack`,
-  config
-);
-```
-
-### Environment Variables and Secrets
-
-Configure runtime environment variables and secrets:
-
-```ts title="stack/index.ts"
-const config: SvelteKitProps = {
-  // ... other props
-  
-  serverProps: {
-    // ... other serverProps
-    variables: [
-      { NODE_ENV: 'production' },
-      { PUBLIC_API_URL: 'https://api.example.com' }
-    ],
-    secrets: [
-      { 
-        key: 'DATABASE_URL', 
-        resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:/my-app/DATABASE_URL-abc123' 
-      },
-    ],
-  },
-};
-```
-
-### Deploy
-
-Build and deploy your serverless SvelteKit application:
-
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm run build
-npx cdk deploy --all --app="npx tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm run build
-pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun run build
-npx cdk deploy --all --app="bunx tsx stack/index.ts"
-```
-  </TabItem>
-</Tabs>
-
-After deployment, you'll receive a **CloudFront URL** to access your serverless SSR application.
-
-
-## Containerized SSR Deployment
----
-
-Deploy server-side rendered SvelteKit applications using ECS Fargate and Application Load Balancer with the `Fargate` construct. This pattern is ideal for MPA and full-stack applications where you need server-side rendering, database integration, or API routes.
-
-### Configure SvelteKit for SSR
-
-Use `adapter-node` for Node.js server deployment:
-
-```ts title="svelte.config.js"
+```js title="svelte.config.js"
 import adapter from '@sveltejs/adapter-node';
 
 export default {
@@ -333,127 +196,76 @@ export default {
 };
 ```
 
-By default, SvelteKit uses server-side rendering (SSR) for the initial page load, which improves SEO and perceived performance. You can also optionally prerender specific pages while keeping others server-rendered:
+### Stack
 
-```ts title="src/routes/about/+page.ts"
-export const prerender = true; // Only for static pages
-```
+The `Fargate` construct creates an ECS cluster, a Fargate task definition, and an Application Load Balancer.
 
-### Install Dependencies and Setup Stack
+```ts title="stack/prod.ts"
+import { Cdk, Fargate, type FargateProps } from '@thunder-so/thunder';
 
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm i tsx @thunder-so/thunder --save-dev
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm add -D tsx @thunder-so/thunder
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add -d tsx @thunder-so/thunder
-```
-  </TabItem>
-</Tabs>
-
-```ts title="stack/index.ts"
-import { Cdk, Fargate, type FargateProps } from "@thunder-so/thunder";
-
-const svcProps: FargateProps = {
-  env: {
-    account: 'your-account-id',
-    region: 'us-west-2'
-  },
-  application: 'your-application-id',
-  service: 'your-service-id',
-  environment: 'production',
-
-  rootDir: '', // e.g. 'app' for monorepos
-};
-
-new Fargate(
-  new Cdk.App(), 
-  `${svcProps.application}-${svcProps.service}-${svcProps.environment}-stack`, 
-  svcProps
-);
-```
-
-### Build Settings Using Nixpacks
-
-Configure automatic containerization with Nixpacks:
-
-```ts title="stack/index.ts"
-const svcProps: FargateProps = {
-  // ... other props
-  
-  buildProps: {
-    buildSystem: 'Nixpacks',
-    installcmd: 'bun install',
-    buildcmd: 'bun run build',
-    startcmd: 'bun start',
-  },
-};
-```
-
-### Build Settings Using Docker Container
-
-Alternatively, use a custom Dockerfile:
-
-```dockerfile title="Dockerfile"
-FROM public.ecr.aws/docker/library/node:20-alpine AS base
-
-FROM base AS builder
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm ci
-
-COPY . .
-RUN npm run build
-
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV=production
-
-COPY --from=builder /app/build ./
-
-EXPOSE 3000
-
-CMD ["node", "index.js"]
-```
-
-```ts title="stack/index.ts"
-const svcProps: FargateProps = {
-  // ... other props
-  
+const config: FargateProps = {
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'web',
+  environment: 'prod',
+  rootDir: '.',
   serviceProps: {
     dockerFile: 'Dockerfile',
+    architecture: Cdk.aws_ecs.CpuArchitecture.ARM64,
+    cpu: 512,
+    memorySize: 1024,
     port: 3000,
+    desiredCount: 1,
+    healthCheckPath: '/',
   },
 };
+
+new Fargate(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
 ```
 
-### Environment Variables and Secrets for SSR
+### Dockerfile
 
-Configure runtime environment variables and secrets:
+Create a `Dockerfile` in your project root. The multi-stage build keeps the final image lean by separating the build environment from the runtime.
 
-```ts title="stack/index.ts"
-const svcProps: FargateProps = {
-  // ... other props
-  
+```dockerfile title="Dockerfile"
+FROM oven/bun:latest AS builder
+WORKDIR /app
+COPY package.json bun.lockb ./
+RUN bun install --frozen-lockfile
+COPY . .
+RUN bun run build
+
+FROM oven/bun:latest AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+ENV PORT=3000
+COPY --from=builder /app/build ./build
+COPY --from=builder /app/package.json ./
+EXPOSE 3000
+CMD ["bun", "./build/index.js"]
+```
+
+<Aside type="tip" title="No Dockerfile?">
+If you omit `dockerFile` from `serviceProps`, Thunder will use [Nixpacks](https://nixpacks.com/) to automatically generate a container image from your project. This is a good option for getting started quickly without writing a Dockerfile.
+</Aside>
+
+### Environment Variables and Secrets
+
+Runtime environment variables are injected into the Fargate task at deploy time. For sensitive values, store them in [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) and reference them by ARN — Thunder fetches and injects them automatically.
+
+```ts title="stack/prod.ts"
+const config: FargateProps = {
+  // ...
   serviceProps: {
+    // ...
     variables: [
       { NODE_ENV: 'production' },
-      { PUBLIC_API_URL: 'https://api.example.com' }
     ],
     secrets: [
-      { 
-        key: 'DATABASE_URL', 
-        resource: 'arn:aws:secretsmanager:us-west-2:123456789012:secret:/my-app/DATABASE_URL-abc123' 
+      {
+        key: 'DATABASE_URL',
+        resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:/myapp/DATABASE_URL-abc123',
       },
     ],
   },
@@ -462,27 +274,169 @@ const svcProps: FargateProps = {
 
 ### Deploy
 
-Build and deploy your containerized application:
+CDK builds the Docker image, pushes it to [ECR](https://aws.amazon.com/ecr/), and deploys it to Fargate. No manual Docker commands needed.
 
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+npx cdk deploy --app "bunx tsx stack/prod.ts" --profile default
+```
+  </TabItem>
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npx cdk deploy --app "npx tsx stack/prod.ts" --profile default
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm exec cdk deploy --app "pnpm exec tsx stack/prod.ts" --profile default
+```
+  </TabItem>
+</Tabs>
+
+After deployment, CDK outputs the **Load Balancer DNS** for your application.
+
+---
+
+## SvelteKit Serverless Fullstack Deployment
+
+Deploy SvelteKit with SSR using [AWS Lambda](https://aws.amazon.com/lambda/) for server-side rendering, [S3](https://aws.amazon.com/s3/) for static assets, and [CloudFront](https://aws.amazon.com/cloudfront/) to unify both behind a single domain. This pattern scales to zero and charges only for actual requests.
+
+### Install Adapter for Lambda
+
+The `@foladayo/sveltekit-adapter-lambda` package adapts SvelteKit's build output to the [Lambda function handler](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-handler.html) format expected by API Gateway.
+
+<Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun add -D @foladayo/sveltekit-adapter-lambda
+```
+  </TabItem>
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm install -D @foladayo/sveltekit-adapter-lambda
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add -D @foladayo/sveltekit-adapter-lambda
+```
+  </TabItem>
+</Tabs>
+
+### Configure SvelteKit for AWS Lambda
+
+Replace the adapter in your SvelteKit config. The `serveStatic: true` option is required — it tells the adapter to serve prerendered pages directly from the Lambda handler rather than expecting a separate static file server.
+
+```js title="svelte.config.js"
+import adapter from '@foladayo/sveltekit-adapter-lambda';
+
+export default {
+  kit: {
+    adapter: adapter({
+      serveStatic: true,
+    }),
+  },
+};
+```
+
+<Aside type="caution" title="serveStatic is required">
+Omitting `serveStatic: true` will cause prerendered pages to return 404 errors.
+</Aside>
+
+The build will produce a flat `build/` directory (Lambda handler) and `build/client/` (static assets for S3).
+
+### Stack (Zip mode)
+
+The `SvelteKit` construct wires up Lambda, API Gateway, S3, and CloudFront automatically. By default, Thunder packages your Lambda handler as a Zip deployment — the fastest option for most apps.
+
+```ts title="stack/prod.ts"
+import { Cdk, SvelteKit, type SvelteKitProps } from '@thunder-so/thunder';
+
+const config: SvelteKitProps = {
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'web',
+  environment: 'prod',
+  rootDir: '.',
+};
+
+new SvelteKit(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
+```
+
+### Container Mode
+
+Zip deployments have a 250 MB unzipped size limit. If your app has large dependencies — native modules, ML libraries, or heavy assets — switch to container mode. Thunder builds a Docker image, pushes it to [ECR](https://aws.amazon.com/ecr/), and deploys it as a [container Lambda](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html), which supports up to 10 GB.
+
+#### Stack (Container mode)
+
+Add `dockerFile` to `serverProps` to enable container mode.
+
+```ts title="stack/prod.ts"
+const config: SvelteKitProps = {
+  // ...
+  serverProps: {
+    dockerFile: 'Dockerfile',
+    memorySize: 2048,
+  },
+};
+```
+
+#### Dockerfile
+
+```dockerfile title="Dockerfile"
+FROM public.ecr.aws/lambda/nodejs:22
+
+# Copy all lambda files
+COPY . ./
+
+CMD ["index.handler"]
+```
+
+### Environment Variables and Secrets
+
+Runtime environment variables are injected into the Lambda function at deploy time. For sensitive values, store them in [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) and reference them by ARN — Thunder fetches and injects them automatically.
+
+```ts title="stack/prod.ts"
+const config: SvelteKitProps = {
+  // ...
+  serverProps: {
+    variables: [
+      { NODE_ENV: 'production' },
+    ],
+    secrets: [
+      {
+        key: 'DATABASE_URL',
+        resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:/myapp/DATABASE_URL-abc123',
+      },
+    ],
+  },
+};
+```
+
+### Deploy
+
+Build your SvelteKit app first to generate the Lambda handler and static assets, then deploy with CDK.
+
+<Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+npx cdk deploy --app "bunx tsx stack/prod.ts" --profile default
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm run build
-npx cdk deploy --all --app="npx tsx stack/index.ts"
+npx cdk deploy --app "npx tsx stack/prod.ts" --profile default
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
 pnpm run build
-pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun run build
-npx cdk deploy --all --app="bunx tsx stack/index.ts"
+pnpm exec cdk deploy --app "pnpm exec tsx stack/prod.ts" --profile default
 ```
   </TabItem>
 </Tabs>
 
-After deployment, you'll receive an **Application Load Balancer URL** to access your application.
+After deployment, CDK outputs a **CloudFront URL** that serves both your SSR responses and static assets.

@@ -19,10 +19,7 @@ There are two deployment patterns available for React Router on AWS:
 - AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
 </Aside>
 
-## Single Page Application (SPA) Deployment
----
-
-Deploy React Router applications to S3 and CloudFront using the `Static` construct. This pattern supports both client-side rendering (CSR) and static pre-rendering, offering flexibility for different use cases.
+## Getting Started
 
 ### Create Project
 
@@ -49,6 +46,12 @@ bun add react-router-dom@7
 ```
   </TabItem>
 </Tabs>
+
+
+## Single Page Application (SPA) Deployment
+---
+
+Deploy React Router applications to S3 and CloudFront using the `Static` construct. This pattern supports both client-side rendering (CSR) and static pre-rendering, offering flexibility for different use cases.
 
 ### Configure React Router
 
@@ -79,27 +82,8 @@ export default {
 
 Pre-rendering generates static HTML and client navigation data payloads for a list of URLs, offering better performance and SEO without requiring a server. Route module loaders are used to fetch data at build time. Individual routes can also use client data loading with `clientLoader` to supplement pre-rendered data.
 
-### Install Dependencies and Setup Stack
-
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm i tsx @thunder-so/thunder --save-dev
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm add -D tsx @thunder-so/thunder
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add -d tsx @thunder-so/thunder
-```
-  </TabItem>
-</Tabs>
-
-```ts title="stack/index.ts"
+### Stack
+```ts title="stack/prod.ts"
 import { Cdk, Static, type StaticProps } from "@thunder-so/thunder";
 
 const myApp: StaticProps = {
@@ -130,19 +114,19 @@ Build and deploy your React Router SPA:
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm run build
-npx cdk deploy --all --app="npx tsx stack/index.ts"
+npx cdk deploy --app "npx tsx stack/prod.ts"
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
 pnpm run build
-pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
+pnpm exec cdk deploy --app "pnpm exec tsx stack/prod.ts"
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
 bun run build
-npx cdk deploy --all --app="bunx tsx stack/index.ts"
+npx cdk deploy --app "bunx tsx stack/prod.ts"
 ```
   </TabItem>
 </Tabs>
@@ -166,39 +150,28 @@ export default {
 
 Server-side rendering requires a deployment that supports it. Individual routes can still be statically pre-rendered, and routes can also use client data loading with `clientLoader` to avoid server rendering/fetching for their portion of the UI.
 
-### Install Dependencies and Setup Stack
-
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm i tsx @thunder-so/thunder --save-dev
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm add -D tsx @thunder-so/thunder
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add -d tsx @thunder-so/thunder
-```
-  </TabItem>
-</Tabs>
-
-```ts title="stack/index.ts"
+### Stack
+```ts title="stack/prod.ts"
 import { Cdk, Fargate, type FargateProps } from "@thunder-so/thunder";
 
 const svcProps: FargateProps = {
   env: {
     account: 'your-account-id',
-    region: 'us-west-2'
+    region: 'us-east-1'
   },
   application: 'your-application-id',
   service: 'your-service-id',
   environment: 'production',
 
-  rootDir: '', // e.g. 'app' for monorepos
+  rootDir: '',
+  serviceProps: {
+    architecture: Cdk.aws_ecs.CpuArchitecture.ARM64,
+    cpu: 512,
+    memorySize: 1024,
+    port: 3000,
+    desiredCount: 1,
+    healthCheckPath: '/',
+  },
 };
 
 new Fargate(
@@ -212,7 +185,7 @@ new Fargate(
 
 Configure automatic containerization with Nixpacks:
 
-```ts title="stack/index.ts"
+```ts title="stack/prod.ts"
 const svcProps: FargateProps = {
   // ... other props
   
@@ -230,30 +203,24 @@ const svcProps: FargateProps = {
 Alternatively, use a custom Dockerfile:
 
 ```dockerfile title="Dockerfile"
-FROM public.ecr.aws/docker/library/node:20-alpine AS base
-
-FROM base AS builder
+FROM oven/bun:latest AS builder
 WORKDIR /app
-
-COPY package*.json ./
-RUN npm ci
-
+COPY package.json bun.lockb ./
+RUN bun install --frozen-lockfile
 COPY . .
-RUN npm run build
+RUN bun run build
 
-FROM base AS runner
+FROM oven/bun:latest AS runner
 WORKDIR /app
-
 ENV NODE_ENV=production
-
+ENV HOST=0.0.0.0
+ENV PORT=3000
 COPY --from=builder /app/build ./build
-
 EXPOSE 3000
-
-CMD ["node", "./build/server/index.js"]
+CMD ["bun", "run", "./build/server/index.js"]
 ```
 
-```ts title="stack/index.ts"
+```ts title="stack/prod.ts"
 const svcProps: FargateProps = {
   // ... other props
   
@@ -268,7 +235,7 @@ const svcProps: FargateProps = {
 
 Configure runtime environment variables and secrets:
 
-```ts title="stack/index.ts"
+```ts title="stack/prod.ts"
 const svcProps: FargateProps = {
   // ... other props
   
@@ -295,19 +262,19 @@ Build and deploy your containerized application:
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm run build
-npx cdk deploy --all --app="npx tsx stack/index.ts"
+npx cdk deploy --app "npx tsx stack/prod.ts"
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
 pnpm run build
-pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
+pnpm exec cdk deploy --app "pnpm exec tsx stack/prod.ts"
 ```
   </TabItem>
   <TabItem label="bun" icon="bun">
 ```sh
 bun run build
-npx cdk deploy --all --app="bunx tsx stack/index.ts"
+npx cdk deploy --app "bunx tsx stack/prod.ts"
 ```
   </TabItem>
 </Tabs>

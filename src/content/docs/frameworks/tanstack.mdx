@@ -3,240 +3,350 @@ title: 'Deploy TanStack Start on AWS'
 description: 'Deploy TanStack Start applications on AWS using static site generation with S3 and CloudFront, serverless SSR with Lambda, or containerized SSR with ECS Fargate.'
 ---
 
-import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
+import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
 import PatternList from '../../../components/docs/PatternList.astro';
 
-Deploy your [TanStack Start](https://tanstack.com/start) applications to AWS using Thunder patterns. This guide covers static site generation, serverless SSR, and containerized deployments.
+Deploy your [TanStack Start](https://tanstack.com/start) applications to AWS using Thunder. Choose the pattern that fits your app's needs.
 
-There are three deployment patterns available for TanStack Start on AWS:
+## Available Patterns
 
 <PatternList patterns={["static", "serverless", "fargate"]} />
 
-<Aside type="note" title="Requirements">
+## Prerequisites
+
+<Aside type="note" title="Before you begin">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
-- Node.js version 20 or higher
+- Node.js 20 or higher
 - [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured
-- AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
+- AWS environment bootstrapped: `cdk bootstrap aws://YOUR_ACCOUNT_ID/us-east-1`
 </Aside>
 
-## Static Site Generation (SSG) Deployment
----
-
-Deploy static TanStack Start sites to S3 and CloudFront using the `Static` construct. This pattern is ideal for static sites and client-side applications.
+## Getting Started
 
 ### Create Project
 
+Scaffold a new TanStack Start project using your preferred package manager. This sets up the project structure, installs dependencies, and prepares you for development.
+
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bunx create-tanstack-start my-app
+cd my-app
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npx create-tanstack-start my-tanstack-app
-cd my-tanstack-app
+npx create-tanstack-start my-app
+cd my-app
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm create @tanstack/start@latest
-cd my-tanstack-app
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun create @tanstack/start my-tanstack-app
-cd my-tanstack-app
+pnpm create @tanstack/start@latest my-app
+cd my-app
 ```
   </TabItem>
 </Tabs>
 
-### Configure TanStack Start for Static Output
+### Install Thunder
+
+Add Thunder as a development dependency. It provides the CDK constructs you'll use to define your AWS infrastructure.
+
+<Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun add @thunder-so/thunder --development
+```
+  </TabItem>
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm install @thunder-so/thunder --save-dev
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add -D @thunder-so/thunder
+```
+  </TabItem>
+</Tabs>
+
+---
+
+## TanStack Start Static Site Deployment
+
+Deploy a fully pre-rendered TanStack Start site to [S3](https://aws.amazon.com/s3/) with [CloudFront](https://aws.amazon.com/cloudfront/) as the CDN. Every page is generated at build time and served as static files — no server required.
+
+### Configure
+
+Set the Nitro preset to `static` in your app config. This tells TanStack Start to pre-render all routes at build time and output them to `.output/public/`.
 
 ```ts title="app.config.ts"
 import { defineConfig } from '@tanstack/start/config';
 
 export default defineConfig({
   server: {
-    preset: 'static'
-  }
+    preset: 'static',
+  },
 });
 ```
 
-### Install Dependencies and Setup Stack
+### Stack
 
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm i tsx @thunder-so/thunder --save-dev
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm add -D tsx @thunder-so/thunder
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add -d tsx @thunder-so/thunder
-```
-  </TabItem>
-</Tabs>
+The `Static` construct provisions an S3 bucket, a CloudFront distribution, and optionally a Route53 DNS record.
 
-```ts title="stack/index.ts"
-import { Cdk, Static, type StaticProps } from "@thunder-so/thunder";
+```ts title="stack/prod.ts"
+import { Cdk, Static, type StaticProps } from '@thunder-so/thunder';
 
-const myApp: StaticProps = {
-  env: {
-    account: 'your-account-id',
-    region: 'us-east-1'
-  },
-  application: 'your-application-id',
-  service: 'your-service-id',
-  environment: 'production',
-
-  rootDir: '',
+const config: StaticProps = {
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'web',
+  environment: 'prod',
+  rootDir: '.',
   outputDir: '.output/public',
 };
 
-new Static(
-  new Cdk.App(), 
-  `${myApp.application}-${myApp.service}-${myApp.environment}-stack`, 
-  myApp
-);
+new Static(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
 ```
 
 ### Deploy
 
-Build and deploy your static site:
+Build your app first to generate the static files, then deploy with CDK. CDK uploads the files to S3 and provisions the CloudFront distribution.
 
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+npx cdk deploy --app "bunx tsx stack/prod.ts" --profile default
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm run build
-npx cdk deploy --all --app="npx tsx stack/index.ts"
+npx cdk deploy --app "npx tsx stack/prod.ts" --profile default
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
 pnpm run build
-pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun run build
-npx cdk deploy --all --app="bunx tsx stack/index.ts"
+pnpm exec cdk deploy --app "pnpm exec tsx stack/prod.ts" --profile default
 ```
   </TabItem>
 </Tabs>
 
-After deployment, you'll receive a **CloudFront URL** to access your static site.
+After deployment, CDK outputs a **CloudFront URL** where your static site is live.
 
-## Serverless SSR Deployment
 ---
 
-Deploy server-side rendered TanStack Start applications using Lambda, S3, and CloudFront with the `TanStackStart` construct. This pattern provides auto-scaling SSR with pay-per-request pricing.
+## TanStack Start Containerized Deployment with Fargate
 
-### Create Project
+Run your TanStack Start app as a Node.js server inside a Docker container on [ECS Fargate](https://aws.amazon.com/fargate/). Traffic is routed through an [Application Load Balancer](https://aws.amazon.com/elasticloadbalancing/application-load-balancer/). This pattern supports full SSR, API routes, and any server-side logic.
 
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npx create-tanstack-start my-tanstack-app
-cd my-tanstack-app
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm create @tanstack/start@latest
-cd my-tanstack-app
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun create @tanstack/start my-tanstack-app
-cd my-tanstack-app
-```
-  </TabItem>
-</Tabs>
+### Configure for Node Server
 
-### Configure TanStack Start for AWS Lambda
+TanStack Start uses [Nitro](https://nitro.unjs.io/) as its server engine. Set the preset to `node-server` so the build output is a standard Node.js HTTP server that can run inside a container.
 
 ```ts title="app.config.ts"
 import { defineConfig } from '@tanstack/start/config';
 
 export default defineConfig({
   server: {
-    preset: 'aws-lambda'
-  }
+    preset: 'node-server',
+  },
 });
 ```
 
-### Install Dependencies and Setup Stack
+### Stack
+
+The `Fargate` construct creates an ECS cluster, a Fargate task definition, and an Application Load Balancer.
+
+```ts title="stack/prod.ts"
+import { Cdk, Fargate, type FargateProps } from '@thunder-so/thunder';
+
+const config: FargateProps = {
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'web',
+  environment: 'prod',
+  rootDir: '.',
+  serviceProps: {
+    dockerFile: 'Dockerfile',
+    architecture: Cdk.aws_ecs.CpuArchitecture.ARM64,
+    cpu: 512,
+    memorySize: 1024,
+    port: 3000,
+    desiredCount: 1,
+    healthCheckPath: '/',
+  },
+};
+
+new Fargate(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
+```
+
+### Dockerfile
+
+Create a `Dockerfile` in your project root. The multi-stage build keeps the final image lean by separating the build environment from the runtime.
+
+```dockerfile title="Dockerfile"
+FROM oven/bun:latest AS builder
+WORKDIR /app
+COPY package.json bun.lockb ./
+RUN bun install --frozen-lockfile
+COPY . .
+RUN bun run build
+
+FROM oven/bun:latest AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+ENV PORT=3000
+COPY --from=builder /app/.output ./
+EXPOSE 3000
+CMD ["bun", "run", "server/index.mjs"]
+```
+
+<Aside type="tip" title="No Dockerfile?">
+If you omit `dockerFile` from `serviceProps`, Thunder will use [Nixpacks](https://nixpacks.com/) to automatically generate a container image from your project. This is a good option for getting started quickly without writing a Dockerfile.
+</Aside>
+
+### Environment Variables and Secrets
+
+Runtime environment variables are injected into the Fargate task at deploy time. For sensitive values, store them in [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) and reference them by ARN — Thunder fetches and injects them automatically.
+
+```ts title="stack/prod.ts"
+const config: FargateProps = {
+  // ...
+  serviceProps: {
+    // ...
+    variables: [
+      { NODE_ENV: 'production' },
+    ],
+    secrets: [
+      {
+        key: 'DATABASE_URL',
+        resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:/myapp/DATABASE_URL-abc123',
+      },
+    ],
+  },
+};
+```
+
+### Deploy
+
+CDK builds the Docker image, pushes it to [ECR](https://aws.amazon.com/ecr/), and deploys it to Fargate. No manual Docker commands needed.
 
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+npx cdk deploy --app "bunx tsx stack/prod.ts" --profile default
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm i tsx @thunder-so/thunder --save-dev
+npx cdk deploy --app "npx tsx stack/prod.ts" --profile default
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm add -D tsx @thunder-so/thunder
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add -d tsx @thunder-so/thunder
+pnpm exec cdk deploy --app "pnpm exec tsx stack/prod.ts" --profile default
 ```
   </TabItem>
 </Tabs>
 
-```ts title="stack/index.ts"
-import { Cdk, TanStackStart, type TanStackStartProps } from "@thunder-so/thunder";
+After deployment, CDK outputs the **Load Balancer DNS** for your application.
+
+---
+
+## TanStack Start Serverless Fullstack Deployment
+
+Deploy TanStack Start with SSR using [AWS Lambda](https://aws.amazon.com/lambda/) for server-side rendering, [S3](https://aws.amazon.com/s3/) for static assets, and [CloudFront](https://aws.amazon.com/cloudfront/) to unify both behind a single domain. This pattern scales to zero and charges only for actual requests.
+
+### Configure TanStack Start for AWS Lambda
+
+TanStack Start uses [Nitro](https://nitro.unjs.io/) as its server engine. You must explicitly set the `aws-lambda` preset — the default `node-server` preset outputs an HTTP server, not a Lambda handler, and will not work on Lambda.
+
+<Aside type="caution" title="Preset required">
+Always set `preset: 'aws-lambda'` explicitly. Omitting it will cause a `Runtime.HandlerNotFound` error on Lambda.
+</Aside>
+
+```ts title="app.config.ts"
+import { defineConfig } from '@tanstack/start/config';
+import { nitro } from 'nitro/vite';
+
+export default defineConfig({
+  vite: {
+    plugins: [
+      nitro({ preset: 'aws-lambda' }),
+    ],
+  },
+});
+```
+
+The build will produce `.output/server/` (Lambda handler) and `.output/public/` (static assets for S3).
+
+### Stack (Zip mode)
+
+The `TanStackStart` construct wires up Lambda, API Gateway, S3, and CloudFront automatically. By default, Thunder packages your Lambda handler as a Zip deployment — the fastest option for most apps.
+
+```ts title="stack/prod.ts"
+import { Cdk, TanStackStart, type TanStackStartProps } from '@thunder-so/thunder';
 
 const config: TanStackStartProps = {
-  env: {
-    account: 'your-account-id',
-    region: 'us-east-1'
-  },
-  application: 'your-application-id',
-  service: 'your-service-id',
-  environment: 'production',
-
-  rootDir: '',
-
-  serverProps: {
-    runtime: Cdk.aws_lambda.Runtime.NODEJS_22_X,
-    architecture: Cdk.aws_lambda.Architecture.ARM_64,
-    memorySize: 1792,
-    timeout: 10,
-    keepWarm: true,
-  },
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'web',
+  environment: 'prod',
+  rootDir: '.',
 };
 
-new TanStackStart(
-  new Cdk.App(),
-  `${config.application}-${config.service}-${config.environment}-stack`,
-  config
-);
+new TanStackStart(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
+```
+
+### Container Mode
+
+Zip deployments have a 250 MB unzipped size limit. If your app has large dependencies — native modules, ML libraries, or heavy assets — switch to container mode. Thunder builds a Docker image, pushes it to [ECR](https://aws.amazon.com/ecr/), and deploys it as a [container Lambda](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html), which supports up to 10 GB.
+
+#### Stack (Container mode)
+
+Add `dockerFile` to `serverProps` to enable container mode.
+
+```ts title="stack/prod.ts"
+const config: TanStackStartProps = {
+  // ...
+  serverProps: {
+    dockerFile: 'Dockerfile',
+    memorySize: 2048,
+  },
+};
+```
+
+#### Dockerfile
+
+```dockerfile title="Dockerfile"
+FROM public.ecr.aws/lambda/nodejs:22
+
+# Copy all lambda files
+COPY . ./
+
+CMD ["index.handler"]
 ```
 
 ### Environment Variables and Secrets
 
-Configure runtime environment variables and secrets:
+Runtime environment variables are injected into the Lambda function at deploy time. For sensitive values, store them in [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) and reference them by ARN — Thunder fetches and injects them automatically.
 
-```ts title="stack/index.ts"
+```ts title="stack/prod.ts"
 const config: TanStackStartProps = {
-  // ... other props
-  
+  // ...
   serverProps: {
-    // ... other serverProps
     variables: [
       { NODE_ENV: 'production' },
-      { PUBLIC_API_URL: 'https://api.example.com' }
+      { PUBLIC_API_URL: 'https://api.example.com' },
     ],
     secrets: [
-      { 
-        key: 'DATABASE_URL', 
-        resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:/my-app/DATABASE_URL-abc123' 
+      {
+        key: 'DATABASE_URL',
+        resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:/myapp/DATABASE_URL-abc123',
       },
     ],
   },
@@ -245,203 +355,27 @@ const config: TanStackStartProps = {
 
 ### Deploy
 
-Build and deploy your serverless TanStack Start application:
+Build your app first to generate the Lambda handler and static assets, then deploy with CDK.
 
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+npx cdk deploy --app "bunx tsx stack/prod.ts" --profile default
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm run build
-npx cdk deploy --all --app="npx tsx stack/index.ts"
+npx cdk deploy --app "npx tsx stack/prod.ts" --profile default
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
 pnpm run build
-pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun run build
-npx cdk deploy --all --app="bunx tsx stack/index.ts"
+pnpm exec cdk deploy --app "pnpm exec tsx stack/prod.ts" --profile default
 ```
   </TabItem>
 </Tabs>
 
-After deployment, you'll receive a **CloudFront URL** to access your serverless SSR application.
-
-## Containerized SSR Deployment
----
-
-Deploy server-side rendered TanStack Start applications using ECS Fargate and Application Load Balancer with the `Fargate` construct.
-
-### Create Project
-
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npx tanstack create my-tanstack-app
-cd my-tanstack-app
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm create @tanstack/start@latest
-cd my-tanstack-app
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun create @tanstack/start my-tanstack-app
-cd my-tanstack-app
-```
-  </TabItem>
-</Tabs>
-
-### Install Dependencies and Setup Stack
-
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm i tsx @thunder-so/thunder --save-dev
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm add -D tsx @thunder-so/thunder
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add -d tsx @thunder-so/thunder
-```
-  </TabItem>
-</Tabs>
-
-```ts title="stack/index.ts"
-import { Cdk, Fargate, type FargateProps } from "@thunder-so/thunder";
-
-const svcProps: FargateProps = {
-  env: {
-    account: 'your-account-id',
-    region: 'us-west-2'
-  },
-  application: 'your-application-id',
-  service: 'your-service-id',
-  environment: 'production',
-
-  rootDir: '', // e.g. 'app' for monorepos
-};
-
-new Fargate(
-  new Cdk.App(), 
-  `${svcProps.application}-${svcProps.service}-${svcProps.environment}-stack`, 
-  svcProps
-);
-```
-
-### Build Settings Using Nixpacks
-
-Configure automatic containerization with Nixpacks:
-
-```ts title="stack/index.ts"
-const svcProps: FargateProps = {
-  // ... other props
-  
-  buildProps: {
-    buildSystem: 'Nixpacks',
-    installcmd: 'bun install',
-    buildcmd: 'bun run build',
-    startcmd: 'bun run start',
-  },
-};
-```
-
-### Build Settings Using Docker Container
-
-Alternatively, use a custom Dockerfile:
-
-```dockerfile title="Dockerfile"
-FROM public.ecr.aws/docker/library/node:20-alpine AS base
-
-FROM base AS builder
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm ci
-
-COPY . .
-RUN npm run build
-
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV=production
-
-COPY --from=builder /app/dist ./dist
-
-EXPOSE 3000
-
-CMD ["node", "./dist/server/index.js"]
-```
-
-```ts title="stack/index.ts"
-const svcProps: FargateProps = {
-  // ... other props
-  
-  serviceProps: {
-    dockerFile: 'Dockerfile',
-    port: 3000,
-  },
-};
-```
-
-### Environment Variables and Secrets for SSR
-
-Configure runtime environment variables and secrets:
-
-```ts title="stack/index.ts"
-const svcProps: FargateProps = {
-  // ... other props
-  
-  serviceProps: {
-    variables: [
-      { NODE_ENV: 'production' },
-      { PUBLIC_API_URL: 'https://api.example.com' }
-    ],
-    secrets: [
-      { 
-        key: 'DATABASE_URL', 
-        resource: 'arn:aws:secretsmanager:us-west-2:123456789012:secret:/my-app/DATABASE_URL-abc123' 
-      },
-    ],
-  },
-};
-```
-
-### Deploy
-
-Build and deploy your containerized application:
-
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm run build
-npx cdk deploy --all --app="npx tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm run build
-pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun run build
-npx cdk deploy --all --app="bunx tsx stack/index.ts"
-```
-  </TabItem>
-</Tabs>
-
-After deployment, you'll receive an **Application Load Balancer URL** to access your SSR application.
+After deployment, CDK outputs a **CloudFront URL** that serves both your SSR responses and static assets.

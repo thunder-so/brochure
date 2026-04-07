@@ -1,12 +1,11 @@
 ---
-title: Serverless
+title: Serverless Fullstack
 description: Deploy full-stack SSR frameworks using Lambda, S3, and CloudFront
 ---
 import { Icon } from 'astro-icon/components';
+import { Aside } from '@astrojs/starlight/components';
 
-Deploy full-stack server-side rendered applications on AWS using Lambda for SSR, S3 for static assets, and CloudFront as the global CDN.
-
-Thunder provides the [@thunder-so/thunder](https://github.com/thunder-so/thunder) package with framework-specific constructs (`Nuxt`, `Astro`, `SvelteKit`, `TanStack Start`, `SolidStart`, `AnalogJS`) as well as a generic `Serverless` construct for any Nitro or Vite-based framework.
+Deploy full-stack server-side rendered applications on AWS using [Lambda](https://aws.amazon.com/lambda/) for SSR, [S3](https://aws.amazon.com/s3/) for static assets, and [CloudFront](https://aws.amazon.com/cloudfront/) as the global CDN. Scales to zero — pay only for actual requests.
 
 ## Supported Frameworks
 
@@ -18,7 +17,19 @@ Thunder provides the [@thunder-so/thunder](https://github.com/thunder-so/thunder
 - [AnalogJS](https://analogjs.org/)
 - Any Nitro or Vite-based SSR framework via the generic `Serverless` construct
 
-## Serverless SSR Architecture
+## AWS Resources
+
+| Resource | Purpose |
+| --- | --- |
+| [Lambda Function](https://aws.amazon.com/lambda/) | Runs SSR and API routes |
+| [API Gateway HTTP API](https://aws.amazon.com/api-gateway/) | Routes dynamic requests to Lambda |
+| [S3 Bucket](https://aws.amazon.com/s3/) | Hosts static assets (JS, CSS, images) |
+| [CloudFront Distribution](https://aws.amazon.com/cloudfront/) | Global CDN with origin routing |
+| [Origin Access Control](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) | Secures S3 — no public bucket access |
+| [ACM Certificate](https://aws.amazon.com/certificate-manager/) | SSL/TLS for custom domain (optional) |
+| [Route53](https://aws.amazon.com/route53/) | DNS management (optional) |
+
+## Architecture
 
 <section class="max-w-full bg-card border border-border rounded-lg p-6 mb-6">
   <svg viewBox="0 0 720 120" class="w-full h-auto">
@@ -64,39 +75,38 @@ Thunder provides the [@thunder-so/thunder](https://github.com/thunder-so/thunder
   </svg>
 </section>
 
-**CloudFront** routes requests at the edge — static assets are served directly from **S3** while dynamic SSR requests are forwarded to **Lambda**, which renders pages on-demand with pay-per-request pricing and automatic scaling.
+CloudFront routes requests at the edge using this logic:
+
+| Request pattern | Routed to | Notes |
+| --- | --- | --- |
+| `*.*` (any file extension) | S3 | JS, CSS, images, fonts — long-term cached |
+| `/api/*` (or custom `paths`) | Lambda via API Gateway | API routes, mutations |
+| Everything else `/*` | Lambda via API Gateway | SSR page rendering |
 
 ## Quick Start
 
 ### Installation
 
 ```bash
-bun add -D tsx @thunder-so/thunder
-```
-
-### Basic Setup
-
-```bash
-mkdir stack && touch stack/index.ts
+bun add -D @thunder-so/thunder
 ```
 
 ### Configuration
 
-Use the framework-specific construct for best defaults, or `Serverless` for any other framework:
+Use the framework-specific construct for best defaults. Each construct knows the expected build output paths for its framework and configures Lambda, S3, and CloudFront accordingly.
 
-```ts
-// stack/index.ts
+```ts title="stack/prod.ts"
 import { Cdk, Nuxt, type NuxtProps } from '@thunder-so/thunder';
 
 const config: NuxtProps = {
   env: {
-    account: 'your-account-id',
+    account: 'YOUR_ACCOUNT_ID',
     region: 'us-east-1',
   },
-  application: 'my-app',
+  application: 'myapp',
   service: 'web',
-  environment: 'production',
-  rootDir: '',
+  environment: 'prod',
+  rootDir: '.',
   serverProps: {
     runtime: Cdk.aws_lambda.Runtime.NODEJS_22_X,
     architecture: Cdk.aws_lambda.Architecture.ARM_64,
@@ -116,17 +126,29 @@ new Nuxt(
 ### Deploy
 
 ```bash
-bunx cdk deploy --all --app="bunx tsx stack/index.ts"
+bun run build
+npx cdk deploy --app "bunx tsx stack/prod.ts" --profile default
 ```
 
-## Custom Domain Setup
+CDK outputs the CloudFront URL and API Gateway URL:
 
-```ts
+```
+Outputs:
+myapp-web-prod-stack.CloudFrontUrl = https://d1234abcd.cloudfront.net
+myapp-web-prod-stack.ApiGatewayUrl = https://abc123.execute-api.us-east-1.amazonaws.com
+```
+
+## Custom Domain
+
+Two certificates are required — one global (for CloudFront, must be `us-east-1`) and one regional (for API Gateway, same region as your function):
+
+```ts title="stack/prod.ts"
 const config: NuxtProps = {
-  // ... other props
+  // ...
   domain: 'app.example.com',
   hostedZoneId: 'Z1D633PJN98FT9',
-  globalCertificateArn: 'arn:aws:acm:us-east-1:123456789012:certificate/abcd1234-abcd-1234-abcd-1234abcd1234',
+  globalCertificateArn: 'arn:aws:acm:us-east-1:123456789012:certificate/abc-123',
+  regionalCertificateArn: 'arn:aws:acm:us-east-1:123456789012:certificate/def-456',
 };
 ```
 
@@ -134,29 +156,121 @@ const config: NuxtProps = {
 
 ### Server Runtime
 
-Fine-tune Lambda performance with memory, timeout, and warm-up settings:
+Fine-tune Lambda performance with memory, timeout, concurrency, and warm-up settings. `streaming` enables response streaming for frameworks that support it (Nuxt/Nitro).
 
-```ts
+```ts title="stack/prod.ts"
 const config: NuxtProps = {
-  // ... other props
+  // ...
   serverProps: {
     runtime: Cdk.aws_lambda.Runtime.NODEJS_22_X,
     architecture: Cdk.aws_lambda.Architecture.ARM_64,
     memorySize: 1792,
     timeout: 10,
-    keepWarm: true,
-    streaming: true, // enable response streaming (Nuxt/Nitro)
+    tracing: true,                  // enable AWS X-Ray
+    keepWarm: true,                 // ping every 5 min to prevent cold starts
+    streaming: true,                // enable response streaming (Nuxt/Nitro)
+    reservedConcurrency: 10,        // hard cap on simultaneous executions
+    provisionedConcurrency: 2,      // pre-warmed instances, eliminates cold starts
+  },
+};
+```
+
+### Custom API Paths
+
+By default, CloudFront routes `/api/*` to Lambda and everything else either to S3 (static files) or Lambda (SSR). Use `paths` to customize which URL patterns are treated as API routes:
+
+```ts title="stack/prod.ts"
+const config: NuxtProps = {
+  // ...
+  serverProps: {
+    paths: ['/api/*', '/trpc/*', '/auth/*'],
+  },
+};
+```
+
+### Environment Variables and Secrets
+
+```ts title="stack/prod.ts"
+const config: NuxtProps = {
+  // ...
+  serverProps: {
     variables: [
       { NODE_ENV: 'production' },
     ],
     secrets: [
-      { key: 'DATABASE_URL', resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:db-url-abc123' },
+      { key: 'DATABASE_URL', resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:/myapp/DATABASE_URL-abc123' },
     ],
   },
 };
 ```
 
-## CI/CD Pipeline Architecture
+### CloudFront Cache Behavior
+
+Control what gets included in the CloudFront cache key for SSR responses:
+
+```ts title="stack/prod.ts"
+const config: NuxtProps = {
+  // ...
+  allowHeaders: ['Accept-Language'],
+  allowCookies: ['session-*'],
+  allowQueryParams: ['lang', 'theme'],
+  // denyQueryParams: ['utm_source', 'fbclid'], // mutually exclusive with allowQueryParams
+};
+```
+
+### Container Mode
+
+Zip deployments have a 250 MB unzipped size limit. For apps with large dependencies, switch to container mode. Thunder builds a Docker image, pushes it to [ECR](https://aws.amazon.com/ecr/), and deploys it as a [container Lambda](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html) (up to 10 GB).
+
+```ts title="stack/prod.ts"
+const config: NuxtProps = {
+  // ...
+  serverProps: {
+    dockerFile: 'Dockerfile',
+    memorySize: 2048,
+  },
+};
+```
+
+```dockerfile title="Dockerfile"
+FROM public.ecr.aws/lambda/nodejs:22
+
+# Copy all lambda files
+COPY . ./
+
+CMD ["index.handler"]
+```
+
+### Generic Serverless Construct
+
+For any Vite/Nitro-based framework not explicitly supported, use the generic `Serverless` construct and specify the server output paths manually:
+
+```ts title="stack/prod.ts"
+import { Cdk, Serverless, type ServerlessProps } from '@thunder-so/thunder';
+
+const config: ServerlessProps = {
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'web',
+  environment: 'prod',
+  rootDir: '.',
+  serverProps: {
+    codeDir: '.output/server',
+    handler: 'index.handler',
+    runtime: Cdk.aws_lambda.Runtime.NODEJS_22_X,
+    architecture: Cdk.aws_lambda.Architecture.ARM_64,
+    memorySize: 1792,
+    timeout: 10,
+  },
+  clientProps: {
+    outputDir: '.output/public',
+  },
+};
+
+new Serverless(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
+```
+
+## CI/CD Pipeline
 
 ### AWS CodePipeline Integration
 
@@ -206,11 +320,9 @@ const config: NuxtProps = {
 
 **GitHub** triggers the pipeline on code changes. **CodeBuild** builds the framework and packages the SSR server for **Lambda** while uploading static assets to S3.
 
-### Configuration
-
-```ts
+```ts title="stack/prod.ts"
 const config: NuxtProps = {
-  // ... other props
+  // ...
   accessTokenSecretArn: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:github-token-XXXXXX',
   sourceProps: {
     owner: 'your-username',
@@ -224,4 +336,18 @@ const config: NuxtProps = {
     buildcmd: 'bun run build',
   },
 };
+```
+
+## Stack Outputs
+
+| Output | Description |
+| --- | --- |
+| `CloudFrontUrl` | CloudFront distribution URL |
+| `ApiGatewayUrl` | API Gateway endpoint URL |
+| `Route53Domain` | Custom domain URL (only if `domain` is configured) |
+
+## Destroy
+
+```bash
+npx cdk destroy --app "bunx tsx stack/prod.ts" --profile default
 ```

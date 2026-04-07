@@ -63,26 +63,27 @@ const config: StaticProps = {
 new Static(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
 ```
   </TabItem>
-  <TabItem label="Serverless">
+  <TabItem label="Lambda">
 ```ts title="stack/index.ts"
-import { Cdk, Nuxt, type NuxtProps } from '@thunder-so/thunder';
+import { Cdk, Lambda, type LambdaProps } from '@thunder-so/thunder';
 
-const config: NuxtProps = {
+const config: LambdaProps = {
   env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
   application: 'myapp',
-  service: 'web',
+  service: 'api',
   environment: 'prod',
   rootDir: '.',
-  serverProps: {
+  functionProps: {
     runtime: Cdk.aws_lambda.Runtime.NODEJS_22_X,
     architecture: Cdk.aws_lambda.Architecture.ARM_64,
-    memorySize: 1792,
-    timeout: 10,
-    keepWarm: true,
+    codeDir: 'src',
+    handler: 'index.handler',
+    memorySize: 512,
+    timeout: 30,
   },
 };
 
-new Nuxt(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
+new Lambda(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
 ```
   </TabItem>
   <TabItem label="Fargate">
@@ -106,27 +107,26 @@ const config: FargateProps = {
 new Fargate(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
 ```
   </TabItem>
-  <TabItem label="Lambda">
+  <TabItem label="Serverless">
 ```ts title="stack/index.ts"
-import { Cdk, Lambda, type LambdaProps } from '@thunder-so/thunder';
+import { Cdk, Nuxt, type NuxtProps } from '@thunder-so/thunder';
 
-const config: LambdaProps = {
+const config: NuxtProps = {
   env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
   application: 'myapp',
-  service: 'api',
+  service: 'web',
   environment: 'prod',
   rootDir: '.',
-  functionProps: {
+  serverProps: {
     runtime: Cdk.aws_lambda.Runtime.NODEJS_22_X,
     architecture: Cdk.aws_lambda.Architecture.ARM_64,
-    codeDir: 'src',
-    handler: 'index.handler',
-    memorySize: 512,
-    timeout: 30,
+    memorySize: 1792,
+    timeout: 10,
+    keepWarm: true,
   },
 };
 
-new Lambda(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
+new Nuxt(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
 ```
   </TabItem>
 </Tabs>

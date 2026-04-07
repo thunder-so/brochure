@@ -11,9 +11,9 @@ const { patterns } = frameworksData;
 
 const patternMeta: Record<string, { label: string; description: string; services: string; href: string; hoverColor: string }> = {
   static:     { label: 'Static',     services: 'S3 + CloudFront',          description: 'Perfect for SPAs and static sites. Global CDN with edge caching.',                    href: '/docs/patterns/static',     hoverColor: 'rgb(96 165 250)' },
-  serverless: { label: 'Serverless', services: 'Lambda + S3 + CloudFront', description: 'Full-stack SSR frameworks. Server-side rendering with pay-per-request pricing.',      href: '/docs/patterns/serverless', hoverColor: 'rgb(251 146 60)' },
-  fargate:    { label: 'Fargate',    services: 'Fargate + ALB',            description: 'Containerized applications. Full control over runtime and resources.',                href: '/docs/patterns/fargate',    hoverColor: 'rgb(192 132 252)' },
   lambda:     { label: 'Lambda',     services: 'Lambda + API Gateway',     description: 'Serverless APIs and backends. Scale to zero, pay for what you use.',                  href: '/docs/patterns/lambda',     hoverColor: 'rgb(52 211 153)' },
+  fargate:    { label: 'Fargate',    services: 'Fargate + ALB',            description: 'Containerized applications. Full control over runtime and resources.',                href: '/docs/patterns/fargate',    hoverColor: 'rgb(192 132 252)' },
+  serverless: { label: 'Serverless', services: 'Lambda + S3 + CloudFront', description: 'Full-stack SSR frameworks. Server-side rendering with pay-per-request pricing.',      href: '/docs/patterns/serverless', hoverColor: 'rgb(251 146 60)' },
 };
 ---
 

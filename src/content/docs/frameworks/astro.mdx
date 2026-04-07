@@ -3,30 +3,37 @@ title: 'Deploy Astro on AWS'
 description: 'Deploy Astro applications on AWS using static hosting with S3 and CloudFront, serverless SSR with Lambda, or containerized SSR with ECS Fargate.'
 ---
 
-import { Tabs, TabItem, LinkButton, Aside } from '@astrojs/starlight/components';
+import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
 import PatternList from '../../../components/docs/PatternList.astro';
 
-Deploy your [Astro](https://astro.build/) applications to AWS using Thunder patterns. This guide covers static site deployment, serverless SSR, and containerized deployments.
+Deploy your [Astro](https://astro.build/) applications to AWS using Thunder. Choose the pattern that fits your app's needs.
 
-There are three deployment patterns available for Astro on AWS:
+## Available Patterns
 
 <PatternList patterns={["static", "serverless", "fargate"]} />
 
-<Aside type="note" title="Requirements">
+## Prerequisites
+
+<Aside type="note" title="Before you begin">
 - [AWS CDK](https://aws.amazon.com/cdk/) installed globally: `npm install -g aws-cdk`
-- Node.js version 20 or higher
+- Node.js 20 or higher
 - [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) configured
-- AWS environment bootstrapped: `cdk bootstrap aws://your-account-id/us-east-1`
+- AWS environment bootstrapped: `cdk bootstrap aws://YOUR_ACCOUNT_ID/us-east-1`
 </Aside>
 
-## Static Site Deployment
----
-
-Deploy static Astro sites to S3 and CloudFront using the `Static` construct. This pattern is ideal for static sites, blogs, and client-side applications.
+## Getting Started
 
 ### Create Project
 
+Scaffold a new Astro project using your preferred package manager. This sets up the project structure, installs dependencies, and prepares you for development.
+
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bunx create-astro@latest my-astro-app
+cd my-astro-app
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm create astro@latest my-astro-app
@@ -39,127 +46,250 @@ pnpm create astro my-astro-app
 cd my-astro-app
 ```
   </TabItem>
+</Tabs>
+
+### Install Thunder
+
+Add Thunder as a development dependency. It provides the CDK constructs you'll use to define your AWS infrastructure.
+
+<Tabs syncKey="package-manager">
   <TabItem label="bun" icon="bun">
 ```sh
-bun create astro my-astro-app
-cd my-astro-app
+bun add @thunder-so/thunder --development
+```
+  </TabItem>
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npm install @thunder-so/thunder --save-dev
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm add -D @thunder-so/thunder
 ```
   </TabItem>
 </Tabs>
 
-### Configure Astro for Static Output
+---
 
-```ts title="astro.config.mjs"
+## Astro Static Site Deployment
+
+Deploy a fully pre-rendered Astro site to [S3](https://aws.amazon.com/s3/) with [CloudFront](https://aws.amazon.com/cloudfront/) as the CDN. This is the simplest and most cost-effective pattern — no server required. Every page is generated at build time and served as static files.
+
+### Configure
+
+Astro defaults to static output, but it's good practice to be explicit. Set `output: 'static'` in your config to ensure all pages are pre-rendered at build time.
+
+```js title="astro.config.mjs"
 import { defineConfig } from 'astro/config';
- 
+
 export default defineConfig({
   output: 'static',
 });
 ```
 
-### Install Dependencies and Setup Stack
+### Stack
 
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm i tsx @thunder-so/thunder --save-dev
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm add -D tsx @thunder-so/thunder
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add -d tsx @thunder-so/thunder
-```
-  </TabItem>
-</Tabs>
+Create a stack file that defines your AWS infrastructure. The `Static` construct provisions an S3 bucket, a CloudFront distribution, and optionally a Route53 DNS record.
 
-```ts title="stack/index.ts"
-import { Cdk, Static, type StaticProps } from "@thunder-so/thunder";
+```ts title="stack/prod.ts"
+import { Cdk, Static, type StaticProps } from '@thunder-so/thunder';
 
-const myApp: StaticProps = {
-  env: {
-    account: 'your-account-id',
-    region: 'us-east-1'
-  },
-  application: 'your-application-id',
-  service: 'your-service-id',
-  environment: 'production',
-
-  rootDir: '', // e.g. 'frontend' for monorepos
+const config: StaticProps = {
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'web',
+  environment: 'prod',
+  rootDir: '.',
   outputDir: 'dist',
 };
 
-new Static(
-  new Cdk.App(), 
-  `${myApp.application}-${myApp.service}-${myApp.environment}-stack`, 
-  myApp
-);
+new Static(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
 ```
 
 ### Deploy
 
-Build and deploy your static site:
+Build your Astro site first — this generates the static files in `dist/`. Then deploy with CDK, which uploads the files to S3 and provisions the CloudFront distribution.
 
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+npx cdk deploy --app "bunx tsx stack/prod.ts" --profile default
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm run build
-npx cdk deploy --all --app="npx tsx stack/index.ts"
+npx cdk deploy --app "npx tsx stack/prod.ts" --profile default
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
 pnpm run build
-pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun run build
-npx cdk deploy --all --app="bunx tsx stack/index.ts"
+pnpm exec cdk deploy --app "pnpm exec tsx stack/prod.ts" --profile default
 ```
   </TabItem>
 </Tabs>
 
-After deployment, you'll receive a **CloudFront URL** to access your static site.
+After deployment, CDK outputs a **CloudFront URL** where your static site is live.
 
-## Serverless SSR Deployment
 ---
 
-Deploy server-side rendered Astro applications using Lambda, S3, and CloudFront with the `Astro` construct. This pattern provides auto-scaling SSR with pay-per-request pricing.
+## Astro Containerized Deployment with Fargate
 
-### Create Project
+Run your Astro app as a Node.js server inside a Docker container on [ECS Fargate](https://aws.amazon.com/fargate/). Traffic is routed through an [Application Load Balancer](https://aws.amazon.com/elasticloadbalancing/application-load-balancer/). This pattern supports full SSR, API routes, and any server-side logic.
+
+### Configure for Node Server
+
+Install the official Astro Node.js adapter, then configure it in standalone mode so the build output is a self-contained server entry point.
 
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun add @astrojs/node
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
-npm create astro@latest my-astro-app
-cd my-astro-app
+npm install @astrojs/node
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
-pnpm create astro my-astro-app
-cd my-astro-app
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun create astro my-astro-app
-cd my-astro-app
+pnpm add @astrojs/node
 ```
   </TabItem>
 </Tabs>
 
-### Configure Astro for AWS Lambda
+```js title="astro.config.mjs"
+import { defineConfig } from 'astro/config';
+import node from '@astrojs/node';
 
-Install the AWS adapter:
+export default defineConfig({
+  output: 'server',
+  adapter: node({ mode: 'standalone' }),
+});
+```
+
+### Stack
+
+The `Fargate` construct creates an ECS cluster, a Fargate task definition, and an Application Load Balancer.
+
+```ts title="stack/prod.ts"
+import { Cdk, Fargate, type FargateProps } from '@thunder-so/thunder';
+
+const config: FargateProps = {
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'web',
+  environment: 'prod',
+  rootDir: '.',
+  serviceProps: {
+    dockerFile: 'Dockerfile',
+    architecture: Cdk.aws_ecs.CpuArchitecture.ARM64,
+    cpu: 512,
+    memorySize: 1024,
+    port: 4321,
+    desiredCount: 1,
+    healthCheckPath: '/',
+  },
+};
+
+new Fargate(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
+```
+
+### Dockerfile
+
+Create a `Dockerfile` in your project root. The multi-stage build keeps the final image lean by separating the build environment from the runtime.
+
+```dockerfile title="Dockerfile"
+FROM public.ecr.aws/docker/library/node:22-alpine AS builder
+WORKDIR /app
+COPY package.json bun.lockb ./
+RUN curl -fsSL https://bun.sh/install | bash && export PATH="$HOME/.bun/bin:$PATH"
+RUN bun install --frozen-lockfile
+COPY . .
+RUN bun run build
+
+FROM public.ecr.aws/docker/library/node:22-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+ENV PORT=4321
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./
+EXPOSE 4321
+CMD ["node", "./dist/server/entry.mjs"]
+```
+
+<Aside type="tip" title="No Dockerfile?">
+If you omit `dockerFile` from `serviceProps`, Thunder will use [Nixpacks](https://nixpacks.com/) to automatically generate a container image from your project. This is a good option for getting started quickly without writing a Dockerfile.
+</Aside>
+
+### Environment Variables and Secrets
+
+Runtime environment variables are injected into the Fargate task at deploy time. For sensitive values, store them in [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) and reference them by ARN — Thunder fetches and injects them automatically.
+
+```ts title="stack/prod.ts"
+const config: FargateProps = {
+  // ...
+  serviceProps: {
+    // ...
+    variables: [
+      { NODE_ENV: 'production' },
+    ],
+    secrets: [
+      {
+        key: 'DATABASE_URL',
+        resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:/myapp/DATABASE_URL-abc123',
+      },
+    ],
+  },
+};
+```
+
+### Deploy
+
+CDK builds the Docker image, pushes it to [ECR](https://aws.amazon.com/ecr/), and deploys it to Fargate. No manual Docker commands needed.
 
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+npx cdk deploy --app "bunx tsx stack/prod.ts" --profile default
+```
+  </TabItem>
+  <TabItem label="npm" icon="seti:npm">
+```sh
+npx cdk deploy --app "npx tsx stack/prod.ts" --profile default
+```
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+```sh
+pnpm exec cdk deploy --app "pnpm exec tsx stack/prod.ts" --profile default
+```
+  </TabItem>
+</Tabs>
+
+After deployment, CDK outputs the **Load Balancer DNS** for your application.
+
+---
+
+## Astro Serverless Fullstack Deployment
+
+Deploy Astro with SSR using [AWS Lambda](https://aws.amazon.com/lambda/) for server-side rendering, [S3](https://aws.amazon.com/s3/) for static assets, and [CloudFront](https://aws.amazon.com/cloudfront/) to unify both behind a single domain. This pattern scales to zero and charges only for actual requests.
+
+### Install Adapter for Lambda
+
+The `@astro-aws/adapter` package adapts Astro's SSR output to the [Lambda function handler](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-handler.html) format expected by API Gateway.
+
+<Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun add @astro-aws/adapter
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm install @astro-aws/adapter
@@ -170,15 +300,15 @@ npm install @astro-aws/adapter
 pnpm add @astro-aws/adapter
 ```
   </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add @astro-aws/adapter
-```
-  </TabItem>
 </Tabs>
 
-```ts title="astro.config.mjs"
+### Configure Astro for AWS Lambda
+
+Set `output: 'server'` to enable SSR and point the adapter at `@astro-aws/adapter`. The build will produce a Lambda handler in `dist/lambda/` and static assets in `dist/client/`.
+
+```js title="astro.config.mjs"
 import { defineConfig } from 'astro/config';
+// @ts-ignore package does not provide types
 import aws from '@astro-aws/adapter';
 
 export default defineConfig({
@@ -187,74 +317,69 @@ export default defineConfig({
 });
 ```
 
-### Install Dependencies and Setup Stack
+### Stack (Zip mode)
 
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm i tsx @thunder-so/thunder --save-dev
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm add -D tsx @thunder-so/thunder
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add -d tsx @thunder-so/thunder
-```
-  </TabItem>
-</Tabs>
+The `Astro` construct wires up Lambda, API Gateway, S3, and CloudFront automatically. By default, Thunder packages your Lambda handler as a Zip deployment — the fastest option for most apps.
 
-```ts title="stack/index.ts"
-import { Cdk, Astro, type AstroProps } from "@thunder-so/thunder";
+```ts title="stack/prod.ts"
+import { Cdk, Astro, type AstroProps } from '@thunder-so/thunder';
 
 const config: AstroProps = {
-  env: {
-    account: 'your-account-id',
-    region: 'us-east-1'
-  },
-  application: 'your-application-id',
-  service: 'your-service-id',
-  environment: 'production',
-
-  rootDir: '',
-
-  serverProps: {
-    runtime: Cdk.aws_lambda.Runtime.NODEJS_22_X,
-    architecture: Cdk.aws_lambda.Architecture.ARM_64,
-    memorySize: 1024,
-    timeout: 10,
-    keepWarm: true,
-  },
+  env: { account: 'YOUR_ACCOUNT_ID', region: 'us-east-1' },
+  application: 'myapp',
+  service: 'web',
+  environment: 'prod',
+  rootDir: '.',
 };
 
-new Astro(
-  new Cdk.App(),
-  `${config.application}-${config.service}-${config.environment}-stack`,
-  config
-);
+new Astro(new Cdk.App(), `${config.application}-${config.service}-${config.environment}-stack`, config);
+```
+
+### Container Mode
+
+Zip deployments have a 250 MB unzipped size limit. If your app has large dependencies — native modules, ML libraries, or heavy assets — switch to container mode. Thunder builds a Docker image, pushes it to [ECR](https://aws.amazon.com/ecr/), and deploys it as a [container Lambda](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html), which supports up to 10 GB.
+
+#### Stack (Container mode)
+
+Add `dockerFile` to `serverProps` to enable container mode.
+
+```ts title="stack/prod.ts"
+const config: AstroProps = {
+  // ...
+  serverProps: {
+    dockerFile: 'Dockerfile',
+    memorySize: 2048,
+  },
+};
+```
+
+#### Dockerfile
+
+```dockerfile title="Dockerfile"
+FROM public.ecr.aws/lambda/nodejs:22
+
+# Copy all lambda files
+COPY . ./
+
+CMD ["index.handler"]
 ```
 
 ### Environment Variables and Secrets
 
-Configure runtime environment variables and secrets:
+Runtime environment variables are injected into the Lambda function at deploy time. For sensitive values, store them in [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) and reference them by ARN — Thunder fetches and injects them automatically.
 
-```ts title="stack/index.ts"
+```ts title="stack/prod.ts"
 const config: AstroProps = {
-  // ... other props
-  
+  // ...
   serverProps: {
-    // ... other serverProps
     variables: [
       { NODE_ENV: 'production' },
-      { PUBLIC_API_URL: 'https://api.example.com' }
+      { PUBLIC_API_URL: 'https://api.example.com' },
     ],
     secrets: [
-      { 
-        key: 'DATABASE_URL', 
-        resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:/my-app/DATABASE_URL-abc123' 
+      {
+        key: 'DATABASE_URL',
+        resource: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:/myapp/DATABASE_URL-abc123',
       },
     ],
   },
@@ -263,194 +388,27 @@ const config: AstroProps = {
 
 ### Deploy
 
-Build and deploy your serverless Astro application:
+Build your Astro app first to generate the Lambda handler and static assets, then deploy with CDK.
 
 <Tabs syncKey="package-manager">
+  <TabItem label="bun" icon="bun">
+```sh
+bun run build
+npx cdk deploy --app "bunx tsx stack/prod.ts" --profile default
+```
+  </TabItem>
   <TabItem label="npm" icon="seti:npm">
 ```sh
 npm run build
-npx cdk deploy --all --app="npx tsx stack/index.ts"
+npx cdk deploy --app "npx tsx stack/prod.ts" --profile default
 ```
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
 ```sh
 pnpm run build
-pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun run build
-npx cdk deploy --all --app="bunx tsx stack/index.ts"
+pnpm exec cdk deploy --app "pnpm exec tsx stack/prod.ts" --profile default
 ```
   </TabItem>
 </Tabs>
 
-After deployment, you'll receive a **CloudFront URL** to access your serverless SSR application.
-
-## Containerized SSR Deployment
----
-
-Deploy server-side rendered Astro applications using ECS Fargate and Application Load Balancer with the `Fargate` construct.
-
-### Configure Astro for SSR
-
-```ts title="astro.config.mjs"
-import { defineConfig } from 'astro/config';
-import node from '@astrojs/node';
-
-export default defineConfig({
-  output: 'server',
-  adapter: node({
-    mode: 'standalone'
-  }),
-});
-```
-
-### Install Dependencies and Setup Stack
-
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm i tsx @thunder-so/thunder --save-dev
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm add -D tsx @thunder-so/thunder
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun add -d tsx @thunder-so/thunder
-```
-  </TabItem>
-</Tabs>
-
-```ts title="stack/index.ts"
-import { Cdk, Fargate, type FargateProps } from "@thunder-so/thunder";
-
-const svcProps: FargateProps = {
-  env: {
-    account: 'your-account-id',
-    region: 'us-west-2'
-  },
-  application: 'your-application-id',
-  service: 'your-service-id',
-  environment: 'production',
-
-  rootDir: '', // e.g. 'app' for monorepos
-};
-
-new Fargate(
-  new Cdk.App(), 
-  `${svcProps.application}-${svcProps.service}-${svcProps.environment}-stack`, 
-  svcProps
-);
-```
-
-### Build Settings Using Nixpacks
-
-Configure automatic containerization with Nixpacks:
-
-```ts title="stack/index.ts"
-const svcProps: FargateProps = {
-  // ... other props
-  
-  buildProps: {
-    buildSystem: 'Nixpacks',
-    installcmd: 'bun install',
-    buildcmd: 'bun run build',
-    startcmd: 'bun start',
-  },
-};
-```
-
-### Build Settings Using Docker Container
-
-Alternatively, use a custom Dockerfile:
-
-```dockerfile title="Dockerfile"
-FROM public.ecr.aws/docker/library/node:20-alpine AS base
-
-FROM base AS builder
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm ci
-
-COPY . .
-RUN npm run build
-
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV=production
-
-COPY --from=builder /app/dist ./dist
-
-EXPOSE 4321
-
-CMD ["node", "./dist/server/entry.mjs"]
-```
-
-```ts title="stack/index.ts"
-const svcProps: FargateProps = {
-  // ... other props
-  
-  serviceProps: {
-    dockerFile: 'Dockerfile',
-    port: 4321,
-  },
-};
-```
-
-### Environment Variables and Secrets for SSR
-
-Configure runtime environment variables and secrets:
-
-```ts title="stack/index.ts"
-const svcProps: FargateProps = {
-  // ... other props
-  
-  serviceProps: {
-    variables: [
-      { NODE_ENV: 'production' },
-      { PUBLIC_API_URL: 'https://api.example.com' }
-    ],
-    secrets: [
-      { 
-        key: 'DATABASE_URL', 
-        resource: 'arn:aws:secretsmanager:us-west-2:123456789012:secret:/my-app/DATABASE_URL-abc123' 
-      },
-    ],
-  },
-};
-```
-
-### Deploy
-
-Build and deploy your containerized application:
-
-<Tabs syncKey="package-manager">
-  <TabItem label="npm" icon="seti:npm">
-```sh
-npm run build
-npx cdk deploy --all --app="npx tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-```sh
-pnpm run build
-pnpm exec cdk deploy --all --app="pnpm exec tsx stack/index.ts"
-```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-```sh
-bun run build
-npx cdk deploy --all --app="bunx tsx stack/index.ts"
-```
-  </TabItem>
-</Tabs>
-
-After deployment, you'll receive an **Application Load Balancer URL** to access your SSR application.
+After deployment, CDK outputs a **CloudFront URL** that serves both your SSR responses and static assets.

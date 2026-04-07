@@ -50,7 +50,7 @@ export const sidebar: Sidebar = {
     { text: 'Static', link: 'docs/patterns/static', description: "S3 + CloudFront", icon: 'tabler:file', iconColor: 'text-blue-400' },
     { text: 'Lambda', link: 'docs/patterns/lambda', description: "Lambda + API Gateway", icon: 'tabler:lambda', iconColor: 'text-emerald-400' },
     { text: 'Fargate', link: 'docs/patterns/fargate', description: "Fargate + ALB", icon: 'tabler:server', iconColor: 'text-purple-400' },
-    { text: 'Serverless', link: 'docs/patterns/serverless', description: "Lambda + S3 + CloudFront", icon: 'tabler:cloud-bolt', iconColor: 'text-orange-400' }
+    { text: 'Serverless Fullstack', link: 'docs/patterns/serverless', description: "Lambda + S3 + CloudFront", icon: 'tabler:cloud-bolt', iconColor: 'text-orange-400' }
   ],
   'Frameworks': [
     { text: 'Overview', link: 'docs/frameworks' },
