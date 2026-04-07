@@ -1,0 +1,56 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<section class="max-w-full bg-card border border-border rounded-lg p-6 mb-6">
+  <svg viewBox="0 0 720 200" class="w-full h-auto">
+    <!-- Users -> CloudFront -->
+    <line x1="120" y1="100" x2="200" y2="100" stroke="currentColor" class="text-border" />
+    <!-- CloudFront fork vertical -->
+    <line x1="380" y1="50" x2="380" y2="150" stroke="currentColor" class="text-border" />
+    <!-- CloudFront -> Lambda (top) -->
+    <line x1="380" y1="50" x2="480" y2="50" stroke="currentColor" class="text-border" />
+    <!-- CloudFront -> S3 (bottom) -->
+    <line x1="380" y1="150" x2="480" y2="150" stroke="currentColor" class="text-border" />
+    <!-- Stem from CloudFront to fork -->
+    <line x1="320" y1="100" x2="380" y2="100" stroke="currentColor" class="text-border" />
+
+    <foreignObject x="0" y="60" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-8 h-8">
+          <Icon name="tabler:users" class="text-muted-foreground w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">Users</span>
+      </div>
+    </foreignObject>
+
+    <foreignObject x="200" y="60" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-12 h-12">
+          <Icon name="logos:aws-cloudfront" class="w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">CloudFront</span>
+      </div>
+    </foreignObject>
+
+    <foreignObject x="480" y="10" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-12 h-12">
+          <Icon name="logos:aws-lambda" class="w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">Lambda (SSR)</span>
+      </div>
+    </foreignObject>
+
+    <foreignObject x="480" y="110" width="120" height="80">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-12 h-12">
+          <Icon name="logos:aws-s3" class="w-full h-full" />
+        </div>
+        <span class="mt-2 text-sm font-medium text-muted-foreground">S3 (Assets)</span>
+      </div>
+    </foreignObject>
+  </svg>
+</section>
+
+<p class="text-muted-foreground"><strong>CloudFront</strong> routes requests at the edge — static assets are served directly from <strong>S3</strong> while dynamic SSR requests are forwarded to <strong>Lambda</strong> via API Gateway, which renders pages on-demand with pay-per-request pricing and automatic scaling.</p>

@@ -4,6 +4,8 @@ description: Deploy full-stack SSR frameworks using Lambda, S3, and CloudFront
 ---
 import { Icon } from 'astro-icon/components';
 import { Aside } from '@astrojs/starlight/components';
+import ServerlessArchitecture from '@/components/docs/patterns/ServerlessArchitecture.astro';
+import ServerlessPipeline from '@/components/docs/patterns/ServerlessPipeline.astro';
 
 Deploy full-stack server-side rendered applications on AWS using [Lambda](https://aws.amazon.com/lambda/) for SSR, [S3](https://aws.amazon.com/s3/) for static assets, and [CloudFront](https://aws.amazon.com/cloudfront/) as the global CDN. Scales to zero — pay only for actual requests.
 
@@ -31,49 +33,7 @@ Deploy full-stack server-side rendered applications on AWS using [Lambda](https:
 
 ## Architecture
 
-<section class="max-w-full bg-card border border-border rounded-lg p-6 mb-6">
-  <svg viewBox="0 0 720 120" class="w-full h-auto">
-    <line x1="120" y1="60" x2="200" y2="60" stroke="currentColor" class="text-border" />
-    <line x1="320" y1="60" x2="400" y2="60" stroke="currentColor" class="text-border" />
-    <line x1="520" y1="60" x2="600" y2="60" stroke="currentColor" class="text-border" />
-
-    <foreignObject x="0" y="30" width="120" height="80">
-      <div class="flex flex-col items-center text-center">
-        <div class="w-8 h-8">
-          <Icon name="tabler:users" class="text-muted-foreground w-full h-full" />
-        </div>
-        <span class="mt-2 text-sm font-medium text-muted-foreground">Users</span>
-      </div>
-    </foreignObject>
-
-    <foreignObject x="200" y="20" width="120" height="80">
-      <div class="flex flex-col items-center text-center">
-        <div class="w-12 h-12">
-          <Icon name="logos:aws-cloudfront" class="w-full h-full" />
-        </div>
-        <span class="mt-2 text-sm font-medium text-muted-foreground">CloudFront</span>
-      </div>
-    </foreignObject>
-
-    <foreignObject x="400" y="20" width="120" height="80">
-      <div class="flex flex-col items-center text-center">
-        <div class="w-12 h-12">
-          <Icon name="logos:aws-lambda" class="w-full h-full" />
-        </div>
-        <span class="mt-2 text-sm font-medium text-muted-foreground">Lambda (SSR)</span>
-      </div>
-    </foreignObject>
-
-    <foreignObject x="600" y="20" width="120" height="80">
-      <div class="flex flex-col items-center text-center">
-        <div class="w-12 h-12">
-          <Icon name="logos:aws-s3" class="w-full h-full" />
-        </div>
-        <span class="mt-2 text-sm font-medium text-muted-foreground">S3 (Assets)</span>
-      </div>
-    </foreignObject>
-  </svg>
-</section>
+<ServerlessArchitecture />
 
 CloudFront routes requests at the edge using this logic:
 
@@ -274,51 +234,7 @@ new Serverless(new Cdk.App(), `${config.application}-${config.service}-${config.
 
 ### AWS CodePipeline Integration
 
-<section class="max-w-full bg-card border border-border rounded-lg p-6 mb-6">
-  <svg viewBox="0 0 720 120" class="w-full h-auto">
-    <line x1="120" y1="60" x2="200" y2="60" stroke="currentColor" class="text-border" />
-    <line x1="320" y1="60" x2="400" y2="60" stroke="currentColor" class="text-border" />
-    <line x1="520" y1="60" x2="600" y2="60" stroke="currentColor" class="text-border" />
-
-    <foreignObject x="0" y="30" width="120" height="80">
-      <div class="flex flex-col items-center text-center">
-        <div class="w-8 h-8">
-          <Icon name="tabler:brand-github" class="text-muted-foreground w-full h-full" />
-        </div>
-        <span class="mt-2 text-sm font-medium text-muted-foreground">GitHub</span>
-      </div>
-    </foreignObject>
-
-    <foreignObject x="200" y="20" width="120" height="80">
-      <div class="flex flex-col items-center text-center">
-        <div class="w-12 h-12">
-          <Icon name="logos:aws-codepipeline" class="w-full h-full" />
-        </div>
-        <span class="mt-2 text-sm font-medium text-muted-foreground">CodePipeline</span>
-      </div>
-    </foreignObject>
-
-    <foreignObject x="400" y="20" width="120" height="80">
-      <div class="flex flex-col items-center text-center">
-        <div class="w-12 h-12">
-          <Icon name="logos:aws-codebuild" class="w-full h-full" />
-        </div>
-        <span class="mt-2 text-sm font-medium text-muted-foreground">CodeBuild</span>
-      </div>
-    </foreignObject>
-
-    <foreignObject x="600" y="20" width="120" height="80">
-      <div class="flex flex-col items-center text-center">
-        <div class="w-12 h-12">
-          <Icon name="logos:aws-lambda" class="w-full h-full" />
-        </div>
-        <span class="mt-2 text-sm font-medium text-muted-foreground">Lambda</span>
-      </div>
-    </foreignObject>
-  </svg>
-</section>
-
-**GitHub** triggers the pipeline on code changes. **CodeBuild** builds the framework and packages the SSR server for **Lambda** while uploading static assets to S3.
+<ServerlessPipeline />
 
 ```ts title="stack/prod.ts"
 const config: NuxtProps = {

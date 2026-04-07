@@ -2,9 +2,10 @@
 title: Lambda
 description: Deploy serverless functions using AWS Lambda and API Gateway
 ---
-import { Icon } from 'astro-icon/components';
 import { Aside } from '@astrojs/starlight/components';
 import LambdaArchitecture from '@/components/docs/patterns/LambdaArchitecture.astro';
+import LambdaZipPipeline from '@/components/docs/patterns/LambdaZipPipeline.astro';
+import LambdaContainerPipeline from '@/components/docs/patterns/LambdaContainerPipeline.astro';
 
 Deploy serverless APIs and backend functions on [AWS Lambda](https://aws.amazon.com/lambda/) with [API Gateway](https://aws.amazon.com/api-gateway/) as the public HTTP endpoint. Scales to zero when idle — pay only for what you use.
 
@@ -222,11 +223,52 @@ Thunder uses [HTTP API (v2)](https://docs.aws.amazon.com/apigateway/latest/devel
 
 ### Zip Deployment Pipeline
 
-<section class="max-w-full bg-card border border-border rounded-lg p-6 mb-6">
-  <svg viewBox="0 0 720 120" class="w-full h-auto">
-    <line x1="120" y1="60" x2="200" y2="60" stroke="currentColor" class="text-border" />
-    <line x1="320" y1="60" x2="400" y2="60" stroke="currentColor" class="text-border" />
-    <line x1="520" y1="60" x2="600" y2="60" stroke="currentColor" class="text-border" />
+<LambdaZipPipeline />
+
+```ts title="stack/prod.ts"
+const config: LambdaProps = {
+  // ...
+  accessTokenSecretArn: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:github-token-XXXXXX',
+  sourceProps: {
+    owner: 'your-username',
+    repo: 'your-repo',
+    branchOrRef: 'main',
+  },
+  buildProps: {
+    runtime: 'nodejs',
+    runtime_version: '22',
+    installcmd: 'bun install',
+    buildcmd: 'bun run build',
+    outputDir: 'dist',
+  },
+};
+```
+
+### Container Deployment Pipeline
+
+<LambdaContainerPipeline />
+
+```ts title="stack/prod.ts"
+const config: LambdaProps = {
+  // ...
+  accessTokenSecretArn: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:github-token-XXXXXX',
+  sourceProps: {
+    owner: 'your-username',
+    repo: 'your-repo',
+    branchOrRef: 'main',
+  },
+  functionProps: {
+    dockerFile: 'Dockerfile',
+  },
+  buildProps: {
+    installcmd: 'bun install',
+    buildcmd: 'bun run build',
+  },
+};
+```
+
+## Stack Outputs
+
     
     <foreignObject x="0" y="30" width="120" height="80">
       <div class="flex flex-col items-center text-center">
