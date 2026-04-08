@@ -8,7 +8,7 @@ const frameworks = [
   { name: "Nuxt",           icon: "vscode-icons:file-type-nuxt",     description: "Vue.js meta-framework",        href: '/docs/frameworks/nuxt' },
   { name: "Astro",          icon: "vscode-icons:file-type-astro",    description: "Content-focused framework",   href: '/docs/frameworks/astro' },
   { name: "TanStack Start", logo: "/frameworks/tanstack.png",        description: "Full-stack React framework",   href: '/docs/frameworks/tanstack' },
-  { name: "Vite",           logo: "/frameworks/Vite.svg",            description: "Next-gen frontend tooling",   href: '/docs/frameworks/vite' },
+  { name: "Vite",           icon: "vscode-icons:file-type-vite",     description: "Next-gen frontend tooling",   href: '/docs/frameworks/vite' },
   { name: "NestJS",         icon: "vscode-icons:file-type-nestjs",   description: "Node.js framework",           href: '/docs/frameworks/nestjs' },
 ];
 ---
@@ -28,13 +28,15 @@ const frameworks = [
       {frameworks.map((framework) => (
         <a
           href={framework.href}
-          class="group relative rounded border border-border bg-card p-6 hover:border-primary/50 transition-all duration-300 flex flex-col items-center text-center hover:bg-card/80"
+          class="group relative rounded border border-border bg-card p-6 hover:border-primary/50 transition-all duration-300 flex flex-col items-center text-center hover:bg-card/80 text-foreground"
         >
           <div class="w-12 h-12 mb-4 flex items-center justify-center">
-            {framework.icon
-              ? <Icon name={framework.icon} class="w-10 h-10 opacity-70 group-hover:opacity-100 transition-opacity" />
-              : <img src={framework.logo} alt={framework.name} class="w-10 h-10 opacity-70 group-hover:opacity-100 transition-opacity object-contain" />
-            }
+            <span class="text-lg">
+              {framework.icon
+                ? <Icon name={framework.icon} class="w-10 h-10 opacity-70 group-hover:opacity-100 transition-opacity" />
+                : <img src={framework.logo} alt={framework.name} class="w-10 h-10 opacity-70 group-hover:opacity-100 transition-opacity object-contain" />
+              }
+            </span>
           </div>
           <h3 class="font-semibold text-foreground mb-1">{framework.name}</h3>
           <p class="text-xs text-muted-foreground">{framework.description}</p>

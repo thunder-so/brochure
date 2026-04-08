@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+/* Astro Icon fixes */
+[astro-icon] {
+  display: inline-block !important;
+  width: 1em;
+  height: 1em;
+}
+
+[astro-icon] svg {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}

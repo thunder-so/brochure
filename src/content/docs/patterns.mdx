@@ -5,6 +5,7 @@ description: AWS CDK Construct Libraries that provide simple configuration to de
 import LambdaArchitecture from '@/components/docs/patterns/LambdaArchitecture.astro';
 import StaticArchitecture from '@/components/docs/patterns/StaticArchitecture.astro';
 import FargateArchitecture from '@/components/docs/patterns/FargateArchitecture.astro';
+import ServerlessArchitecture from '@/components/docs/patterns/ServerlessArchitecture.astro';
 
 Thunder provides production-ready AWS CDK construct libraries for deploying modern web applications. Choose the deployment pattern that best fits your use case.
 
@@ -56,3 +57,20 @@ Deploy containerized full-stack applications on AWS Fargate with Application Loa
 - Automatic scaling and high availability
 
 [Learn more →](/docs/patterns/fargate)
+
+---
+
+## Serverless Fullstack
+
+Deploy full-stack SSR frameworks using Lambda for server-side rendering, S3 for static assets, and CloudFront as the global CDN. Supports Nuxt, Astro, TanStack Start, SvelteKit, Solid Start, and AnalogJS.
+
+<ServerlessArchitecture />
+
+**Use Serverless for:**
+- Server-side rendered applications
+- Full-stack frameworks (Nuxt, Astro, SvelteKit)
+- API routes and server functions
+- Scales to zero with pay-per-request pricing
+- Global edge distribution
+
+[Learn more →](/docs/patterns/serverless)
