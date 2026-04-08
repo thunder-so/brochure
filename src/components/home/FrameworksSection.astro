@@ -4,12 +4,12 @@ import { Icon } from "astro-icon/components";
 import Button from "../Button.astro";
 
 const frameworks = [
-  { name: "Next.js",        icon: "tabler:brand-nextjs",        description: "Full-stack React framework",   href: '/docs/frameworks/nextjs' },
-  { name: "Nuxt",           icon: "vscode-icons:file-type-nuxt",           description: "Vue.js meta-framework",             href: '/docs/frameworks/nuxt' },
-  { name: "Astro",          icon: "vscode-icons:file-type-astro",          description: "Content-focused framework",    href: '/docs/frameworks/astro' },
-  { name: "TanStack Start", icon: null, logo: "/frameworks/tanstack.png", description: "Full-stack React framework",   href: '/docs/frameworks/tanstack' },
-  { name: "Vite",           icon: "vscode-icons:file-type-vite",         description: "Next-gen frontend tooling",    href: '/docs/frameworks/vite' },
-  { name: "NestJS",         icon: "vscode-icons:file-type-nestjs",         description: "Node.js framework",            href: '/docs/frameworks/nestjs' },
+  { name: "Next.js",        icon: "tabler:brand-nextjs",             description: "Full-stack React framework",   href: '/docs/frameworks/nextjs' },
+  { name: "Nuxt",           icon: "vscode-icons:file-type-nuxt",     description: "Vue.js meta-framework",        href: '/docs/frameworks/nuxt' },
+  { name: "Astro",          icon: "vscode-icons:file-type-astro",    description: "Content-focused framework",   href: '/docs/frameworks/astro' },
+  { name: "TanStack Start", logo: "/frameworks/tanstack.png",        description: "Full-stack React framework",   href: '/docs/frameworks/tanstack' },
+  { name: "Vite",           logo: "/frameworks/Vite.svg",            description: "Next-gen frontend tooling",   href: '/docs/frameworks/vite' },
+  { name: "NestJS",         icon: "vscode-icons:file-type-nestjs",   description: "Node.js framework",           href: '/docs/frameworks/nestjs' },
 ];
 ---
 
@@ -33,9 +33,7 @@ const frameworks = [
           <div class="w-12 h-12 mb-4 flex items-center justify-center">
             {framework.icon
               ? <Icon name={framework.icon} class="w-10 h-10 opacity-70 group-hover:opacity-100 transition-opacity" />
-              : framework.logo
-                ? <img src={framework.logo} alt={framework.name} class="w-10 h-10 opacity-70 group-hover:opacity-100 transition-opacity object-contain" />
-                : <span class="text-2xl font-black text-muted-foreground group-hover:text-foreground transition-colors">TS</span>
+              : <img src={framework.logo} alt={framework.name} class="w-10 h-10 opacity-70 group-hover:opacity-100 transition-opacity object-contain" />
             }
           </div>
           <h3 class="font-semibold text-foreground mb-1">{framework.name}</h3>

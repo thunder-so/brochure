@@ -862,9 +862,9 @@
 		margin: 24px 0;
 	}
 	.starlight-aside--note {
-		--sl-color-asides-text-accent: var(--sl-color-blue-high);
-		--sl-color-asides-border: var(--sl-color-blue);
-		background-color: var(--sl-color-blue-low);
+		--sl-color-asides-text-accent: hsl(var(--foreground));
+		--sl-color-asides-border: hsl(var(--border));
+		background-color: hsl(var(--muted) / 0.3);
 	}
 	.starlight-aside--tip {
 		--sl-color-asides-text-accent: var(--sl-color-purple-high);
